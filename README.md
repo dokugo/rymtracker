@@ -8,13 +8,13 @@
 
 - [ ] **server**
   - [x] static user page crawling
-  - [ ] set specific username to track
-  - [ ] api route for getting immediate results
+  - [x] set specific username to track
+  - [x] api route for getting immediate results
   - [ ] putting the results to database
   - [ ] sending the results to email
   - [ ] api route for setting mailing list subscription
 - [ ] **client**
-  - [ ] getting the results for a specified username
+  - [x] getting the results for a specified username
   - [ ] mailing list subscription
 
 ## Side notes

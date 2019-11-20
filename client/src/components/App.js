@@ -9,6 +9,7 @@ import styled, {
 import themeLight from '../themes/themeLight';
 import themeDark from '../themes/themeDark';
 import ThemeButton from './ThemeButton';
+import TestList from './Test/TestList';
 
 const App = () => {
   const themeIsStored = localStorage.getItem('isDarkMode');
@@ -31,6 +32,7 @@ const App = () => {
           <Form setDataStorage={setDataStorage} />
         </Navbar>
         <Container isOpaque={dataStorage ? true : false}>
+          <TestList dataStorage={dataStorage} />
           {/* <List dataStorage={dataStorage} listAnimation={listAnimation} /> */}
         </Container>
         <ThemeButton isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
