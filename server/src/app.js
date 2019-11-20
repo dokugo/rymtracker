@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 
 const rym = require('./rym');
+const reduce = require('./helpers');
 const sampleData = require('./sample.json');
 
 const PORT = process.env.PORT || 9000;
@@ -15,7 +16,8 @@ app.listen(PORT, () => console.log(`rymtracker app listening on port ${PORT}`));
 app.get('/rym/:id', async (req, res) => {
   try {
     const username = req.params.id;
-    const data = await rym(username);
+    const rawData = await rym(username);
+    const data = reduce(rawData);
     // console.log(data);
     res.status(200).send(data);
   } catch (error) {
@@ -25,7 +27,8 @@ app.get('/rym/:id', async (req, res) => {
 
 app.get('/test/', async (req, res) => {
   try {
-    res.status(200).send(sampleData);
+    const data = reduce(sampleData);
+    res.status(200).send(data);
   } catch (error) {
     console.log(error);
   }
