@@ -24,10 +24,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-#temporarily ignore client
-# /client
-# /client/.gitignore
-
 #temporarily ignore unused server files
 /server/src/mutex.js
 /server/src/crawler.js
