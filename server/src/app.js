@@ -25,9 +25,10 @@ app.get('/rym/:id', async (req, res) => {
   }
 });
 
-app.get('/test/', async (req, res) => {
+app.get('/test', async (req, res) => {
   try {
     const data = reduce(sampleData);
+    // console.log(data)
     res.status(200).send(data);
   } catch (error) {
     console.log(error);

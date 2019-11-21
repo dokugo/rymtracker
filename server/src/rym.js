@@ -20,27 +20,38 @@ const getPage = async (URL, page) => {
         '#content > table > tbody > tr > td > div:nth-child(4) > table > tbody > tr:nth-child(2) > td:nth-child(2) > table > tbody > tr:nth-child(2) > td > div'
       );
 
+      const items = box.getElementsByTagName('*');
+      const itemsAmount = items.length;
+
       const getData = {
         text: i => {
-          return box.querySelectorAll('a')[i].innerText;
+          return items[i].innerText;
         },
         type: i => {
-          return box.querySelectorAll('a')[i].className;
+          return items[i].className;
         },
         link: i => {
-          return box.querySelectorAll('a')[i].href;
+          return items[i].href;
+        },
+        date: i => {
+          return items[i].textContent;
         }
       };
 
-      const itemsAmountOnPage = box.querySelectorAll('a').length;
-
       const data = [];
-      for (let i = 0; i < itemsAmountOnPage; i++) {
-        data.push({
-          text: getData.text(i),
-          type: getData.type(i),
-          link: getData.link(i)
-        });
+      for (let i = 0; i < itemsAmount; i++) {
+        if (items[i].tagName === 'A') {
+          data.push({
+            text: getData.text(i),
+            type: getData.type(i),
+            link: getData.link(i)
+          });
+        } else if (items[i].tagName === 'B') {
+          data.push({
+            date: getData.date(i),
+            type: 'date'
+          });
+        }
       }
 
       return data;

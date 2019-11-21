@@ -3,7 +3,8 @@ const finder = (data, index) => {
   for (let i = index - 1; i >= 0; i--) {
     if (data[i].type === 'artist') {
       // result = [...result, ...[data[i]]];
-      result = result.concat([data[i]]);
+      result = [...[data[i]], ...result];
+      // result = result.concat([data[i]]);
     }
     if (data[i].type === 'album') {
       break;
@@ -14,9 +15,15 @@ const finder = (data, index) => {
 
 const reducer = arr => {
   const result = arr.reduce((acc, item, index) => {
+    if (item.type === 'date') {
+      // acc = [...acc, ...[{ date: item }]];
+      acc = acc.concat([{ date: item.date, type: 'date' }]);
+    }
     if (item.type === 'album') {
       // acc = [...acc, ...[{ artists: finder(index), album: item }]];
-      acc = acc.concat([{ artists: finder(arr, index), album: item }]);
+      acc = acc.concat([
+        { artists: finder(arr, index), album: item, type: 'release' }
+      ]);
     }
     return acc;
   }, []);
