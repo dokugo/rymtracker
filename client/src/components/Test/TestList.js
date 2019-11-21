@@ -17,7 +17,7 @@ const TestList = ({ dataStorage }) => {
 
   if (dataStorage) {
     console.log(
-      '%cReduced data arrived.',
+      '%cReduced data has arrived.',
       'color: darkred; font-weight: 700; font-size: 14px'
     );
   }
@@ -27,30 +27,32 @@ const TestList = ({ dataStorage }) => {
 
   const elements = data
     ? data.map((item, index) => {
-        return (
-          <Item key={index}>
-            {
-              <>
-                <Artists>
-                  {item.artists.map((item, index, arr) => {
-                    return (
-                      <div key={index}>
-                        <Link
-                          artist
-                          key={index}
-                          href={item.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {item.text}
-                        </Link>
-                        <Ampersand>
-                          {index === arr.length - 1 ? null : '&'}
-                        </Ampersand>
-                      </div>
-                    );
-                  })}
-                </Artists>
+        if (item.type === 'date') {
+          return <ReleaseDate key={index}>{item.date}</ReleaseDate>;
+        } else {
+          return (
+            <Item key={index}>
+              <Artists>
+                {item.artists.map((item, index, arr) => {
+                  return (
+                    <Artist key={index}>
+                      <Link
+                        artist
+                        key={index}
+                        href={item.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {item.text}
+                      </Link>
+                      <Ampersand>
+                        {index === arr.length - 1 ? null : '&'}
+                      </Ampersand>
+                    </Artist>
+                  );
+                })}
+              </Artists>
+              <Album>
                 <Link
                   album
                   href={item.album.link}
@@ -59,10 +61,10 @@ const TestList = ({ dataStorage }) => {
                 >
                   {item.album.text}
                 </Link>
-              </>
-            }
-          </Item>
-        );
+              </Album>
+            </Item>
+          );
+        }
       })
     : null;
 
@@ -76,6 +78,13 @@ const List = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+`;
+
+const ReleaseDate = styled.time`
+  padding: 5px 10px;
+  background-color: rgba(32, 34, 37, 0.3);
+  margin-bottom: 10px;
+  border-radius: 5px;
 `;
 
 const Item = styled.article`
@@ -96,17 +105,23 @@ const Artists = styled.div`
   display: flex;
 `;
 
-const Ampersand = styled.span`
+const Artist = styled.span``;
+
+const Album = styled.div``;
+
+const Ampersand = styled.i`
   padding: 0 5px;
   font-size: 22px;
+  font-style: normal;
 `;
 
 const Link = styled.a`
   text-decoration: none;
   width: fit-content;
   color: ${({ artist, album }) =>
-    (artist && 'rgba(130, 209, 255, 0.65)') || (album && 'rgb(130, 209, 255)')};
-  font-size: ${({ artist, album }) => (artist && '22px') || (album && '22px')};
+    (artist && 'rgba(175, 225, 255, 0.8)') || (album && 'rgb(175, 225, 255)')};
+  font-size: ${({ artist, album }) => (artist && '22px') || (album && '24px')};
+  font-weight: ${({ artist, album }) => (artist && '300') || (album && '400')};
   &:hover {
     text-decoration: underline;
   }

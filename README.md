@@ -22,15 +22,15 @@
 #### In progress:
 
 ###### Server:
-- nothing for now
+- research on push vs concat vs spread performance
 
 ###### Client:
-- nothing for now
+- —
 
 #### Completed:
 
 ###### Server:
-- nothing for now
+- get release date
 
 ###### Client:
-- nothing for now
+- render release date

@@ -1,12 +1,12 @@
 export default {
   global: {
-    background: 'rgb(54, 57, 63)',
+    background: 'rgb(76, 98, 136)',
     text: 'rgb(175, 175, 175)'
   },
   input: {
     background: 'rgba(32, 34, 37, 0.3)',
     text: 'rgb(185, 187, 190)',
-    default: 'rgba(122, 169, 92, 0.35)',
+    default: 'rgba(175, 225, 255, 0.35)',
     warning: 'rgba(232, 145, 15, 0.35)',
     error: 'rgba(220, 53, 69, 0.35)'
   },
