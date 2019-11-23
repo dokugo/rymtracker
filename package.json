@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "install": "cd client && npm i && cd ../server && npm i",
-    "server": "nodemon --inspect server/src/app.js",
+    "server": "cd server && npm run dev",
     "client": "cd client && npm run dev",
     "deploy" : "now --prod && git push heroku master",
     "logs": "heroku logs --tail"

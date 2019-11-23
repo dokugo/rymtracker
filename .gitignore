@@ -11,7 +11,7 @@
 # .github
 
 # production
-/client/build
+client/build
 
 # misc
 .DS_Store
@@ -25,6 +25,9 @@ yarn-debug.log*
 yarn-error.log*
 
 #temporarily ignore unused server files
-/server/src/mutex.js
-/server/src/crawler.js
-/server/src/cities.js
+server/src/mutex.js
+server/src/crawler.js
+server/src/cities.js
+
+#evn vars
+server/.env
