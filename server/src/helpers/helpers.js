@@ -17,10 +17,12 @@ const reducer = arr => {
   const result = arr.reduce((acc, item, index) => {
     if (item.type === 'date') {
       // acc = [...acc, ...[{ date: item }]];
+      // change to push() ?
       acc = acc.concat([{ date: item.date, type: 'date' }]);
     }
     if (item.type === 'album') {
       // acc = [...acc, ...[{ artists: finder(index), album: item }]];
+      // change to push() ?
       acc = acc.concat([
         { artists: finder(arr, index), album: item, type: 'release' }
       ]);

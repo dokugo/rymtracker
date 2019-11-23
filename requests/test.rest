@@ -1,0 +1,26 @@
+### GET test
+get http://localhost:9000/test
+
+### POST test
+post http://localhost:9000/test
+Content-Type: application/json
+
+{
+  "content": "a test message.",
+  "type": "test"
+}
+
+### GET all saved data from the db
+get http://localhost:9000/rym/subscriptions
+
+### GET crawled user data
+get http://localhost:9000/rym/user/sharifi
+
+### POST new user to the db
+post http://localhost:9000/rym/subscribe
+Content-Type: application/json
+
+{
+  "username": "username",
+  "email": "username@gmail.com"
+}
