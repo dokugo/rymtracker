@@ -3,8 +3,10 @@ import styled from 'styled-components/macro';
 
 const TestList = ({ dataStorage }) => {
   // const TestList = () => {
+
   // const [dataStorage, setDataStorage] = useState(null);
-  const [fakeData, setFakeData] = useState(null);
+
+  /*   const [fakeData, setFakeData] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:9000/test`)
@@ -13,32 +15,41 @@ const TestList = ({ dataStorage }) => {
         console.log(res);
         setFakeData(res);
       });
-  }, []);
+  }, []); */
 
-  if (dataStorage) {
+  /*   if (dataStorage) {
     console.log(
       '%cReduced data has arrived.',
       'color: darkred; font-weight: 700; font-size: 14px'
     );
-  }
+  } */
 
-  // const data = dataStorage;
-  const data = fakeData;
+  // const data = fakeData;
+  const data = dataStorage;
+
+  const releaseDate = (prevDate, currDate, nextDate) => {
+    return currDate === nextDate && currDate !== prevDate ? (
+      <ReleaseDate>{currDate}</ReleaseDate>
+    ) : currDate !== nextDate && currDate !== prevDate ? (
+      <ReleaseDate>{currDate}</ReleaseDate>
+    ) : null;
+  };
 
   const elements = data
-    ? data.map((item, index) => {
-        if (item.type === 'date') {
-          return <ReleaseDate key={index}>{item.date}</ReleaseDate>;
-        } else {
-          return (
-            <Item key={index}>
+    ? data.map((item, index, arr) => {
+        let prevDate = arr[index - 1] && arr[index - 1].date;
+        let currDate = item.date;
+        let nextDate = arr[index + 1] && arr[index + 1].date;
+        return (
+          <React.Fragment key={index}>
+            {releaseDate(prevDate, currDate, nextDate)}
+            <Item>
               <Artists>
                 {item.artists.map((item, index, arr) => {
                   return (
                     <Artist key={index}>
                       <Link
                         artist
-                        key={index}
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -63,8 +74,8 @@ const TestList = ({ dataStorage }) => {
                 </Link>
               </Album>
             </Item>
-          );
-        }
+          </React.Fragment>
+        );
       })
     : null;
 
@@ -109,10 +120,10 @@ const Artist = styled.span``;
 
 const Album = styled.div``;
 
-const Ampersand = styled.i`
+const Ampersand = styled.span`
   padding: 0 5px;
   font-size: 22px;
-  font-style: normal;
+  /* font-style: normal; */
 `;
 
 const Link = styled.a`
