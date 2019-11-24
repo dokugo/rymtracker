@@ -1,4 +1,6 @@
-### To run dev version:
+###### Please note that if you try to use [`https://rymtracker.now.sh`](https://rymtracker.now.sh), you might experience slow first-loading period since a free-tier heroku instance takes some time to get itself out of sleep, usually around 15 seconds.
+
+## To run dev version
 
 ### `npm install`
 ### `npm run server`
@@ -17,9 +19,9 @@
   - [x] getting the results for a specified username
   - [ ] mailing list subscription
 
-## Side notes
+## Personal side notes
 
-#### In progress:
+<details><summary>In progress</summary>
 
 ###### Server:
 - research on push vs concat vs spread performance
@@ -27,10 +29,24 @@
 ###### Client:
 - —
 
-#### Completed:
+###### Other:
+- add 'why' part with pictures to this readme
+
+</details>
+
+<details><summary>Completed</summary>
 
 ###### Server:
 - get release date
+- fix crawling selector
+- handle posting duplicates to the db
+- restructure response json data
 
 ###### Client:
-- render release date
+- render release dates
+- separate render function for the restructured release dates
+
+###### Other:
+- —
+
+</details>

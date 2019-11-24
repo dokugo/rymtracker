@@ -58,7 +58,7 @@ const Form = ({ setDataStorage, setListAnimation }) => {
 
       console.log(inputData);
 
-      fetch(`http://localhost:9000/rym/${inputData}`, {
+      fetch(`http://localhost:9000/rym/user/${inputData}`, {
         // fetch(`https://nxtractor.herokuapp.com/api/search/${inputData}`, {
         headers: {
           'Cache-Control':

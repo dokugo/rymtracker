@@ -2,29 +2,28 @@ const mongoose = require('mongoose');
 
 const url = process.env.MONGODB_URI;
 
-console.log('connecting to', url);
+// console.log('Connecting to', url);
 
 mongoose
   .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(result => {
-    console.log('connected to MongoDB');
+    console.log('Connected to the database.');
   })
   .catch(error => {
-    console.log('error connecting to MongoDB:', error.message);
+    console.log('Error connecting to the database: ', error.message);
   });
 
 const userSchema = new mongoose.Schema({
   username: String,
-  email: String,
-  date: Date
+  email: String
 });
 
-/* userSchema.set('toJSON', {
+userSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
     delete returnedObject.__v;
   }
-}); */
+});
 
 module.exports = mongoose.model('User', userSchema);

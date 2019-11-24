@@ -10,11 +10,13 @@ Content-Type: application/json
   "type": "test"
 }
 
+### GET crawled user data
+get http://localhost:9000/rym/user/sharifi
+
+
 ### GET all saved data from the db
 get http://localhost:9000/rym/subscriptions
 
-### GET crawled user data
-get http://localhost:9000/rym/user/sharifi
 
 ### POST new user to the db
 post http://localhost:9000/rym/subscribe

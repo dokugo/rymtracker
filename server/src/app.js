@@ -15,22 +15,21 @@ const PORT = process.env.PORT;
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.listen(PORT, () => console.log(`server is listening on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server is listening on port ${PORT}.`));
 
-const requestLogger = (request, response, next) => {
+/* const requestLogger = (request, response, next) => {
   console.log('Method:', request.method);
   console.log('Path:  ', request.path);
   console.log('Body:  ', request.body);
   console.log('---');
   next();
 };
-app.use(requestLogger);
+app.use(requestLogger); */
 
 app.get('/rym/subscriptions', async (request, response) => {
   try {
-    User.find({}).then(users => {
-      response.json(users);
-    });
+    const users = await User.find({});
+    response.send(users);
   } catch (error) {
     console.log(error);
   }
@@ -41,18 +40,26 @@ app.post('/rym/subscribe', async (request, response) => {
     const body = request.body;
 
     if (body.username === undefined || body.email === undefined) {
-      return response.status(400).json({ error: 'data missing' });
+      return response.status(400).send({ error: 'data missing' });
     }
 
-    const user = new User({
+    const foundUser = await User.findOne({
       username: body.username,
-      email: body.email,
-      date: new Date()
+      email: body.email
     });
 
-    user.save().then(savedUser => {
-      response.json(savedUser.toJSON());
-    });
+    if (foundUser) {
+      console.log('Duplicate!');
+      return response.status(400).send({ error: 'duplicate' });
+    } else {
+      const user = new User({
+        username: body.username,
+        email: body.email
+      });
+
+      const savedUser = await user.save();
+      response.send(savedUser);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -72,9 +79,7 @@ app.get('/rym/user/:id', async (request, response) => {
 
 app.get('/test', async (request, response) => {
   try {
-    const data = reduce(sampleData);
-    // console.log(data)
-    response.status(200).send(data);
+    response.status(200).send(sampleData);
   } catch (error) {
     console.log(error);
   }
