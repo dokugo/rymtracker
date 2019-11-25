@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 // import List from './List/List';
 import Form from './Form/Form';
+import Subscribe from './Form/Subscribe';
 import { hot } from 'react-hot-loader';
 import styled, {
   createGlobalStyle,
@@ -29,6 +30,7 @@ const App = () => {
       <GlobalStyle />
       <AppBox>
         <Navbar>
+          <Subscribe />
           <Form setDataStorage={setDataStorage} />
         </Navbar>
         <Container isOpaque={dataStorage ? true : false}>
@@ -54,13 +56,14 @@ const Navbar = styled.nav`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  height: 125px;
+  /* height: 125px; */
   transition: all 0.5s ease 0s;
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
 `;
 
 const Container = styled.main`
+  margin-top: 30px;
   display: flex;
   align-items: center;
   flex-direction: column;

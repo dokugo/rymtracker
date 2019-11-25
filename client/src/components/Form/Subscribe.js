@@ -21,13 +21,18 @@ const Form = ({ setDataStorage, setListAnimation }) => {
         default: false
       });
     } else {
-      setInputData(e.target.value.trim());
+      if (e.target.name === 'email') {
+        setInputData({ ...inputData, email: e.target.value.trim() });
+      } else if (e.target.name === 'username') {
+        setInputData({ ...inputData, username: e.target.value.trim() });
+      }
       setFormState({
         ...formState,
         warning: false,
         error: false,
         default: false
       });
+      console.log(inputData);
     }
   };
 
@@ -58,9 +63,12 @@ const Form = ({ setDataStorage, setListAnimation }) => {
 
       console.log(inputData);
 
-      fetch(`http://localhost:9000/rym/user/${inputData}`, {
+      fetch(`http://localhost:9000/rym/subscribe`, {
         // fetch(`https://nxtractor.herokuapp.com/api/search/${inputData}`, {
+        method: 'POST',
+        body: JSON.stringify(inputData),
         headers: {
+          'Content-Type': 'application/json',
           'Cache-Control':
             'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
           Pragma: 'no-cache',
@@ -74,7 +82,7 @@ const Form = ({ setDataStorage, setListAnimation }) => {
           } */
 
           console.log(response);
-          setDataStorage(response);
+          // setDataStorage(response);
           /* if (response.data) {
             setDataStorage(response.data);
           } else {
@@ -91,9 +99,20 @@ const Form = ({ setDataStorage, setListAnimation }) => {
   return (
     <FormItem onSubmit={handleRequest}>
       <InputText>
-        Load current upcoming releases list for a specified user
+        Subscribe to a weekly mail of the upcoming releases list taken from a
+        specified RYM account
       </InputText>
       <InputField>
+        <Input
+          onChange={handleInputChange}
+          formState={formState}
+          ref={inputRef}
+          type="email"
+          title="Email"
+          name="email"
+          placeholder="email"
+          autoComplete="off"
+        />
         <Input
           onChange={handleInputChange}
           formState={formState}
@@ -138,6 +157,7 @@ const InputText = styled.div`
 `;
 
 const InputField = styled.div`
+  display: flex;
   position: relative;
   width: 640px;
   min-width: 100%;
@@ -154,9 +174,12 @@ const autofill = keyframes`
 `;
 
 const Input = styled.input`
+  &:nth-of-type(1) {
+    margin-right: 15px;
+  }
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
     'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 400;
   width: 100%;
   height: 65px;
