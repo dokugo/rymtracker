@@ -1,52 +1,73 @@
+## Rate Your Music (Sonemic) email tracker
+
+Track the upcoming releases section of the specified [`rateyourmusic`](https://rateyourmusic.com) account with a weekly email updates.
+
 ###### Please note that if you try to use [`https://rymtracker.now.sh`](https://rymtracker.now.sh), you might experience slow first-loading period since a free-tier heroku instance takes some time to get itself out of sleep, usually around 15 seconds.
 
-## To run dev version
+### Run the dev version locally
 
-### `npm install`
-### `npm run server`
-### `npm run client`
+``` shell
+npm install
+npm run server
+npm run client
+```
 
-## Todo
+You'll have to setup MongoDB and `MONGODB_URI` inside `server/.env` by yourself.
 
-- [ ] **server**
+
+### Todo
+
+- [ ]  **server**
   - [x] static user page crawling
   - [x] set specific username to track
   - [x] api route for getting immediate results
+  - [x] api route for setting mailing list subscription
+  - [x] unsubscribe function
   - [ ] putting the results to database
   - [ ] sending the results to email
-  - [ ] api route for setting mailing list subscription
-- [ ] **client**
+- [ ]  **client**
   - [x] getting the results for a specified username
-  - [ ] mailing list subscription
+  - [x] mailing list subscription
+  - [ ] ui styling
 
-## Personal side notes
+### Personal side notes
 
 <details><summary>In progress</summary>
 
-###### Server:
+###### Server
 - research on push vs concat vs spread performance
+- improve file structure
 
-###### Client:
-- —
+###### Client
+- manage subscription form icons
+- update color themes
+- create new form validation scheme
+- reduce icon size
 
-###### Other:
+###### Other
 - add 'why' part with pictures to this readme
+- try mlab heroku addon
+- setup mailing scheduling
+- try to merge client and server
+- consider moving server deployment to zeit.co
+- depcheck
 
 </details>
 
 <details><summary>Completed</summary>
 
-###### Server:
+###### Server
 - get release date
 - fix crawling selector
 - handle posting duplicates to the db
 - restructure response json data
+- setup mongodb instance through heroku addon
 
-###### Client:
+###### Client
 - render release dates
 - separate render function for the restructured release dates
 
-###### Other:
+###### Other
 - —
 
 </details>
