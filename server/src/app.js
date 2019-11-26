@@ -11,7 +11,7 @@ const sampleData = require('./sample.json');
 
 const User = require('./models/user');
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 9000;
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -49,7 +49,6 @@ app.post('/rym/subscribe', async (request, response) => {
     });
 
     if (foundUser) {
-      console.log('Duplicate!');
       return response.status(400).send({ error: 'duplicate' });
     } else {
       const user = new User({
@@ -58,7 +57,26 @@ app.post('/rym/subscribe', async (request, response) => {
       });
 
       const savedUser = await user.save();
-      response.send(savedUser);
+      response.status(200).send(savedUser);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.delete('/rym/unsubscribe', async (request, response) => {
+  try {
+    const deletedUser = await User.findOneAndDelete({
+      username: request.query.username,
+      email: request.query.email
+    });
+
+    if (deletedUser) {
+      response
+        .status(200)
+        .send({ message: 'succesfully deleted', user: deletedUser });
+    } else {
+      response.status(400).send({ error: 'no such user' });
     }
   } catch (error) {
     console.log(error);
@@ -67,19 +85,15 @@ app.post('/rym/subscribe', async (request, response) => {
 
 app.get('/rym/user/:id', async (request, response) => {
   try {
+    if (request.params.id === 'test') {
+      return response.status(200).send(sampleData);
+    }
+
     const username = request.params.id;
     const rawData = await rym(username);
     const data = reduce(rawData);
     // console.log(data);
     response.status(200).send(data);
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-app.get('/test', async (request, response) => {
-  try {
-    response.status(200).send(sampleData);
   } catch (error) {
     console.log(error);
   }
