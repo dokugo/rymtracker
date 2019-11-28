@@ -17,6 +17,8 @@ get http://localhost:9000/rym/user/sharifi
 ### GET all saved data from the db
 get http://localhost:9000/rym/subscriptions
 
+### GET specified user data from the db
+get http://localhost:9000/rym/subscriptions/username@gmail.com
 
 ### POST new user to the db
 post http://localhost:9000/rym/subscribe

@@ -29,7 +29,22 @@ app.use(requestLogger); */
 app.get('/rym/subscriptions', async (request, response) => {
   try {
     const users = await User.find({});
-    response.send(users);
+    response.status(200).send(users);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+app.get('/rym/subscriptions/:id', async (request, response) => {
+  try {
+    const email = request.params.id;
+    const subscriptions = await User.find({ email: email });
+
+    if (subscriptions.length) {
+      response.status(200).send(subscriptions);
+    } else {
+      response.status(200).send({ message: 'no subscriptions' });
+    }
   } catch (error) {
     console.log(error);
   }
@@ -61,6 +76,7 @@ app.post('/rym/subscribe', async (request, response) => {
     }
   } catch (error) {
     console.log(error);
+    throw error;
   }
 });
 

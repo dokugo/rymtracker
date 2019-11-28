@@ -23,6 +23,7 @@ You'll have to setup MongoDB and `MONGODB_URI` inside `server/.env` by yourself.
   - [x] api route for getting immediate results
   - [x] api route for setting mailing list subscription
   - [x] unsubscribe function
+  - [x] get all subscriptions of a specified user
   - [ ] putting the results to database
   - [ ] sending the results to email
 - [ ]  **client**
@@ -37,6 +38,7 @@ You'll have to setup MongoDB and `MONGODB_URI` inside `server/.env` by yourself.
 ###### Server
 - research on push vs concat vs spread performance
 - improve file structure
+- normalize api routes
 
 ###### Client
 - manage subscription form icons
@@ -51,6 +53,8 @@ You'll have to setup MongoDB and `MONGODB_URI` inside `server/.env` by yourself.
 - try to merge client and server
 - consider moving server deployment to zeit.co
 - depcheck
+- move the db to eu-west-1
+- describe the app architecture in the readme
 
 </details>
 
