@@ -105,7 +105,7 @@ const rym = async username => {
 
     const result = await getPage(URL, page);
 
-    // await page.close();
+    await page.close();
     return result;
   } catch (error) {
     console.error('Error: ', error);

@@ -10,6 +10,7 @@ const reduce = require('./helpers/helpers');
 const sampleData = require('./sample.json');
 
 const User = require('./models/user');
+const Release = require('./models/release');
 
 const PORT = process.env.PORT || 9000;
 const app = express();
@@ -108,8 +109,17 @@ app.get('/rym/user/:id', async (request, response) => {
     const username = request.params.id;
     const rawData = await rym(username);
     const data = reduce(rawData);
+
+    const release = new Release({
+      username: username,
+      data: data
+    });
+
+    const savedData = await release.save();
+    response.status(200).send(savedData);
+
     // console.log(data);
-    response.status(200).send(data);
+    // response.status(200).send(data);
   } catch (error) {
     console.log(error);
   }
