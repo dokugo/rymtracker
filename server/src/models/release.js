@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const releaseSchema = new mongoose.Schema({
   username: String,
-  data: Object
+  data: Array,
+  error: String
 });
 
 releaseSchema.set('toJSON', {

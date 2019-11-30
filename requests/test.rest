@@ -1,8 +1,11 @@
 ### GET test
 get http://localhost:9000/crawl/test
 
-### GET crawled user data
+### GET specified user crawled data
 get http://localhost:9000/crawl/sharifi
+
+### GET all subscribed users crawled data
+get http://localhost:9000/crawl/subscribed
 
 ### GET all saved data from the db
 get http://localhost:9000/user/subscriptions

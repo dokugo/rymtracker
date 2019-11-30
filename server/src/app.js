@@ -32,9 +32,9 @@ app.listen(PORT, () => console.log(`Server is listening on port ${PORT}.`));
 };
 app.use(requestLogger); */
 
-const users = require('./controllers/subscriptions');
+const subscriptions = require('./controllers/subscriptions');
 const crawling = require('./controllers/crawling');
-app.use('/user', users);
+app.use('/user', subscriptions);
 app.use('/crawl', crawling);
 
 const unknownEndpoint = (request, response) => {

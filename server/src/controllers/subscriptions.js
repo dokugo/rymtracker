@@ -13,7 +13,7 @@ router.get('/subscriptions', async (request, response) => {
   }
 });
 
-// GET user subscriptions
+// GET specified user subscriptions
 router.get('/subscriptions/:id', async (request, response) => {
   try {
     const email = request.params.id;
@@ -29,7 +29,7 @@ router.get('/subscriptions/:id', async (request, response) => {
   }
 });
 
-// POST subscribe
+// POST subscribe user
 router.post('/subscribe', async (request, response) => {
   try {
     const body = request.body;
@@ -60,7 +60,7 @@ router.post('/subscribe', async (request, response) => {
   }
 });
 
-// DELETE subscription
+// DELETE user subscription
 router.delete('/unsubscribe', async (request, response) => {
   try {
     const deletedUser = await User.findOneAndDelete({
