@@ -1,27 +1,17 @@
 ### GET test
-get http://localhost:9000/test
-
-### POST test
-post http://localhost:9000/test
-Content-Type: application/json
-
-{
-  "content": "a test message.",
-  "type": "test"
-}
+get http://localhost:9000/crawl/test
 
 ### GET crawled user data
-get http://localhost:9000/rym/user/sharifi
-
+get http://localhost:9000/crawl/sharifi
 
 ### GET all saved data from the db
-get http://localhost:9000/rym/subscriptions
+get http://localhost:9000/user/subscriptions
 
 ### GET specified user data from the db
-get http://localhost:9000/rym/subscriptions/username@gmail.com
+get http://localhost:9000/user/subscriptions/username@gmail.com
 
 ### POST new user to the db
-post http://localhost:9000/rym/subscribe
+post http://localhost:9000/user/subscribe
 Content-Type: application/json
 
 {
@@ -30,4 +20,4 @@ Content-Type: application/json
 }
 
 ### DELETE specified user and email
-DELETE http://localhost:9000/rym/unsubscribe?username=username&email=username@gmail.com
+DELETE http://localhost:9000/user/unsubscribe?username=another_account&email=username@gmail.com
