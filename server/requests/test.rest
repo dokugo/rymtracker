@@ -24,3 +24,6 @@ Content-Type: application/json
 
 ### DELETE specified user and email
 DELETE http://localhost:9000/user/unsubscribe?username=another_account&email=username@gmail.com
+
+### GET mailing
+get http://localhost:9000/mailing/massmail
