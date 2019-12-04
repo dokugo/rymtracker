@@ -2,30 +2,38 @@ const nodemailer = require('nodemailer');
 
 require('dotenv').config();
 const pass = process.env.SMTP_API_KEY;
+const host = process.env.SMTP_HOST;
 
-const mailer = async data => {
+const mailer = async (user, release) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: 'smtp.sendgrid.net',
+      host: host,
       port: 587,
       auth: {
         user: 'apikey',
         pass: pass
-        /* pass:
-          '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' */
       }
     });
 
     const info = await transporter.sendMail({
       from: '"RYM Tracker" <mailer@rymtracker.ml>',
-      to: data.email,
-      subject: `💿 Upcoming releases for ${data.username}`,
-      text: `New releases weekly update: ${data.username}`,
-      html: `<b>New releases weekly update: ${data.username}</b>`
+      to: user.email,
+      subject: `💿 Upcoming releases for ${user.username}`,
+      text: `${release[4].artists[0].text}`,
+      html: `
+      <b>
+        Artist: ${release[4].artists[0].text}
+      </b>
+      <br>
+      <b>
+        Album: ${release[4].album.text}
+      </b>
+      `
     });
 
     // console.log('Message sent: %s', info.messageId);
-    console.log('Message sent: %s', info);
+    console.log('Message sent:');
+    console.log(info);
   } catch (error) {
     console.log(error);
   }

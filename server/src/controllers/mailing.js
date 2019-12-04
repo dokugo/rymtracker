@@ -3,11 +3,12 @@ const router = express.Router();
 
 const mailer = require('../services/mailer');
 
+const Release = require('../models/release');
 const User = require('../models/user');
 
-const sendmail = async users => {
-  for (let i = 0; i < users.length; i++) {
-    await mailer(users[i]);
+const sendmail = async (users, releases) => {
+  for (let i = 0; i < 1; i++) {
+    await mailer(users[i], releases[i].data);
   }
 };
 
@@ -15,8 +16,10 @@ const sendmail = async users => {
 router.get('/massmail', async (request, response) => {
   try {
     const users = await User.find({});
-    sendmail(users);
-    response.status(200).send(users);
+    const releases = await Release.find({});
+
+    sendmail(users, releases);
+    response.status(200).send({ message: 'emails sent' });
   } catch (error) {
     console.log(error);
   }
