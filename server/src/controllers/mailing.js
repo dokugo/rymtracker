@@ -18,7 +18,8 @@ router.get('/massmail', async (request, response) => {
     const users = await User.find({});
     const releases = await Release.find({});
 
-    sendmail(users, releases);
+    await sendmail(users, releases);
+
     response.status(200).send({ message: 'emails sent' });
   } catch (error) {
     console.log(error);
