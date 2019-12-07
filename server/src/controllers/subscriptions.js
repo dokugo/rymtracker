@@ -48,7 +48,8 @@ router.post('/subscribe', async (request, response) => {
     } else {
       const user = new User({
         username: body.username,
-        email: body.email
+        email: body.email,
+        isVerified: body.isVerified
       });
 
       const savedUser = await user.save();
@@ -57,6 +58,23 @@ router.post('/subscribe', async (request, response) => {
   } catch (error) {
     console.log(error);
     throw error;
+  }
+});
+
+// GET verify specified user
+router.get('/subscriptions/verify/:id', async (request, response) => {
+  try {
+    const id = request.params.id;
+    const user = await User.findById(id);
+
+    if (user.isVerified) {
+      response.status(200).send({ message: 'this email is already verified' });
+    } else {
+      await user.updateOne({ isVerified: true });
+      response.status(200).send({ message: 'verification succesful' });
+    }
+  } catch (error) {
+    console.log(error);
   }
 });
 
