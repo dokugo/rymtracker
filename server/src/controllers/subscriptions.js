@@ -6,8 +6,13 @@ const User = require('../models/user');
 // GET all users subscriptions
 router.get('/subscriptions', async (request, response) => {
   try {
-    const users = await User.find({});
-    response.status(200).send(users);
+    const users = await User.find();
+
+    if (users.length) {
+      response.status(200).send(users);
+    } else {
+      response.status(200).send({ message: 'No subscriptions.' });
+    }
   } catch (error) {
     console.log(error);
   }
@@ -17,12 +22,12 @@ router.get('/subscriptions', async (request, response) => {
 router.get('/subscriptions/:id', async (request, response) => {
   try {
     const email = request.params.id;
-    const subscriptions = await User.find({ email: email });
+    const user = await User.findOne({ email: email });
 
-    if (subscriptions.length) {
-      response.status(200).send(subscriptions);
+    if (user) {
+      response.status(200).send(user);
     } else {
-      response.status(200).send({ message: 'no subscriptions' });
+      response.status(200).send({ message: 'No subscriptions.' });
     }
   } catch (error) {
     console.log(error);
@@ -35,26 +40,37 @@ router.post('/subscribe', async (request, response) => {
     const body = request.body;
 
     if (body.username === undefined || body.email === undefined) {
-      return response.status(400).send({ error: 'data missing' });
+      return response.status(400).send({ error: 'Data missing.' });
     }
 
     const foundUser = await User.findOne({
-      username: body.username,
+      // username: body.username,
       email: body.email
     });
 
-    if (foundUser) {
-      return response.status(400).send({ error: 'duplicate' });
-    } else {
-      const user = new User({
-        username: body.username,
-        email: body.email,
-        isVerified: body.isVerified
-      });
-
-      const savedUser = await user.save();
-      response.status(200).send(savedUser);
+    if (foundUser && foundUser.username === body.username) {
+      return response.status(200).send({ error: 'Duplicate.' });
     }
+
+    if (foundUser) {
+      await foundUser.updateOne({
+        username: body.username
+      });
+      return response.status(200).send({
+        message: `Updated ${body.email} subscription from ${foundUser.username} to ${body.username}`
+      });
+    }
+
+    const user = new User({
+      username: body.username,
+      email: body.email,
+      isVerified: false
+    });
+
+    await user.save();
+    response.status(200).send({
+      message: `Saved ${body.email} subscription to ${body.username}`
+    });
   } catch (error) {
     console.log(error);
     throw error;
@@ -67,11 +83,15 @@ router.get('/subscriptions/verify/:id', async (request, response) => {
     const id = request.params.id;
     const user = await User.findById(id);
 
+    if (!user) {
+      return response.status(200).send({ message: 'No such user.' });
+    }
+
     if (user.isVerified) {
-      response.status(200).send({ message: 'this email is already verified' });
+      response.status(200).send({ message: 'This email is already verified.' });
     } else {
       await user.updateOne({ isVerified: true });
-      response.status(200).send({ message: 'verification succesful' });
+      response.status(200).send({ message: 'Verification succesful.' });
     }
   } catch (error) {
     console.log(error);
@@ -89,9 +109,9 @@ router.delete('/unsubscribe', async (request, response) => {
     if (deletedUser) {
       response
         .status(200)
-        .send({ message: 'succesfully deleted', user: deletedUser });
+        .send({ message: 'Succesfully deleted.', user: deletedUser });
     } else {
-      response.status(400).send({ error: 'no such user' });
+      response.status(400).send({ error: 'No such user.' });
     }
   } catch (error) {
     console.log(error);
