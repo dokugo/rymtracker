@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const crawler = require('../helpers/crawler');
+const crawler = require('../services/crawler');
 const reduce = require('../helpers/reducer');
 const sampleData = require('../sample.json');
 
@@ -11,7 +11,7 @@ const User = require('../models/user');
 // GET all subscribed users crawled data
 router.get('/subscribed', async (request, response) => {
   try {
-    const users = await User.find({});
+    const users = await User.find();
     const usernames = users.map(item => item.username);
 
     console.log(usernames);

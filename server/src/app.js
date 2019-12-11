@@ -37,7 +37,7 @@ const crawling = require('./controllers/crawling');
 const mailing = require('./controllers/mailing');
 app.use('/user', subscriptions);
 app.use('/crawl', crawling);
-app.use('/mailing', mailing);
+app.use('/mail', mailing);
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' });

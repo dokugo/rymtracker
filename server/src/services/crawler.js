@@ -76,7 +76,7 @@ const getPage = async (URL, page) => {
 
 let browser;
 
-const rym = async username => {
+const crawler = async username => {
   const URL = getUserPage(username);
 
   try {
@@ -115,4 +115,4 @@ const rym = async username => {
   }
 };
 
-module.exports = rym;
+module.exports = crawler;
