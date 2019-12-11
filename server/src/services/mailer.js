@@ -9,7 +9,8 @@ const pass = process.env.SMTP_PASS__PROD || process.env.SMTP_PASS;
 
 const transport = {
   host: host,
-  port: 587, // true for 465, false for other ports
+  port: 587,
+  secure: false, // true for 465, false for other ports
   auth: {
     user: user,
     pass: pass

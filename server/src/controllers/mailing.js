@@ -6,21 +6,51 @@ const mailer = require('../services/mailer');
 const Release = require('../models/release');
 const User = require('../models/user');
 
-const sendmail = async (users, releases) => {
-  for (let i = 0; i < 1; i++) {
-    await mailer(users[i], releases[i].data);
+const massMail = async (users, releases) => {
+  for (let i = 0; i < users.length; i++) {
+    const release = releases.find(item => item.username === users[i].username);
+    await mailer(users[i], release.data);
   }
 };
 
-// GET ping to massmail route to send a email to every subscribed user
-router.get('/massmail', async (request, response) => {
+const singleMail = async (user, release) => {
+  await mailer(user, release.data);
+};
+
+// GET send a email to every subscribed user
+router.get('/mass', async (request, response) => {
   try {
-    const users = await User.find({});
-    const releases = await Release.find({});
+    // refactor the db query here
+    const users = await User.find();
+    const releases = await Release.find();
 
-    await sendmail(users, releases);
+    await massMail(users, releases);
 
-    response.status(200).send({ message: 'emails sent' });
+    response.status(200).send({ message: 'Mass mailing successful.' });
+  } catch (error) {
+    console.log(error);
+  }
+});
+
+// GET send a mail to specified user
+router.get('/:id', async (request, response) => {
+  try {
+    const email = request.params.id;
+
+    // refactor the db query here
+    const user = await User.findOne({ email: email });
+    console.log(user);
+    if (user) {
+      const release = await Release.findOne({ username: user.username });
+      if (!release) {
+        return response.status(200).send({ message: 'No data.' });
+      }
+
+      await singleMail(user, release);
+      response.status(200).send({ message: `Email sent to ${email}` });
+    } else {
+      response.status(200).send({ message: 'No subscriptions.' });
+    }
   } catch (error) {
     console.log(error);
   }
