@@ -99,12 +99,16 @@ router.get('/subscriptions/verify/:id', async (request, response) => {
 });
 
 // DELETE user subscription
-router.delete('/unsubscribe', async (request, response) => {
+router.delete('/unsubscribe/:id', async (request, response) => {
   try {
-    const deletedUser = await User.findOneAndDelete({
+    /*     const deletedUser = await User.findOneAndDelete({
       username: request.query.username,
       email: request.query.email
-    });
+    }); */
+
+    // const id = request.params.id;
+
+    const deletedUser = await User.findByIdAndDelete(request.params.id);
 
     if (deletedUser) {
       response

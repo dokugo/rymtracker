@@ -20,7 +20,7 @@ const transporter = nodemailer.createTransport(transport);
 
 const getHtml = async (user, releases) => {
   const templateData = {
-    name: user.username,
+    user: user,
     releases: releases
   };
 

@@ -7,6 +7,8 @@ get http://localhost:9000/crawl/sharifi
 ### GET all subscribed users crawled data
 get http://localhost:9000/crawl/subscribed
 
+
+
 ### GET all saved data from the db
 get http://localhost:9000/user/subscriptions
 
@@ -18,12 +20,18 @@ post http://localhost:9000/user/subscribe
 Content-Type: application/json
 
 {
-  "username": "username",
+  "username": "sharifi",
   "email": "username@gmail.com"
 }
 
-### DELETE specified user and email
-DELETE http://localhost:9000/user/unsubscribe?username=another_account&email=username@gmail.com
+### GET verify specified user
+get http://localhost:9000/user/subscriptions/verify/5df0205777c2212470e76111
 
-### GET mailing
-get http://localhost:9000/mailing/massmail
+### DELETE specified user and email
+delete http://localhost:9000/user/unsubscribe/5df54c02013b55168cbd2f5d
+
+### GET mass mailing
+get http://localhost:9000/mail/mass
+
+### GET single user mailing
+get http://localhost:9000/mail/username@gmail.com
