@@ -1,3 +1,5 @@
+### /crawl
+
 ### GET test
 get http://localhost:9000/crawl/test
 
@@ -5,33 +7,45 @@ get http://localhost:9000/crawl/test
 get http://localhost:9000/crawl/sharifi
 
 ### GET all subscribed users crawled data
-get http://localhost:9000/crawl/subscribed
+get http://localhost:9000/crawl/everyone
 
 
+
+
+### /user
 
 ### GET all saved data from the db
 get http://localhost:9000/user/subscriptions
 
 ### GET specified user data from the db
-get http://localhost:9000/user/subscriptions/username@gmail.com
+get http://localhost:9000/user/username@gmail.com
 
-### POST new user to the db
-post http://localhost:9000/user/subscribe
+### GET verify specified user
+get http://localhost:9000/user/verify/5df0205777c2212470e76111
+
+### GET unsubscribe specified user
+get http://localhost:9000/user/unsubscribe/5df54c02013b55168cbd2f5d
+
+### PUT subscribe user
+put http://localhost:9000/user/subscribe
 Content-Type: application/json
 
 {
-  "username": "sharifi",
+  "username": "escyth",
   "email": "username@gmail.com"
 }
 
-### GET verify specified user
-get http://localhost:9000/user/subscriptions/verify/5df0205777c2212470e76111
 
-### DELETE specified user and email
-delete http://localhost:9000/user/unsubscribe/5df54c02013b55168cbd2f5d
+
+
+### /mail
 
 ### GET mass mailing
 get http://localhost:9000/mail/mass
 
 ### GET single user mailing
 get http://localhost:9000/mail/username@gmail.com
+
+### testing emails
+### no data: escyth
+### has data: sharifi

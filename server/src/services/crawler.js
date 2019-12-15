@@ -26,7 +26,7 @@ const getPage = async (URL, page) => {
         }
       }
       if (!table) {
-        return { error: 'no upcoming releases section on the user page' };
+        return { error: 'No upcoming releases section on this user page.' };
       }
 
       const box = table.querySelector('tbody > tr:nth-child(2) > td > div');

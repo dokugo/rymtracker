@@ -32,12 +32,12 @@ app.listen(PORT, () => console.log(`Server is listening on port ${PORT}.`));
 };
 app.use(requestLogger); */
 
-const subscriptions = require('./controllers/subscriptions');
-const crawling = require('./controllers/crawling');
-const mailing = require('./controllers/mailing');
-app.use('/user', subscriptions);
-app.use('/crawl', crawling);
-app.use('/mail', mailing);
+const user = require('./controllers/user');
+const crawl = require('./controllers/crawl');
+const mail = require('./controllers/mail');
+app.use('/user', user);
+app.use('/crawl', crawl);
+app.use('/mail', mail);
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' });

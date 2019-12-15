@@ -8,8 +8,21 @@ const sampleData = require('../sample.json');
 const Release = require('../models/release');
 const User = require('../models/user');
 
+const saveCrawledData = async (data, username, error) => {
+  const query = { username: username };
+  const update = { data: data, error: error };
+  const options = {
+    useFindAndModify: false,
+    upsert: true,
+    new: true,
+    setDefaultsOnInsert: true
+  };
+
+  await Release.findOneAndUpdate(query, update, options);
+};
+
 // GET all subscribed users crawled data
-router.get('/subscribed', async (request, response) => {
+router.get('/everyone', async (request, response) => {
   try {
     const users = await User.find();
     const usernames = users.map(item => item.username);
@@ -20,21 +33,10 @@ router.get('/subscribed', async (request, response) => {
       const rawData = await crawler(usernames[i]);
 
       if (rawData.error) {
-        const release = new Release({
-          username: usernames[i],
-          data: null,
-          error: rawData.error
-        });
-
-        await release.save();
+        await saveCrawledData(null, usernames[i], rawData.error);
       } else {
         const data = reduce(rawData);
-        const release = new Release({
-          username: usernames[i],
-          data: data
-        });
-
-        await release.save();
+        await saveCrawledData(data, usernames[i], null);
       }
     }
 
