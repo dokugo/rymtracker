@@ -3,7 +3,9 @@ const router = express.Router();
 
 const User = require('../models/user');
 
-// GET all users subscriptions
+const mailer = require('../services/mailer');
+
+// GET all users
 router.get('/subscriptions', async (request, response) => {
   try {
     const users = await User.find();
@@ -18,8 +20,8 @@ router.get('/subscriptions', async (request, response) => {
   }
 });
 
-// GET specified user subscriptions
-router.get('/subscriptions/:id', async (request, response) => {
+// GET specified user
+router.get('/:id', async (request, response) => {
   try {
     const email = request.params.id;
     const user = await User.findOne({ email: email });
@@ -34,51 +36,8 @@ router.get('/subscriptions/:id', async (request, response) => {
   }
 });
 
-// POST subscribe user
-router.post('/subscribe', async (request, response) => {
-  try {
-    const body = request.body;
-
-    if (body.username === undefined || body.email === undefined) {
-      return response.status(400).send({ error: 'Data missing.' });
-    }
-
-    const foundUser = await User.findOne({
-      // username: body.username,
-      email: body.email
-    });
-
-    if (foundUser && foundUser.username === body.username) {
-      return response.status(200).send({ error: 'Duplicate.' });
-    }
-
-    if (foundUser) {
-      await foundUser.updateOne({
-        username: body.username
-      });
-      return response.status(200).send({
-        message: `Updated ${body.email} subscription from ${foundUser.username} to ${body.username}`
-      });
-    }
-
-    const user = new User({
-      username: body.username,
-      email: body.email,
-      isVerified: false
-    });
-
-    await user.save();
-    response.status(200).send({
-      message: `Saved ${body.email} subscription to ${body.username}`
-    });
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-});
-
 // GET verify specified user
-router.get('/subscriptions/verify/:id', async (request, response) => {
+router.get('/verify/:id', async (request, response) => {
   try {
     const id = request.params.id;
     const user = await User.findById(id);
@@ -98,8 +57,8 @@ router.get('/subscriptions/verify/:id', async (request, response) => {
   }
 });
 
-// DELETE user subscription
-router.delete('/unsubscribe/:id', async (request, response) => {
+// GET user subscription
+router.get('/unsubscribe/:id', async (request, response) => {
   try {
     /*     const deletedUser = await User.findOneAndDelete({
       username: request.query.username,
@@ -119,6 +78,53 @@ router.delete('/unsubscribe/:id', async (request, response) => {
     }
   } catch (error) {
     console.log(error);
+  }
+});
+
+// PUT subscribe user
+router.put('/subscribe', async (request, response) => {
+  try {
+    const body = request.body;
+
+    // end: data missing
+    if (body.username === undefined || body.email === undefined) {
+      return response.status(400).send({ error: 'Data missing.' });
+    }
+
+    const foundUser = await User.findOne({
+      email: body.email
+    });
+
+    // end: duplicate
+    if (foundUser && foundUser.username === body.username) {
+      return response.status(409).send({ error: 'Duplicate.' });
+    }
+
+    // end: updated
+    if (foundUser) {
+      await foundUser.updateOne({
+        username: body.username
+      });
+      return response.status(200).send({
+        message: `Updated ${body.email} subscription from ${foundUser.username} to ${body.username}`
+      });
+    }
+
+    const user = new User({
+      username: body.username,
+      email: body.email,
+      isVerified: false
+    });
+    await user.save();
+    await mailer(user, 'verification');
+
+    // end: saved
+    response.status(201).send({
+      message: `Saved ${body.email} subscription to ${body.username}`
+    });
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 });
 

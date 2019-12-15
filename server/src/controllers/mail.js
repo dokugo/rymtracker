@@ -8,13 +8,17 @@ const User = require('../models/user');
 
 const massMail = async (users, releases) => {
   for (let i = 0; i < users.length; i++) {
-    const release = releases.find(item => item.username === users[i].username);
-    await mailer(users[i], release.data);
+    const item = releases.find(item => item.username === users[i].username);
+    if (item.data) {
+      await mailer(users[i], 'releases', item.data);
+    } else {
+      console.log(`No crawled data for ${users[i].username}.`);
+    }
   }
 };
 
 const singleMail = async (user, release) => {
-  await mailer(user, release.data);
+  await mailer(user, 'releases', release.data);
 };
 
 // GET send a email to every subscribed user
@@ -39,11 +43,17 @@ router.get('/:id', async (request, response) => {
 
     // refactor the db query here
     const user = await User.findOne({ email: email });
-    console.log(user);
+    // console.log(user);
     if (user) {
       const release = await Release.findOne({ username: user.username });
+
       if (!release) {
-        return response.status(200).send({ message: 'No data.' });
+        return response
+          .status(400)
+          .send({ error: `No crawled data for ${user.username}.` });
+      }
+      if (release.error) {
+        return response.status(400).send({ error: release.error });
       }
 
       await singleMail(user, release);

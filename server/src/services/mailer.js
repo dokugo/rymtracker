@@ -18,36 +18,56 @@ const transport = {
 };
 const transporter = nodemailer.createTransport(transport);
 
-const getHtml = async (user, releases) => {
+const getSubject = (type, user) => {
+  let subject;
+  switch (type) {
+    case 'releases':
+      subject = `💿 Upcoming releases for ${user.username}`;
+      break;
+    case 'verification':
+      subject = `❓ Please verify your subscription to ${user.username}`;
+      break;
+  }
+  return subject;
+};
+
+const getHtml = async (user, type, data) => {
   const templateData = {
     user: user,
-    releases: releases
+    data: data
   };
 
-  const templateDir = path.join(__dirname, '../templates/email.ejs');
+  let templateDir;
+  switch (type) {
+    case 'releases':
+      templateDir = path.join(__dirname, '../templates/releases.ejs');
+      break;
+    case 'verification':
+      templateDir = path.join(__dirname, '../templates/verification.ejs');
+      break;
+  }
 
   const html = await ejs.renderFile(templateDir, templateData);
-
   return html;
 };
 
-const getOptions = async (user, releases) => {
-  const html = await getHtml(user, releases);
-
+const getOptions = async (user, subject, html) => {
   const options = {
     from: '"RYM Tracker" <mailer@rymtracker.ml>',
     to: user.email,
-    subject: `💿 Upcoming releases for ${user.username}`,
+    subject: subject,
     text: `Please use a client with HTML support.`,
     html: html
   };
-
   return options;
 };
 
-const mailer = async (user, releases) => {
+const mailer = async (user, type, data) => {
   try {
-    const options = await getOptions(user, releases);
+    const subject = getSubject(type, user);
+    const html = await getHtml(user, type, data);
+
+    const options = await getOptions(user, subject, html);
 
     const message = await transporter.sendMail(options);
 
@@ -57,5 +77,17 @@ const mailer = async (user, releases) => {
     console.log(error);
   }
 };
+
+/* const verify = async user => {
+  try {
+    const options = await getOptions(user, 'verification');
+    const message = await transporter.sendMail(options);
+
+    console.log('Message sent:');
+    console.log(message);
+  } catch (error) {
+    console.log(error);
+  }
+}; */
 
 module.exports = mailer;
