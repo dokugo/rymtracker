@@ -60,10 +60,10 @@ const Navbar = styled.nav`
   transition: all 0.5s ease 0s;
   display: flex;
   flex-direction: column;
+  margin-bottom: 30px;
 `;
 
 const Container = styled.main`
-  margin-top: 30px;
   display: flex;
   align-items: center;
   flex-direction: column;

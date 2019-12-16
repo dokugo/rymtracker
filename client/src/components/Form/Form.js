@@ -58,7 +58,10 @@ const Form = ({ setDataStorage, setListAnimation }) => {
 
       console.log(inputData);
 
-      fetch(`http://localhost:9000/rym/user/${inputData}`, {
+      const DOMAIN =
+        process.env.REACT_APP_PROD_API_ROUTE || 'http://localhost:9000';
+
+      fetch(`${DOMAIN}/crawl/${inputData}`, {
         // fetch(`https://nxtractor.herokuapp.com/api/search/${inputData}`, {
         headers: {
           'Cache-Control':

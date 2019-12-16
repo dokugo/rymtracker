@@ -63,9 +63,12 @@ const Form = ({ setDataStorage, setListAnimation }) => {
 
       console.log(inputData);
 
-      fetch(`http://localhost:9000/rym/subscribe`, {
+      const DOMAIN =
+        process.env.REACT_APP_PROD_API_ROUTE || 'http://localhost:9000';
+
+      fetch(`${DOMAIN}/user/subscribe`, {
         // fetch(`https://nxtractor.herokuapp.com/api/search/${inputData}`, {
-        method: 'POST',
+        method: 'PUT',
         body: JSON.stringify(inputData),
         headers: {
           'Content-Type': 'application/json',
