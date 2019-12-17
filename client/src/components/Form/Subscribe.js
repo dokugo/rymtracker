@@ -2,23 +2,32 @@ import React, { useState, createRef } from 'react';
 import styled, { keyframes } from 'styled-components/macro';
 import FormButton from './FormButton';
 
-const Form = ({ setDataStorage, setListAnimation }) => {
+const Subscribe = ({ setDataStorage, setListAnimation }) => {
   const [inputData, setInputData] = useState(null);
   const [formState, setFormState] = useState({
     default: true,
     loading: false,
     warning: false,
-    error: false
+    error: false,
+    message: null
   });
 
   const handleInputChange = e => {
-    if (e.target.value.length < 1 || e.target.value.trim().length < 1) {
-      setInputData(null);
+    if (e.target.value.trim().length < 1) {
+      if (e.target.name === 'email') {
+        setInputData({ ...inputData, email: null });
+      } else if (e.target.name === 'username') {
+        setInputData({ ...inputData, username: null });
+      }
+
+      // setInputData(null);
+
       setFormState({
         ...formState,
         warning: true,
         error: false,
-        default: false
+        default: false,
+        message: null
       });
     } else {
       if (e.target.name === 'email') {
@@ -54,13 +63,9 @@ const Form = ({ setDataStorage, setListAnimation }) => {
       return;
     }
 
-    if (inputData === null) {
-      setFormState({ ...formState, warning: false, error: true });
-      return;
-    } else {
+    if (inputData && inputData.email && inputData.username) {
       // setListAnimation(false);
       setFormState({ ...formState, loading: true });
-
       console.log(inputData);
 
       const DOMAIN =
@@ -84,7 +89,6 @@ const Form = ({ setDataStorage, setListAnimation }) => {
             console.error(response.message);
           } */
 
-          console.log(response);
           // setDataStorage(response);
           /* if (response.data) {
             setDataStorage(response.data);
@@ -93,11 +97,31 @@ const Form = ({ setDataStorage, setListAnimation }) => {
           } */
 
           // setListAnimation(true);
-          setFormState({ ...formState, loading: false, default: false });
+          setFormState({
+            ...formState,
+            loading: false,
+            default: false,
+            message: response.message
+          });
         })
         .catch(error => console.log('Error: ', error));
+    } else {
+      setFormState({
+        ...formState,
+        warning: false,
+        error: true,
+        message: null
+      });
+      return;
     }
   };
+
+  /*   const inputStateTooltip = formState.warning
+    ? `Search request can't be empty.`
+    : formState.error
+    ? `Can't send empty request.`
+    : null;
+  const responseStateTooltip = tipState; */
 
   return (
     <FormItem onSubmit={handleRequest}>
@@ -110,7 +134,8 @@ const Form = ({ setDataStorage, setListAnimation }) => {
           onChange={handleInputChange}
           formState={formState}
           ref={inputRef}
-          type="email"
+          // type="email"
+          type="text"
           title="Email"
           name="email"
           placeholder="email"
@@ -134,15 +159,18 @@ const Form = ({ setDataStorage, setListAnimation }) => {
           ? `Search request can't be empty.`
           : formState.error
           ? `Can't send empty request.`
+          : formState.message
+          ? formState.message
           : null}
       </Tooltip>
     </FormItem>
   );
 };
 
-export default Form;
+export default Subscribe;
 
 const FormItem = styled.form`
+  padding-bottom: 20px;
   @media (max-width: 660px) {
     width: 100%;
   }
