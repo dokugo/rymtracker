@@ -1,10 +1,10 @@
 export default {
   global: {
-    background: 'rgb(76, 98, 136)',
+    background: 'rgb(47, 72, 109)',
     text: 'rgb(175, 175, 175)'
   },
   input: {
-    background: 'rgba(32, 34, 37, 0.3)',
+    background: 'rgba(6, 6, 8, 0.2)',
     text: 'rgb(185, 187, 190)',
     default: 'rgba(175, 225, 255, 0.35)',
     warning: 'rgba(232, 145, 15, 0.35)',
@@ -22,12 +22,12 @@ export default {
     loading: 'rgb(122, 169, 92)'
   },
   tooltip: {
-    default: 'rgb(40, 167, 69)',
+    default: 'rgba(175, 225, 255, 0.8)',
     warning: 'rgba(232, 145, 15, 0.85)',
     error: 'rgba(220, 53, 69, 0.85)'
   },
   card: {
-    background: 'rgba(32, 34, 37, 0.3)',
+    background: 'rgba(6, 6, 8, 0.2)',
     title: 'rgba(255, 255, 255, 0.70)',
     date: 'rgb(125, 125, 125)',
     employer: 'rgb(175, 175, 175)',

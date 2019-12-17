@@ -7,26 +7,15 @@ import styled, {
   createGlobalStyle,
   ThemeProvider
 } from 'styled-components/macro';
-import themeLight from '../themes/themeLight';
 import themeDark from '../themes/themeDark';
-import ThemeButton from './ThemeButton';
 import TestList from './Test/TestList';
 
 const App = () => {
-  const themeIsStored = localStorage.getItem('isDarkMode');
-  const [isDarkMode, setIsDarkMode] = useState(
-    themeIsStored === 'true' ? true : false
-  );
-  const toggleTheme = () => {
-    setIsDarkMode(!isDarkMode);
-    localStorage.setItem('isDarkMode', !isDarkMode);
-  };
-
   const [dataStorage, setDataStorage] = useState(null);
   // const [listAnimation, setListAnimation] = useState(null);
 
   return (
-    <ThemeProvider theme={isDarkMode ? themeDark : themeLight}>
+    <ThemeProvider theme={themeDark}>
       <GlobalStyle />
       <AppBox>
         <Navbar>
@@ -37,7 +26,6 @@ const App = () => {
           <TestList dataStorage={dataStorage} />
           {/* <List dataStorage={dataStorage} listAnimation={listAnimation} /> */}
         </Container>
-        <ThemeButton isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
       </AppBox>
     </ThemeProvider>
   );
@@ -58,7 +46,6 @@ const Navbar = styled.nav`
   box-sizing: border-box;
   /* height: 125px; */
   transition: all 0.5s ease 0s;
-  display: flex;
   flex-direction: column;
   margin-bottom: 30px;
 `;

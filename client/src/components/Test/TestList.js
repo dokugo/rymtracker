@@ -103,7 +103,8 @@ const Item = styled.article`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  background-color: rgba(32, 34, 37, 0.3);
+  background: ${({ theme }) => theme.card.background};
+  /* background-color: rgba(32, 34, 37, 0.3); */
   margin-bottom: 20px;
   border-radius: 10px;
   padding: 10px 20px;
