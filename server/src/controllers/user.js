@@ -27,9 +27,9 @@ router.get('/:id', async (request, response) => {
     const user = await User.findOne({ email: email });
 
     if (user) {
-      response.status(200).send(user);
+      response.status(200).send({ message: `Requested user: ${user}` });
     } else {
-      response.status(200).send({ message: 'No subscriptions.' });
+      response.status(404).send({ message: 'No subscriptions.' });
     }
   } catch (error) {
     console.log(error);
@@ -74,10 +74,31 @@ router.get('/unsubscribe/:id', async (request, response) => {
         .status(200)
         .send({ message: 'Succesfully deleted.', user: deletedUser });
     } else {
-      response.status(400).send({ error: 'No such user.' });
+      response.status(400).send({ message: 'No such user.' });
     }
   } catch (error) {
     console.log(error);
+  }
+});
+
+// GET update user
+router.get('/update/:id/:username', async (request, response) => {
+  try {
+    const id = request.params.id;
+    const newUsername = request.params.username;
+    const user = await User.findById(id);
+
+    if (user) {
+      await user.updateOne({
+        username: newUsername
+      });
+      return response.status(200).send({
+        message: `Updated ${user.email} subscription from ${user.username} to ${newUsername}`
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
   }
 });
 
@@ -88,7 +109,7 @@ router.put('/subscribe', async (request, response) => {
 
     // end: data missing
     if (body.username === undefined || body.email === undefined) {
-      return response.status(400).send({ error: 'Data missing.' });
+      return response.status(400).send({ message: 'Data missing.' });
     }
 
     const foundUser = await User.findOne({
@@ -97,7 +118,7 @@ router.put('/subscribe', async (request, response) => {
 
     // end: duplicate
     if (foundUser && foundUser.username === body.username) {
-      return response.status(409).send({ error: 'Duplicate.' });
+      return response.status(409).send({ message: 'Duplicate.' });
     }
 
     // end: updated
@@ -110,6 +131,7 @@ router.put('/subscribe', async (request, response) => {
       });
     }
 
+    // end: saved
     const user = new User({
       username: body.username,
       email: body.email,
@@ -118,7 +140,6 @@ router.put('/subscribe', async (request, response) => {
     await user.save();
     await mailer(user, 'verification');
 
-    // end: saved
     response.status(201).send({
       message: `Saved ${body.email} subscription to ${body.username}`
     });
