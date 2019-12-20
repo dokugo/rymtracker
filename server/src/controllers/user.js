@@ -88,13 +88,17 @@ router.get('/update/:id/:username', async (request, response) => {
     const newUsername = request.params.username;
     const user = await User.findById(id);
 
-    if (user) {
+    if (user && user.username !== newUsername) {
       await user.updateOne({
         username: newUsername
       });
       return response.status(200).send({
         message: `Updated ${user.email} subscription from ${user.username} to ${newUsername}`
       });
+    }
+
+    if (user && user.username === newUsername) {
+      return response.status(409).send({ message: 'Duplicate' });
     }
   } catch (error) {
     console.log(error);
