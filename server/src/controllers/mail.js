@@ -53,7 +53,7 @@ router.get('/:id', async (request, response) => {
           .send({ error: `No crawled data for ${user.username}.` });
       }
       if (release.error) {
-        return response.status(400).send({ error: release.error });
+        return response.status(400).send({ message: release.error });
       }
 
       await singleMail(user, release);

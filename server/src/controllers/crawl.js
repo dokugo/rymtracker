@@ -56,7 +56,7 @@ router.get('/:id', async (request, response) => {
     const username = request.params.id;
     const rawData = await crawler(username);
     if (rawData.error) {
-      return response.status(400).send({ error: rawData.error });
+      return response.status(400).send({ message: rawData.error });
     }
     const data = reduce(rawData);
 
