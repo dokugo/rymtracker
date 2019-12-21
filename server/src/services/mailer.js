@@ -27,6 +27,9 @@ const getSubject = (type, user) => {
     case 'verification':
       subject = `❓ Please verify your subscription to ${user.username}`;
       break;
+    case 'update':
+      subject = `❓ Please confirm updating your subscription to ${user.username}`;
+      break;
   }
   return subject;
 };
@@ -44,6 +47,9 @@ const getHtml = async (user, type, data) => {
       break;
     case 'verification':
       templateDir = path.join(__dirname, '../templates/verification.ejs');
+      break;
+    case 'update':
+      templateDir = path.join(__dirname, '../templates/update.ejs');
       break;
   }
 

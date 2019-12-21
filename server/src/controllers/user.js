@@ -93,7 +93,7 @@ router.get('/update/:id/:username', async (request, response) => {
         username: newUsername
       });
       return response.status(200).send({
-        message: `Updated ${user.email} subscription from ${user.username} to ${newUsername}`
+        message: 'Update successful.'
       });
     }
 
@@ -125,17 +125,32 @@ router.put('/subscribe', async (request, response) => {
       return response.status(409).send({ message: 'Duplicate.' });
     }
 
-    // end: updated
-    if (foundUser) {
-      await foundUser.updateOne({
+    // end: update
+    if (foundUser && foundUser.username !== body.username) {
+      /*       const newUser = {
+        id: foundUser.id,
+        email: foundUser.email,
         username: body.username
-      });
+      }; */
+
+      await mailer(
+        {
+          id: foundUser.id,
+          email: foundUser.email,
+          username: body.username
+        },
+        'update'
+      );
+
+      /* await foundUser.updateOne({
+        username: body.username
+      }); */
       return response.status(200).send({
-        message: `Updated ${body.email} subscription from ${foundUser.username} to ${body.username}`
+        message: `Received ${body.email} subscription update from ${foundUser.username} to ${body.username}. Please confirm subscription update via email verification link.`
       });
     }
 
-    // end: saved
+    // end: save
     const user = new User({
       username: body.username,
       email: body.email,
@@ -145,7 +160,7 @@ router.put('/subscribe', async (request, response) => {
     await mailer(user, 'verification');
 
     response.status(201).send({
-      message: `Saved ${body.email} subscription to ${body.username}`
+      message: `Received ${body.email} subscription to ${body.username}. Please confirm your subscription via email verification link.`
     });
   } catch (error) {
     console.log(error);
