@@ -9,7 +9,9 @@ const User = require('../models/user');
 const massMail = async (users, releases) => {
   for (let i = 0; i < users.length; i++) {
     const item = releases.find(item => item.username === users[i].username);
-    if (item.data) {
+    if (!users[i].isVerified) {
+      console.log(`${users[i].email} is not verified.`);
+    } else if (item.data) {
       await mailer(users[i], 'releases', item.data);
     } else {
       console.log(`No crawled data for ${users[i].username}.`);

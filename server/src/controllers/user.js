@@ -57,7 +57,7 @@ router.get('/verify/:id', async (request, response) => {
   }
 });
 
-// GET user subscription
+// GET unsubscribe user
 router.get('/unsubscribe/:id', async (request, response) => {
   try {
     /*     const deletedUser = await User.findOneAndDelete({
@@ -127,20 +127,13 @@ router.put('/subscribe', async (request, response) => {
 
     // end: update
     if (foundUser && foundUser.username !== body.username) {
-      /*       const newUser = {
+      const newUser = {
         id: foundUser.id,
         email: foundUser.email,
         username: body.username
-      }; */
+      };
 
-      await mailer(
-        {
-          id: foundUser.id,
-          email: foundUser.email,
-          username: body.username
-        },
-        'update'
-      );
+      await mailer(newUser, 'update');
 
       /* await foundUser.updateOne({
         username: body.username

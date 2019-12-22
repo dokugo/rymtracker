@@ -30,17 +30,24 @@ router.get('/everyone', async (request, response) => {
     console.log(usernames);
 
     for (let i = 0; i < usernames.length; i++) {
+      if (!users[i].isVerified) {
+        console.log(`${users[i].email} is not verified.`);
+        continue;
+      }
+
       const rawData = await crawler(usernames[i]);
 
       if (rawData.error) {
+        console.log(`No data for ${usernames[i]}.`);
         await saveCrawledData(null, usernames[i], rawData.error);
       } else {
+        console.log(`Crawled data for ${usernames[i]}.`);
         const data = reduce(rawData);
         await saveCrawledData(data, usernames[i], null);
       }
     }
 
-    response.status(200).send({ messge: 'OK', usernames: usernames });
+    response.status(200).send({ message: 'OK', usernames: usernames });
   } catch (error) {
     console.log(error);
   }
