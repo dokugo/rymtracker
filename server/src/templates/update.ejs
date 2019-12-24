@@ -5,6 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   </head>
   <body>
-    <a style="color: #999999; font-family: Verdana; font-size: 12px;" href="http://localhost:9000/user/update/<%=user.id%>/<%=user.username%>">Update</a>
+    <p style="line-height: 1.5; color: #606060; font-family: Lucida Console, Monaco, Courier New; font-size: 12px;">Please confirm updating <span style="color: #000000"><%=user.email%></span> subscription to tracking new music releases for <span style="color: #000000"><%=user.username%></span> RYM account.</p>
+    <p style="line-height: 1.5; color: #606060; font-family: Lucida Console, Monaco, Courier New; font-size: 12px;">
+      <a style="color: #5b7cc4; font-family: Lucida Console, Monaco, Courier New; font-size: 12px;" href="http://localhost:9000/user/update/<%=user.id%>/<%=user.username%>">Click here</a>
+      or copy and paste the following into your browser address bar:
+      <br/>
+      <span style="color: #000000">http://localhost:9000/user/update/<%=user.id%>/<%=user.username%></span>
+    </p>
   </body>
 </html>
+
