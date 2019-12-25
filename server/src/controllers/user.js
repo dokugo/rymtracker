@@ -109,7 +109,16 @@ router.get('/update/:id/:username', async (request, response) => {
 // PUT subscribe user
 router.put('/subscribe', async (request, response) => {
   try {
-    const body = request.body;
+    const { body } = request;
+
+    const validateEmail = email => {
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(String(email));
+    };
+
+    if (!validateEmail(body.email)) {
+      return response.status(400).send({ message: 'Incorrect email format.' });
+    }
 
     // end: data missing
     if (body.username === undefined || body.email === undefined) {
