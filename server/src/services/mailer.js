@@ -25,10 +25,10 @@ const getSubject = (type, user) => {
       subject = `💿 Upcoming releases for ${user.username}`;
       break;
     case 'verification':
-      subject = `❓ Please verify your subscription to ${user.username}`;
+      subject = `❓ Please confirm subscription to ${user.username}`;
       break;
     case 'update':
-      subject = `❓ Please confirm updating your subscription to ${user.username}`;
+      subject = `❓ Please confirm subscription update to ${user.username}`;
       break;
   }
   return subject;
@@ -59,7 +59,7 @@ const getHtml = async (user, type, data) => {
 
 const getOptions = async (user, subject, html) => {
   const options = {
-    from: '"RYM Tracker" <mailer@rymtracker.ml>',
+    from: '"RYM Tracker" <no-reply@rymtracker.ml>',
     to: user.email,
     subject: subject,
     text: `Please use a client with HTML support.`,

@@ -131,6 +131,13 @@ router.put('/subscribe', async (request, response) => {
 
     // end: duplicate
     if (foundUser && foundUser.username === body.username) {
+      // end: duplicate + verify
+      if (!foundUser.isVerified) {
+        await mailer(foundUser, 'verification');
+        return response
+          .status(409)
+          .send({ message: 'Duplicate, need email verification.' });
+      }
       return response.status(409).send({ message: 'Duplicate.' });
     }
 
@@ -148,7 +155,8 @@ router.put('/subscribe', async (request, response) => {
         username: body.username
       }); */
       return response.status(200).send({
-        message: `Received ${body.email} subscription update from ${foundUser.username} to ${body.username}. Please confirm subscription update via email verification link.`
+        message: `Please confirm subscription update via email verification link.`
+        /*         message: `Received ${body.email} subscription update from ${foundUser.username} to ${body.username}. Please confirm subscription update via email verification link.` */
       });
     }
 
@@ -162,7 +170,8 @@ router.put('/subscribe', async (request, response) => {
     await mailer(user, 'verification');
 
     response.status(201).send({
-      message: `Received ${body.email} subscription to ${body.username}. Please confirm your subscription via email verification link.`
+      message: `Please confirm subscription via email verification link.`
+      // message: `Received ${body.email} subscription to ${body.username}. Please confirm your subscription via email verification link.`
     });
   } catch (error) {
     console.log(error);
