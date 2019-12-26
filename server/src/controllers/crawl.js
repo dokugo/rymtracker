@@ -3,6 +3,7 @@ const router = express.Router();
 
 const crawler = require('../services/crawler');
 const reduce = require('../helpers/reducer');
+const filter = require('../helpers/duplicateFilter');
 const sampleData = require('../sample.json');
 
 const Release = require('../models/release');
@@ -57,7 +58,7 @@ router.get('/everyone', async (request, response) => {
 router.get('/:id', async (request, response) => {
   try {
     if (request.params.id === 'test') {
-      return response.status(200).send(sampleData);
+      return response.status(200).send(filter(sampleData));
     }
 
     const username = request.params.id;
@@ -65,7 +66,7 @@ router.get('/:id', async (request, response) => {
     if (rawData.error) {
       return response.status(400).send({ message: rawData.error });
     }
-    const data = reduce(rawData);
+    const data = filter(reduce(rawData));
 
     /*     const release = new Release({
       username: username,
