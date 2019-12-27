@@ -1,6 +1,6 @@
 {
-  "short_name": "rymtracker",
-  "name": "rymtracker client",
+  "short_name": "RYM Tracker",
+  "name": "RYM Tracker client",
   "icons": [
     {
       "src": "favicon.png",

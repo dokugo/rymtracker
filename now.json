@@ -13,7 +13,7 @@
   ],
   "routes": [
     { "src": "/static/(.*)", "dest": "/client/static/$1" },
-    { "src": "/favicon.ico", "dest": "/client/favicon.ico" },
+    { "src": "/favicon.png", "dest": "/client/favicon.png" },
     { "src": "/robots.txt", "dest": "/client/robots.txt" },
     { "src": "/manifest.json", "dest": "/client/manifest.json" },
     { "src": "/precache-manifest.(.*)", "dest": "/precache-manifest.$1" },

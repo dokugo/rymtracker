@@ -25,4 +25,5 @@ yarn-debug.log*
 yarn-error.log*
 
 #environment variables
-server/.env
+server/src/.env
+server/src/.env.prod

@@ -6,7 +6,7 @@
   "author": "dokugo",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon --inspect src/app.js",
+    "dev": "cd src && nodemon --inspect app.js",
     "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

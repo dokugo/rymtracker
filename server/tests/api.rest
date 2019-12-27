@@ -21,7 +21,7 @@ GET http://localhost:9000/user/subscriptions
 GET http://localhost:9000/user/username@gmail.com
 
 ### GET verify user
-GET http://localhost:9000/user/verify/5df0205777c2212470e76111
+GET http://localhost:9000/user/verify/5df58a4563bf5c223c07a1fd
 
 ### GET unsubscribe user
 GET http://localhost:9000/user/unsubscribe/5df54c02013b55168cbd2f5d
@@ -43,8 +43,8 @@ Content-Type: application/json
 
 ### /mail
 
-### GET mass mailing
-GET http://localhost:9000/mail/mass
+### GET mail everyone
+GET http://localhost:9000/mail/everyone
 
 ### GET single user mailing
 GET http://localhost:9000/mail/username@gmail.com
