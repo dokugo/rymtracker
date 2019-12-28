@@ -35,7 +35,7 @@ const getSubject = (type, user) => {
 };
 
 const getHtml = async (user, type, data) => {
-  const templateData = {
+  let templateData = {
     user: user,
     data: data
   };
@@ -46,10 +46,20 @@ const getHtml = async (user, type, data) => {
       templateDir = path.join(__dirname, '../templates/releases.ejs');
       break;
     case 'verification':
-      templateDir = path.join(__dirname, '../templates/verification.ejs');
+      templateData = {
+        ...templateData,
+        link: `https://rymtracker.ml/user/verify/${user.id}`,
+        text: ``
+      };
+      templateDir = path.join(__dirname, '../templates/confirmation.ejs');
       break;
     case 'update':
-      templateDir = path.join(__dirname, '../templates/update.ejs');
+      templateData = {
+        ...templateData,
+        link: `https://rymtracker.ml/user/update/${user.id}`,
+        text: `update`
+      };
+      templateDir = path.join(__dirname, '../templates/confirmation.ejs');
       break;
   }
 
