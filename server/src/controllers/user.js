@@ -27,7 +27,7 @@ router.get('/:id', async (request, response) => {
     const user = await User.findOne({ email: email });
 
     if (user) {
-      response.status(200).send({ message: `Requested user: ${user}` });
+      response.status(200).send(user);
     } else {
       response.status(404).send({ message: 'No subscriptions.' });
     }

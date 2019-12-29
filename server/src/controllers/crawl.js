@@ -43,7 +43,7 @@ router.get('/everyone', async (request, response) => {
         await saveCrawledData(null, usernames[i], rawData.error);
       } else {
         console.log(`Crawled data for ${usernames[i]}.`);
-        const data = reduce(rawData);
+        const data = filter(reduce(rawData));
         await saveCrawledData(data, usernames[i], null);
       }
     }
@@ -67,14 +67,6 @@ router.get('/:id', async (request, response) => {
       return response.status(400).send({ message: rawData.error });
     }
     const data = filter(reduce(rawData));
-
-    /*     const release = new Release({
-      username: username,
-      data: data
-    });
-
-    const savedData = await release.save();
-    response.status(200).send(savedData); */
 
     response.status(200).send(data);
   } catch (error) {

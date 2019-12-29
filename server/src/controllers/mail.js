@@ -24,7 +24,7 @@ const singleMail = async (user, release) => {
 };
 
 // GET send a email to every subscribed user
-router.get('/mass', async (request, response) => {
+router.get('/everyone', async (request, response) => {
   try {
     // refactor the db query here
     const users = await User.find();
