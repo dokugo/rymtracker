@@ -3,7 +3,7 @@ import styled, { keyframes } from 'styled-components/macro';
 import FormButton from './FormButton';
 
 const Subscribe = ({ setDataStorage, setListAnimation }) => {
-  const [inputData, setInputData] = useState(null);
+  const [inputData, setInputData] = useState({ email: null, username: null });
   const [formState, setFormState] = useState({
     default: true,
     loading: false,
@@ -14,13 +14,13 @@ const Subscribe = ({ setDataStorage, setListAnimation }) => {
 
   const handleInputChange = e => {
     if (e.target.value.trim().length < 1) {
+      //empty input
+
       if (e.target.name === 'email') {
         setInputData({ ...inputData, email: null });
       } else if (e.target.name === 'username') {
         setInputData({ ...inputData, username: null });
       }
-
-      // setInputData(null);
 
       setFormState({
         ...formState,
@@ -30,17 +30,21 @@ const Subscribe = ({ setDataStorage, setListAnimation }) => {
         message: null
       });
     } else {
+      //not empty input
+
       if (e.target.name === 'email') {
         setInputData({ ...inputData, email: e.target.value.trim() });
       } else if (e.target.name === 'username') {
         setInputData({ ...inputData, username: e.target.value.trim() });
       }
+
       setFormState({
         ...formState,
         warning: false,
         error: false,
         default: false
       });
+
       console.log(inputData);
     }
   };
@@ -193,6 +197,7 @@ const InputField = styled.div`
   width: 640px;
   min-width: 100%;
   @media (max-width: 660px) {
+    flex-direction: column;
     width: 100%;
   }
 `;
@@ -205,6 +210,12 @@ const autofill = keyframes`
 `;
 
 const Input = styled.input`
+  @media (max-width: 660px) {
+    &:nth-of-type(1) {
+      margin-right: 0;
+      margin-bottom: 20px;
+    }
+  }
   &:nth-of-type(1) {
     margin-right: 15px;
   }
@@ -257,7 +268,7 @@ const Input = styled.input`
 const Tooltip = styled.span`
   position: absolute;
   font-size: 14px;
-  padding: 5px 5px;
+  padding: 5px 10px;
   color: ${({ formState, theme }) =>
     formState.warning
       ? theme.tooltip.warning

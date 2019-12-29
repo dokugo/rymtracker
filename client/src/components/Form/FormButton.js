@@ -11,7 +11,7 @@ const FormButton = ({ formState, focusInput }) => {
     >
       <Button
         isDisabled={formState.loading || formState.warning || formState.error}
-        onClick={focusInput}
+        /* onClick={focusInput} */
         aria-label="Search button"
       >
         <ButtonIconContainer>
@@ -38,6 +38,11 @@ const ButtonContainer = styled.div`
   top: 0;
   right: 0;
   position: absolute;
+  display: flex;
+  @media (max-width: 660px) {
+    bottom: 0;
+    top: unset;
+  }
 `;
 
 const Button = styled.button`
