@@ -1,8 +1,9 @@
-import React, { useState, createRef } from 'react';
-import styled, { keyframes } from 'styled-components/macro';
+import React, { useState /* createRef */ } from 'react';
+import styled from 'styled-components/macro';
 import FormButton from './FormButton';
+import SubInput from './SubInput';
 
-const Subscribe = ({ setDataStorage, setListAnimation }) => {
+const Subscribe = () => {
   const [inputData, setInputData] = useState({ email: null, username: null });
   const [formState, setFormState] = useState({
     default: true,
@@ -49,26 +50,26 @@ const Subscribe = ({ setDataStorage, setListAnimation }) => {
     }
   };
 
-  const inputRef = createRef();
+  /*   const inputRef = createRef();
   const focusInput = () => {
     if (formState.default) {
       inputRef.current.focus();
     }
-  };
+  }; */
 
   const handleRequest = e => {
     e.preventDefault();
 
-    if (!formState.default && !formState.warning) {
+    /*     if (!formState.default && !formState.warning) {
+      console.log(formState);
       inputRef.current.blur();
-    }
+    } */
 
     if (formState.loading) {
       return;
     }
 
     if (inputData && inputData.email && inputData.username) {
-      // setListAnimation(false);
       setFormState({ ...formState, loading: true });
       console.log(inputData);
 
@@ -76,7 +77,6 @@ const Subscribe = ({ setDataStorage, setListAnimation }) => {
         process.env.REACT_APP_PROD_API_ROUTE || 'http://localhost:9000';
 
       fetch(`${DOMAIN}/user/subscribe`, {
-        // fetch(`https://nxtractor.herokuapp.com/api/search/${inputData}`, {
         method: 'PUT',
         body: JSON.stringify(inputData),
         headers: {
@@ -89,18 +89,6 @@ const Subscribe = ({ setDataStorage, setListAnimation }) => {
       })
         .then(response => response.json())
         .then(response => {
-          /*           if (response.status === 'error') {
-            console.error(response.message);
-          } */
-
-          // setDataStorage(response);
-          /* if (response.data) {
-            setDataStorage(response.data);
-          } else {
-            setDataStorage([]);
-          } */
-
-          // setListAnimation(true);
           setFormState({
             ...formState,
             loading: false,
@@ -120,42 +108,27 @@ const Subscribe = ({ setDataStorage, setListAnimation }) => {
     }
   };
 
-  /*   const inputStateTooltip = formState.warning
-    ? `Search request can't be empty.`
-    : formState.error
-    ? `Can't send empty request.`
-    : null;
-  const responseStateTooltip = tipState; */
-
   return (
     <FormItem onSubmit={handleRequest}>
       <InputText>
         Subscribe to a weekly mail of the upcoming releases list taken from a
         specified RYM account
       </InputText>
+
       <InputField>
-        <Input
-          onChange={handleInputChange}
+        <SubInput
+          handleInputChange={handleInputChange}
           formState={formState}
-          ref={inputRef}
-          // type="email"
-          type="text"
           title="Email"
           name="email"
-          placeholder="email"
-          autoComplete="off"
         />
-        <Input
-          onChange={handleInputChange}
+        <SubInput
+          handleInputChange={handleInputChange}
           formState={formState}
-          ref={inputRef}
-          type="text"
           title="Username"
           name="username"
-          placeholder="username"
-          autoComplete="off"
         />
-        <FormButton formState={formState} focusInput={focusInput} />
+        <FormButton formState={formState} /* focusInput={focusInput} */ />
       </InputField>
 
       <Tooltip formState={formState}>
@@ -200,69 +173,6 @@ const InputField = styled.div`
     flex-direction: column;
     width: 100%;
   }
-`;
-
-const autofill = keyframes`
-  to {
-    color: ${({ theme }) => theme.input.text};
-    background: ${({ theme }) => theme.input.background};
-  }
-`;
-
-const Input = styled.input`
-  @media (max-width: 660px) {
-    &:nth-of-type(1) {
-      margin-right: 0;
-      margin-bottom: 20px;
-    }
-  }
-  &:nth-of-type(1) {
-    margin-right: 15px;
-  }
-  font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
-    'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size: 22px;
-  font-weight: 400;
-  width: 100%;
-  height: 65px;
-  padding: 0px 20px;
-  padding-right: 70px;
-  padding-bottom: 2.5px;
-  box-sizing: border-box;
-  background-color: ${({ theme }) => theme.input.background};
-  border-radius: 8px;
-  color: ${({ theme }) => theme.input.text};
-  transition: box-shadow 0.15s ease-in-out;
-  border-width: 0px;
-  outline: 0 none;
-  &:focus {
-    box-shadow: ${({ formState, theme }) =>
-      formState.warning
-        ? `0 0 0 3px ${theme.input.warning}`
-        : formState.error
-        ? `0 0 0 3px ${theme.input.error}`
-        : `0 0 0 3px ${theme.input.default}`};
-  }
-  ::-webkit-search-decoration,
-  ::-webkit-search-cancel-button,
-  ::-webkit-search-results-button,
-  ::-webkit-search-results-decoration {
-    display: none;
-  }
-  :-webkit-autofill {
-    animation-name: ${autofill};
-    animation-fill-mode: both;
-  }
-  ::placeholder {
-    color: ${({ theme }) => theme.input.text};
-    opacity: 0.65;
-  }
-  /* &:hover {
-    ::placeholder {
-      transition: opacity 0.15s ease-in-out;
-      opacity: 0.35;
-    }
-  } */
 `;
 
 const Tooltip = styled.span`
