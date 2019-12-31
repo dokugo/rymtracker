@@ -7,11 +7,10 @@ const Form = ({ setDataStorage, setListAnimation }) => {
   const [formState, setFormState] = useState({
     default: true,
     loading: false,
-    warning: false,
     error: false
   });
 
-  const handleInputChange = e => {
+  /*   const handleInputChange = e => {
     if (e.target.value.length < 1 || e.target.value.trim().length < 1) {
       setInputData(null);
       setFormState({
@@ -29,6 +28,16 @@ const Form = ({ setDataStorage, setListAnimation }) => {
         default: false
       });
     }
+  }; */
+
+  const handleInputChange = event => {
+    setInputData(event.target.value.trim());
+    setFormState({
+      ...formState,
+      default: true,
+      error: false
+    });
+    console.log(inputData);
   };
 
   const inputRef = createRef();
@@ -38,57 +47,47 @@ const Form = ({ setDataStorage, setListAnimation }) => {
     }
   };
 
-  const handleRequest = e => {
-    e.preventDefault();
-
-    if (!formState.default && !formState.warning) {
-      inputRef.current.blur();
-    }
+  const handleRequest = event => {
+    event.preventDefault();
 
     if (formState.loading) {
       return;
     }
 
-    if (inputData === null) {
-      setFormState({ ...formState, warning: false, error: true });
+    if (!inputData) {
+      setFormState({ ...formState, default: false, error: true });
       return;
-    } else {
-      // setListAnimation(false);
-      setFormState({ ...formState, loading: true });
-
-      console.log(inputData);
-
-      const DOMAIN =
-        process.env.REACT_APP_PROD_API_ROUTE || 'http://localhost:9000';
-
-      fetch(`${DOMAIN}/crawl/${inputData}`, {
-        // fetch(`https://nxtractor.herokuapp.com/api/search/${inputData}`, {
-        headers: {
-          'Cache-Control':
-            'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-          Pragma: 'no-cache',
-          Expires: '0'
-        }
-      })
-        .then(response => response.json())
-        .then(response => {
-          /*           if (response.status === 'error') {
-            console.error(response.message);
-          } */
-
-          console.log(response);
-          setDataStorage(response);
-          /* if (response.data) {
-            setDataStorage(response.data);
-          } else {
-            setDataStorage([]);
-          } */
-
-          // setListAnimation(true);
-          setFormState({ ...formState, loading: false, default: false });
-        })
-        .catch(error => console.log('Error: ', error));
     }
+
+    // setListAnimation(false);
+    setFormState({ ...formState, default: false, loading: true });
+    inputRef.current.blur();
+
+    const DOMAIN =
+      process.env.REACT_APP_PROD_API_ROUTE || 'http://localhost:9000';
+
+    fetch(`${DOMAIN}/crawl/${inputData}`, {
+      headers: {
+        'Cache-Control':
+          'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
+        Pragma: 'no-cache',
+        Expires: '0'
+      }
+    })
+      .then(response => response.json())
+      .then(response => {
+        if (response.data) {
+          setDataStorage(response.data);
+        } else {
+          setDataStorage([]);
+        }
+
+        // setListAnimation(true);
+        setFormState({ ...formState, default: true, loading: false });
+
+        console.log(response);
+      })
+      .catch(error => console.log('Error: ', error));
   };
 
   return (
@@ -111,10 +110,10 @@ const Form = ({ setDataStorage, setListAnimation }) => {
       </InputField>
 
       <Tooltip formState={formState}>
-        {formState.warning
-          ? `Search request can't be empty.`
-          : formState.error
+        {formState.error
           ? `Can't send empty request.`
+          : formState.message
+          ? formState.message
           : null}
       </Tooltip>
     </FormItem>
@@ -175,9 +174,7 @@ const Input = styled.input`
   outline: 0 none;
   &:focus {
     box-shadow: ${({ formState, theme }) =>
-      formState.warning
-        ? `0 0 0 3px ${theme.input.warning}`
-        : formState.error
+      formState.error
         ? `0 0 0 3px ${theme.input.error}`
         : `0 0 0 3px ${theme.input.default}`};
   }
@@ -208,9 +205,5 @@ const Tooltip = styled.span`
   font-size: 14px;
   padding: 5px 5px;
   color: ${({ formState, theme }) =>
-    formState.warning
-      ? theme.tooltip.warning
-      : formState.error
-      ? theme.tooltip.error
-      : theme.tooltip.default};
+    formState.error ? theme.tooltip.error : theme.tooltip.default};
 `;
