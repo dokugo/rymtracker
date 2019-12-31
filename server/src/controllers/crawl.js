@@ -58,7 +58,8 @@ router.get('/everyone', async (request, response) => {
 router.get('/:id', async (request, response) => {
   try {
     if (request.params.id === 'test') {
-      return response.status(200).send(filter(sampleData));
+      const data = filter(sampleData);
+      return response.status(200).send({ data });
     }
 
     const username = request.params.id;
@@ -68,7 +69,7 @@ router.get('/:id', async (request, response) => {
     }
     const data = filter(reduce(rawData));
 
-    response.status(200).send(data);
+    response.status(200).send({ data });
   } catch (error) {
     console.log(error);
   }

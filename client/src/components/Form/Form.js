@@ -7,28 +7,9 @@ const Form = ({ setDataStorage, setListAnimation }) => {
   const [formState, setFormState] = useState({
     default: true,
     loading: false,
-    error: false
+    error: false,
+    message: null
   });
-
-  /*   const handleInputChange = e => {
-    if (e.target.value.length < 1 || e.target.value.trim().length < 1) {
-      setInputData(null);
-      setFormState({
-        ...formState,
-        warning: true,
-        error: false,
-        default: false
-      });
-    } else {
-      setInputData(e.target.value.trim());
-      setFormState({
-        ...formState,
-        warning: false,
-        error: false,
-        default: false
-      });
-    }
-  }; */
 
   const handleInputChange = event => {
     setInputData(event.target.value.trim());
@@ -37,7 +18,8 @@ const Form = ({ setDataStorage, setListAnimation }) => {
       default: true,
       error: false
     });
-    console.log(inputData);
+
+    // console.log(inputData);
   };
 
   const inputRef = createRef();
@@ -49,6 +31,8 @@ const Form = ({ setDataStorage, setListAnimation }) => {
 
   const handleRequest = event => {
     event.preventDefault();
+
+    console.log(inputData);
 
     if (formState.loading) {
       return;
@@ -77,13 +61,24 @@ const Form = ({ setDataStorage, setListAnimation }) => {
       .then(response => response.json())
       .then(response => {
         if (response.data) {
+          setFormState({
+            ...formState,
+            default: true,
+            loading: false,
+            message: null
+          });
           setDataStorage(response.data);
         } else {
+          setFormState({
+            ...formState,
+            default: true,
+            loading: false,
+            message: response.message
+          });
           setDataStorage([]);
         }
 
         // setListAnimation(true);
-        setFormState({ ...formState, default: true, loading: false });
 
         console.log(response);
       })
