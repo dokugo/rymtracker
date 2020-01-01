@@ -1,11 +1,11 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components/macro';
 
-const SubInput = ({ handleInputChange, formState, title, name }) => {
+const SubInput = ({ handleInputChange, inputState, title, name }) => {
   return (
     <Input
       onChange={handleInputChange}
-      formState={formState}
+      inputState={inputState}
       /* ref={inputRef} */
       type="text"
       title={title}
@@ -29,7 +29,7 @@ const Input = styled.input`
   @media (max-width: 660px) {
     &:nth-of-type(1) {
       margin-right: 0;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
     }
   }
   &:nth-of-type(1) {
@@ -52,10 +52,8 @@ const Input = styled.input`
   border-width: 0px;
   outline: 0 none;
   &:focus {
-    box-shadow: ${({ formState, theme }) =>
-      formState.warning
-        ? `0 0 0 3px ${theme.input.warning}`
-        : formState.error
+    box-shadow: ${({ inputState, theme }) =>
+      inputState.error
         ? `0 0 0 3px ${theme.input.error}`
         : `0 0 0 3px ${theme.input.default}`};
   }
