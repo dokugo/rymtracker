@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import styled, { keyframes } from 'styled-components/macro';
 
-const SubInput = ({ handleInputChange, inputState, title, name }) => {
+const SubInput = forwardRef((props, ref) => {
+  const { handleInputChange, inputState, title, name } = props;
   return (
     <Input
       onChange={handleInputChange}
       inputState={inputState}
-      /* ref={inputRef} */
+      ref={ref}
       type="text"
       title={title}
       name={name}
@@ -14,7 +15,7 @@ const SubInput = ({ handleInputChange, inputState, title, name }) => {
       autoComplete="off"
     />
   );
-};
+});
 
 export default SubInput;
 

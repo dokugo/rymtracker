@@ -30,12 +30,17 @@ const Subscribe = () => {
     // console.log(inputData);
   };
 
-  const inputRef = createRef();
-  /*   const focusInput = () => {
-    if (formState.default) {
-      inputRef.current.focus();
+  const emailInputRef = createRef();
+  const usernameInputRef = createRef();
+  const focusInput = () => {
+    if (!inputData) {
+      emailInputRef.current.focus();
+    } else if (inputData && !inputData.email) {
+      emailInputRef.current.focus();
+    } else if (inputData && !inputData.username) {
+      usernameInputRef.current.focus();
     }
-  }; */
+  };
 
   const handleRequest = event => {
     event.preventDefault();
@@ -45,11 +50,6 @@ const Subscribe = () => {
     if (formState.loading) {
       return;
     }
-
-    /*     if (!formState.default && !formState.warning) {
-      console.log(formState);
-      inputRef.current.blur();
-    } */
 
     //try optional chaining
     if (
@@ -66,7 +66,8 @@ const Subscribe = () => {
     }
 
     setFormState({ ...formState, loading: true });
-    // inputRef.current.blur();
+    emailInputRef.current.blur();
+    usernameInputRef.current.blur();
 
     const DOMAIN =
       process.env.REACT_APP_PROD_API_ROUTE || 'http://localhost:9000';
@@ -104,26 +105,20 @@ const Subscribe = () => {
 
       <InputField>
         <SubInput
-          // handleInputChange={handleInputChange}
-          /*           formState={formState}
-          setFormState={setFormState} */
           handleInputChange={handleInputChange}
           inputState={formState}
-          ref={inputRef}
+          ref={emailInputRef}
           title="Email"
           name="email"
         />
         <SubInput
-          // handleInputChange={handleInputChange}
-          /*           formState={formState}
-          setFormState={setFormState} */
           handleInputChange={handleInputChange}
           inputState={formState}
-          ref={inputRef}
+          ref={usernameInputRef}
           title="Username"
           name="username"
         />
-        <FormButton formState={formState} /* focusInput={focusInput} */ />
+        <FormButton formState={formState} focusInput={focusInput} />
       </InputField>
 
       <Tooltip formState={formState}>
