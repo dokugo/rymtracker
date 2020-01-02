@@ -153,7 +153,7 @@ const autofill = keyframes`
 const Input = styled.input`
   font-family: 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell',
     'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 400;
   width: 100%;
   height: 65px;
@@ -185,7 +185,7 @@ const Input = styled.input`
   }
   ::placeholder {
     color: ${({ theme }) => theme.input.text};
-    opacity: 0.65;
+    opacity: 0.5;
   }
   /* &:hover {
     ::placeholder {
@@ -198,7 +198,7 @@ const Input = styled.input`
 const Tooltip = styled.span`
   position: absolute;
   font-size: 14px;
-  padding: 5px 5px;
+  padding: 5px 10px;
   color: ${({ formState, theme }) =>
     formState.error ? theme.tooltip.error : theme.tooltip.default};
 `;

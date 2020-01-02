@@ -70,7 +70,7 @@ const Input = styled.input`
   }
   ::placeholder {
     color: ${({ theme }) => theme.input.text};
-    opacity: 0.65;
+    opacity: 0.5;
   }
   /* &:hover {
     ::placeholder {

@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 // import List from './List/List';
 import Form from './Form/Form';
 import Subscribe from './Form/Subscribe';
+
 import { hot } from 'react-hot-loader';
+
 import styled, {
   createGlobalStyle,
   ThemeProvider
 } from 'styled-components/macro';
-import themeDark from '../themes/themeDark';
+import theme from '../themes/theme';
+
 import TestList from './Test/TestList';
 
 const App = () => {
@@ -15,7 +18,7 @@ const App = () => {
   // const [listAnimation, setListAnimation] = useState(null);
 
   return (
-    <ThemeProvider theme={themeDark}>
+    <ThemeProvider theme={theme}>
       <GlobalStyle />
       <AppBox>
         <Navbar>
@@ -30,6 +33,7 @@ const App = () => {
     </ThemeProvider>
   );
 };
+
 export default hot(module)(App);
 
 const AppBox = styled.div`
@@ -38,16 +42,18 @@ const AppBox = styled.div`
 `;
 
 const Navbar = styled.nav`
-  margin: auto;
+  @media (max-width: 660px) {
+    margin-top: 0;
+  }
   display: flex;
   width: 100%;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
-  /* height: 125px; */
   transition: all 0.5s ease 0s;
   flex-direction: column;
   margin-bottom: 30px;
+  margin-top: 60px;
 `;
 
 const Container = styled.main`

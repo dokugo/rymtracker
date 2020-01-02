@@ -44,12 +44,12 @@ const TestList = ({ dataStorage }) => {
           <React.Fragment key={index}>
             {releaseDate(prevDate, currDate, nextDate)}
             <Item>
-              <Artists>
+              <div className="artists">
                 {item.artists.map((item, index, arr) => {
                   return (
-                    <Artist key={index}>
+                    <span className="artist" key={index}>
                       <Link
-                        artist
+                        type={'artist'}
                         href={item.link}
                         target="_blank"
                         rel="noopener noreferrer"
@@ -59,20 +59,20 @@ const TestList = ({ dataStorage }) => {
                       <Ampersand>
                         {index === arr.length - 1 ? null : '&'}
                       </Ampersand>
-                    </Artist>
+                    </span>
                   );
                 })}
-              </Artists>
-              <Album>
+              </div>
+              <div className="albums">
                 <Link
-                  album
+                  type={'album'}
                   href={item.album.link}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   {item.album.text}
                 </Link>
-              </Album>
+              </div>
             </Item>
           </React.Fragment>
         );
@@ -93,7 +93,7 @@ const List = styled.section`
 
 const ReleaseDate = styled.time`
   padding: 5px 10px;
-  background-color: rgba(32, 34, 37, 0.3);
+  background-color: ${({ theme }) => theme.card.date};
   margin-bottom: 10px;
   border-radius: 5px;
 `;
@@ -104,7 +104,6 @@ const Item = styled.article`
   display: flex;
   flex-direction: column;
   background: ${({ theme }) => theme.card.background};
-  /* background-color: rgba(32, 34, 37, 0.3); */
   margin-bottom: 20px;
   border-radius: 10px;
   padding: 10px 20px;
@@ -113,27 +112,24 @@ const Item = styled.article`
   }
 `;
 
-const Artists = styled.div`
-  display: flex;
-`;
-
-const Artist = styled.span``;
-
-const Album = styled.div``;
-
 const Ampersand = styled.span`
   padding: 0 5px;
   font-size: 22px;
-  /* font-style: normal; */
 `;
 
 const Link = styled.a`
   text-decoration: none;
   width: fit-content;
-  color: ${({ artist, album }) =>
-    (artist && 'rgba(175, 225, 255, 0.8)') || (album && 'rgb(175, 225, 255)')};
-  font-size: ${({ artist, album }) => (artist && '22px') || (album && '24px')};
-  font-weight: ${({ artist, album }) => (artist && '300') || (album && '400')};
+  font-size: ${({ type }) =>
+    type === 'artist' ? '22px' : type === 'album' ? '24px' : null};
+  font-weight: ${({ type }) =>
+    type === 'artist' ? '300' : type === 'album' ? '400' : null};
+  color: ${({ type, theme }) =>
+    type === 'artist'
+      ? theme.card.artist
+      : type === 'album'
+      ? theme.card.album
+      : null};
   &:hover {
     text-decoration: underline;
   }
