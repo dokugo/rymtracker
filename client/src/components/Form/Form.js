@@ -2,7 +2,15 @@ import React, { useState, createRef } from 'react';
 import styled, { keyframes } from 'styled-components/macro';
 import FormButton from './FormButton';
 
-const Form = ({ setDataStorage, setListAnimation }) => {
+import { useContextSelector } from 'use-context-selector';
+import { AnimationContext } from '../../contexts/animationContext';
+
+const Form = ({ setDataStorage }) => {
+  const setListAnimation = useContextSelector(
+    AnimationContext,
+    state => state.setListAnimation
+  );
+
   const [inputData, setInputData] = useState(null);
   const [formState, setFormState] = useState({
     default: true,
@@ -43,8 +51,8 @@ const Form = ({ setDataStorage, setListAnimation }) => {
       return;
     }
 
-    // setListAnimation(false);
-    setFormState({ ...formState, default: false, loading: true });
+    setListAnimation(false);
+    setFormState({ ...formState, loading: true });
     inputRef.current.blur();
 
     const DOMAIN =
@@ -63,7 +71,6 @@ const Form = ({ setDataStorage, setListAnimation }) => {
         if (response.data) {
           setFormState({
             ...formState,
-            default: true,
             loading: false,
             message: null
           });
@@ -71,14 +78,13 @@ const Form = ({ setDataStorage, setListAnimation }) => {
         } else {
           setFormState({
             ...formState,
-            default: true,
             loading: false,
             message: response.message
           });
           setDataStorage([]);
         }
 
-        // setListAnimation(true);
+        setListAnimation(true);
 
         console.log(response);
       })
@@ -106,7 +112,7 @@ const Form = ({ setDataStorage, setListAnimation }) => {
 
       <Tooltip formState={formState}>
         {formState.error
-          ? `Can't send empty request.`
+          ? `Can't send incomplete request.`
           : formState.message
           ? formState.message
           : null}

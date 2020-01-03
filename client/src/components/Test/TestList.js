@@ -1,30 +1,19 @@
-import React /* , { useState, useEffect } */ from 'react';
+import React from 'react';
 import styled from 'styled-components/macro';
 
+import { AnimationContext } from '../../contexts/animationContext';
+import { useContextSelector } from 'use-context-selector';
+
+import { Transition } from 'react-transition-group';
+const duration = 750;
+
 const TestList = ({ dataStorage }) => {
-  // const TestList = () => {
+  const listAnimation = useContextSelector(
+    AnimationContext,
+    state => state.listAnimation
+  );
 
-  // const [dataStorage, setDataStorage] = useState(null);
-
-  /*   const [fakeData, setFakeData] = useState(null);
-
-  useEffect(() => {
-    fetch(`http://localhost:9000/test`)
-      .then(res => res.json())
-      .then(res => {
-        console.log(res);
-        setFakeData(res);
-      });
-  }, []); */
-
-  /*   if (dataStorage) {
-    console.log(
-      '%cReduced data has arrived.',
-      'color: darkred; font-weight: 700; font-size: 14px'
-    );
-  } */
-
-  // const data = fakeData;
+  //obsolete?
   const data = dataStorage;
 
   const releaseDate = (prevDate, currDate, nextDate) => {
@@ -79,7 +68,15 @@ const TestList = ({ dataStorage }) => {
       })
     : null;
 
-  return <List>{elements}</List>;
+  return (
+    <Transition in={!listAnimation} timeout={duration}>
+      {state => (
+        <Box state={state}>
+          <List>{elements}</List>
+        </Box>
+      )}
+    </Transition>
+  );
 };
 
 export default TestList;
@@ -133,4 +130,42 @@ const Link = styled.a`
   &:hover {
     text-decoration: underline;
   }
+`;
+
+const Box = styled.section`
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  width: 100%;
+  transition: ${duration}ms;
+  transform: ${({ state }) =>
+    state === 'entering'
+      ? 'translateY(50px)'
+      : state === 'entered'
+      ? 'translateY(50px)'
+      : state === 'exiting'
+      ? 'translateY(0)'
+      : state === 'exited'
+      ? 'translateY(0)'
+      : null};
+  opacity: ${({ state }) =>
+    state === 'entering'
+      ? 0
+      : state === 'entered'
+      ? 0
+      : state === 'exiting'
+      ? 1
+      : state === 'exited'
+      ? 1
+      : null};
+/*   background: ${({ state }) =>
+  state === 'entering'
+    ? 'red'
+    : state === 'entered'
+    ? 'blue'
+    : state === 'exiting'
+    ? 'yellow'
+    : state === 'exited'
+    ? 'green'
+    : null}; */
 `;

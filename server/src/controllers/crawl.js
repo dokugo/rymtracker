@@ -59,7 +59,10 @@ router.get('/:id', async (request, response) => {
   try {
     if (request.params.id === 'test') {
       const data = filter(sampleData);
-      return response.status(200).send({ data });
+      setTimeout(() => {
+        return response.status(200).send({ data });
+      }, 1000);
+      return;
     }
 
     const username = request.params.id;
