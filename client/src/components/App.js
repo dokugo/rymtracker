@@ -1,9 +1,4 @@
 import React, { useState } from 'react';
-// import List from './List/List';
-import Form from './Form/Form';
-import Subscribe from './Form/Subscribe';
-
-import { hot } from 'react-hot-loader';
 
 import styled, {
   createGlobalStyle,
@@ -11,31 +6,34 @@ import styled, {
 } from 'styled-components/macro';
 import theme from '../themes/theme';
 
-import TestList from './Test/TestList';
+import { hot } from 'react-hot-loader';
 
 import SubForm from './Forms/Sub/SubForm';
-import CrawlForm from './Forms/Crawl/CrawlForm';
+import CrawlingForm from './Forms/Crawling/CrawlingForm';
 import List from './List/List';
 
 const App = () => {
   const [dataStorage, setDataStorage] = useState(null);
-  // const [listAnimation, setListAnimation] = useState(null);
 
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
+      <Main>
         <FormsContainer>
           <SubForm />
-          <CrawlForm setDataStorage={setDataStorage} />
+          <CrawlingForm setDataStorage={setDataStorage} />
         </FormsContainer>
+        <DataContainer /* isOpaque={dataStorage ? true : false} */>
           <List dataStorage={dataStorage} />
+        </DataContainer>
+      </Main>
     </ThemeProvider>
   );
 };
 
 export default hot(module)(App);
 
-const AppBox = styled.div`
+const Main = styled.main`
   height: 100%;
   padding: 0 12px;
 `;
@@ -56,7 +54,7 @@ const FormsContainer = styled.section`
   margin-top: 60px;
 `;
 
-const Container = styled.main`
+const DataContainer = styled.section`
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -82,8 +80,10 @@ const GlobalStyle = createGlobalStyle`
   -moz-osx-font-smoothing: grayscale;
   background: ${({ theme }) => theme.global.background};
   color: ${({ theme }) => theme.global.text};
+  /* remove transition? */
   transition: background-color .2s ease-out;
   }
+  /* remove the next rule? */
   body > div {
     height:100%;
   }
