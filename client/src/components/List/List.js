@@ -1,19 +1,26 @@
 import React from 'react';
-import ListBox from './ListBox';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-transition-group';
 
-const List = ({ dataStorage, listAnimation }) => {
+import { AnimationContext } from '../../contexts/animationContext';
+import { useContextSelector } from 'use-context-selector';
+
+import ListItems from './ListItems';
+
+const duration = 750;
+
+const List = ({ dataStorage }) => {
+  const listAnimation = useContextSelector(
+    AnimationContext,
+    state => state.listAnimation
+  );
+
   return (
-    <Transition in={!listAnimation} timeout={1000}>
+    <Transition in={!listAnimation} timeout={duration}>
       {state => (
-        <Box state={state}>
-          {dataStorage && dataStorage.items && dataStorage.items.length ? (
-            <ListBox dataStorage={dataStorage} />
-          ) : (
-            <NoData>Found nothing</NoData>
-          )}
-        </Box>
+        <TransitionBox state={state}>
+          <ListItems data={dataStorage} />
+        </TransitionBox>
       )}
     </Transition>
   );
@@ -21,12 +28,12 @@ const List = ({ dataStorage, listAnimation }) => {
 
 export default List;
 
-const Box = styled.section`
+const TransitionBox = styled.div`
   display: flex;
   justify-content: space-around;
   flex-direction: column;
   width: 100%;
-  transition: 1s;
+  transition: ${duration}ms;
   transform: ${({ state }) =>
     state === 'entering'
       ? 'translateY(50px)'
@@ -47,48 +54,4 @@ const Box = styled.section`
       : state === 'exited'
       ? 1
       : null};
-`;
-
-/* const ScrollingBox = styled(InfiniteScroll)`
-  overflow: visible !important;
-`; */
-
-/* const blink = keyframes`
-  0% {
-    opacity: 0.15;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.15;
-  }
-`;
-
-const DotBox = styled.p`
-  text-align: center;
-  font-size: 24px;
-  font-weight: 700;
-  user-select: none;
-`;
-
-const Dot = styled.i`
-  padding: 0 5px;
-  animation: 1s infinite both;
-  animation-name: ${({ animated }) => animated && blink};
-  &:nth-of-type(2) {
-    animation-delay: 0.2s;
-  }
-  &:nth-of-type(3) {
-    animation-delay: 0.4s;
-  }
-`; */
-
-const NoData = styled.span`
-  display: block;
-  font-size: 36px;
-  line-height: 1;
-  text-align: center;
-  margin: 20px 0 20px;
-  color: ${({ theme }) => theme.card.title};
 `;

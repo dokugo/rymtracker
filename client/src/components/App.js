@@ -15,6 +15,8 @@ import TestList from './Test/TestList';
 
 import SubForm from './Forms/Sub/SubForm';
 import CrawlForm from './Forms/Crawl/CrawlForm';
+import List from './List/List';
+
 const App = () => {
   const [dataStorage, setDataStorage] = useState(null);
   // const [listAnimation, setListAnimation] = useState(null);
@@ -26,6 +28,7 @@ const App = () => {
           <SubForm />
           <CrawlForm setDataStorage={setDataStorage} />
         </FormsContainer>
+          <List dataStorage={dataStorage} />
     </ThemeProvider>
   );
 };
