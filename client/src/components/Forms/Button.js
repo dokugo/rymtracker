@@ -1,6 +1,7 @@
 import React from 'react';
-import { IconLoading, IconWarning, IconError, IconSearch } from './Icons';
 import styled from 'styled-components/macro';
+
+import { IconLoading, IconWarning, IconError, IconSearch } from './Icons';
 
 const FormButton = ({ formState, focusInput }) => {
   const { loading, warning, error } = formState;

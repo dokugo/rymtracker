@@ -1,9 +1,10 @@
 import React, { useState, createRef } from 'react';
 import styled from 'styled-components/macro';
-import Button from '../Button';
-import SubInput from '../Input';
 
-const Subscribe = () => {
+import Input from '../Input';
+import Button from '../Button';
+
+const SubForm = () => {
   const [inputData, setInputData] = useState(null);
   const [formState, setFormState] = useState({
     default: true,
@@ -103,23 +104,27 @@ const Subscribe = () => {
         specified RYM account
       </InputText>
 
-      <InputField>
-        <SubInput
-          handleSubChange={handleInputChange}
-          inputState={formState}
-          ref={emailInputRef}
-          title="Email"
-          name="email"
-        />
-        <SubInput
-          handleInputChange={handleInputChange}
-          inputState={formState}
-          ref={usernameInputRef}
-          title="Username"
-          name="username"
-        />
+      <InputGroup>
+        <InputBox>
+          <Input
+            handleInputChange={handleInputChange}
+            inputState={formState}
+            ref={emailInputRef}
+            title="Email"
+            name="email"
+          />
+        </InputBox>
+        <InputBox>
+          <Input
+            handleInputChange={handleInputChange}
+            inputState={formState}
+            ref={usernameInputRef}
+            title="Username"
+            name="username"
+          />
+        </InputBox>
         <Button formState={formState} focusInput={focusInput} />
-      </InputField>
+      </InputGroup>
 
       <Tooltip formState={formState}>
         {formState.error
@@ -132,7 +137,7 @@ const Subscribe = () => {
   );
 };
 
-export default Subscribe;
+export default SubForm;
 
 const FormItem = styled.form`
   margin-bottom: 30px;
@@ -152,7 +157,7 @@ const InputText = styled.div`
   }
 `;
 
-const InputField = styled.div`
+const InputGroup = styled.div`
   display: flex;
   position: relative;
   width: 640px;
@@ -160,6 +165,18 @@ const InputField = styled.div`
   @media (max-width: 660px) {
     flex-direction: column;
     width: 100%;
+  }
+`;
+
+const InputBox = styled.div`
+  &:nth-of-type(1) {
+    margin-right: 15px;
+  }
+  @media (max-width: 660px) {
+    &:nth-of-type(1) {
+      margin-right: 0;
+      margin-bottom: 15px;
+    }
   }
 `;
 
