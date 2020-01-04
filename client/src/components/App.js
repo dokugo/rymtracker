@@ -13,6 +13,8 @@ import theme from '../themes/theme';
 
 import TestList from './Test/TestList';
 
+import SubForm from './Forms/Sub/SubForm';
+import CrawlForm from './Forms/Crawl/CrawlForm';
 const App = () => {
   const [dataStorage, setDataStorage] = useState(null);
   // const [listAnimation, setListAnimation] = useState(null);
@@ -20,16 +22,10 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <AppBox>
-        <Navbar>
-          <Subscribe />
-          <Form setDataStorage={setDataStorage} />
-        </Navbar>
-        <Container isOpaque={dataStorage ? true : false}>
-          <TestList dataStorage={dataStorage} />
-          {/* <List dataStorage={dataStorage} listAnimation={listAnimation} /> */}
-        </Container>
-      </AppBox>
+        <FormsContainer>
+          <SubForm />
+          <CrawlForm setDataStorage={setDataStorage} />
+        </FormsContainer>
     </ThemeProvider>
   );
 };
@@ -41,7 +37,7 @@ const AppBox = styled.div`
   padding: 0 12px;
 `;
 
-const Navbar = styled.nav`
+const FormsContainer = styled.section`
   @media (max-width: 660px) {
     margin-top: 0;
   }
@@ -50,6 +46,7 @@ const Navbar = styled.nav`
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+  /* remove transition? */
   transition: all 0.5s ease 0s;
   flex-direction: column;
   margin-bottom: 30px;

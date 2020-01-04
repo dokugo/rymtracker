@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconLoading, IconWarning, IconError, IconSearch } from './FormIcons';
+import { IconLoading, IconWarning, IconError, IconSearch } from './Icons';
 import styled from 'styled-components/macro';
 
 const FormButton = ({ formState, focusInput }) => {

@@ -1,7 +1,7 @@
 import React, { useState, createRef } from 'react';
 import styled from 'styled-components/macro';
-import FormButton from './FormButton';
-import SubInput from './SubInput';
+import Button from '../Button';
+import SubInput from '../Input';
 
 const Subscribe = () => {
   const [inputData, setInputData] = useState(null);
@@ -105,7 +105,7 @@ const Subscribe = () => {
 
       <InputField>
         <SubInput
-          handleInputChange={handleInputChange}
+          handleSubChange={handleInputChange}
           inputState={formState}
           ref={emailInputRef}
           title="Email"
@@ -118,7 +118,7 @@ const Subscribe = () => {
           title="Username"
           name="username"
         />
-        <FormButton formState={formState} focusInput={focusInput} />
+        <Button formState={formState} focusInput={focusInput} />
       </InputField>
 
       <Tooltip formState={formState}>

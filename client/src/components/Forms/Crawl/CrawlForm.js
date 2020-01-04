@@ -1,9 +1,9 @@
 import React, { useState, createRef } from 'react';
 import styled, { keyframes } from 'styled-components/macro';
-import FormButton from './FormButton';
+import Button from '..Button/Button';
 
 import { useContextSelector } from 'use-context-selector';
-import { AnimationContext } from '../../contexts/animationContext';
+import { AnimationContext } from '../../../contexts/animationContext';
 
 const Form = ({ setDataStorage }) => {
   const setListAnimation = useContextSelector(
@@ -107,7 +107,7 @@ const Form = ({ setDataStorage }) => {
           placeholder="username"
           autoComplete="off"
         />
-        <FormButton formState={formState} focusInput={focusInput} />
+        <Button formState={formState} focusInput={focusInput} />
       </InputField>
 
       <Tooltip formState={formState}>
