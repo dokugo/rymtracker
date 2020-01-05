@@ -10,8 +10,29 @@ const SubForm = () => {
     default: true,
     loading: false,
     error: false,
-    message: null
+    message: null,
+    validated: false
   });
+
+  const emailInputRef = createRef();
+  const usernameInputRef = createRef();
+
+  const focusInput = () => {
+    if (!inputData) {
+      emailInputRef.current.focus();
+    } else if (inputData && !inputData.email) {
+      emailInputRef.current.focus();
+    } else if (inputData && !inputData.username) {
+      usernameInputRef.current.focus();
+    } else if (!formState.validated) {
+      emailInputRef.current.focus();
+    }
+  };
+
+  const validateEmail = email => {
+    const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regex.test(String(email));
+  };
 
   const handleInputChange = event => {
     if (event.target.name === 'email') {
@@ -29,18 +50,6 @@ const SubForm = () => {
     });
 
     // console.log(inputData);
-  };
-
-  const emailInputRef = createRef();
-  const usernameInputRef = createRef();
-  const focusInput = () => {
-    if (!inputData) {
-      emailInputRef.current.focus();
-    } else if (inputData && !inputData.email) {
-      emailInputRef.current.focus();
-    } else if (inputData && !inputData.username) {
-      usernameInputRef.current.focus();
-    }
   };
 
   const handleRequest = event => {
@@ -61,12 +70,24 @@ const SubForm = () => {
       setFormState({
         ...formState,
         default: false,
-        error: true
+        error: true,
+        message: `Can't send incomplete request.`
       });
       return;
     }
 
-    setFormState({ ...formState, loading: true });
+    if (!validateEmail(inputData.email)) {
+      setFormState({
+        ...formState,
+        default: false,
+        error: true,
+        message: 'Incorrect email format.',
+        validated: false
+      });
+      return;
+    }
+
+    setFormState({ ...formState, loading: true, validated: true });
     emailInputRef.current.blur();
     usernameInputRef.current.blur();
 
