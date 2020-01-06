@@ -3,7 +3,11 @@ const mongoose = require('mongoose');
 const userSchema = new mongoose.Schema({
   username: String,
   email: String,
-  isVerified: Boolean
+  isVerified: Boolean,
+  data: {
+    releases: Array,
+    error: String
+  }
 });
 
 userSchema.set('toJSON', {
