@@ -6,12 +6,13 @@ const reduce = require('../helpers/reducer');
 const filter = require('../helpers/duplicateFilter');
 const sampleData = require('../sample.json');
 
-const Release = require('../models/release');
 const User = require('../models/user');
+
+const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 const saveCrawledData = async (data, username, error) => {
   const query = { username: username };
-  const update = { data: data, error: error };
+  const update = { data: { releases: data, error: error } };
   const options = {
     useFindAndModify: false,
     upsert: true,
@@ -19,12 +20,14 @@ const saveCrawledData = async (data, username, error) => {
     setDefaultsOnInsert: true
   };
 
-  await Release.findOneAndUpdate(query, update, options);
+  await User.findOneAndUpdate(query, update, options);
 };
 
 // GET all subscribed users crawled data
 router.get('/everyone', async (request, response) => {
   try {
+    const responseMessages = [];
+
     const users = await User.find();
     const usernames = users.map(item => item.username);
 
@@ -32,23 +35,32 @@ router.get('/everyone', async (request, response) => {
 
     for (let i = 0; i < usernames.length; i++) {
       if (!users[i].isVerified) {
-        console.log(`${users[i].email} is not verified.`);
+        const message = `${usernames[i]}: email is not verified.`;
+        responseMessages.push(message);
+        console.log(message);
         continue;
       }
 
+      await sleep(1000);
       const rawData = await crawler(usernames[i]);
 
       if (rawData.error) {
-        console.log(`No data for ${usernames[i]}.`);
+        const message = `${usernames[i]}: no data.`;
+        responseMessages.push(message);
+        console.log(message);
+
         await saveCrawledData(null, usernames[i], rawData.error);
       } else {
-        console.log(`Crawled data for ${usernames[i]}.`);
+        const message = `${usernames[i]}: crawling successful.`;
+        responseMessages.push(message);
+        console.log(message);
+
         const data = filter(reduce(rawData));
         await saveCrawledData(data, usernames[i], null);
       }
     }
 
-    response.status(200).send({ message: 'OK', usernames: usernames });
+    response.status(200).send({ message: responseMessages });
   } catch (error) {
     console.log(error);
   }
@@ -59,14 +71,15 @@ router.get('/:id', async (request, response) => {
   try {
     if (request.params.id === 'test') {
       const data = filter(sampleData);
-      setTimeout(() => {
-        return response.status(200).send({ data });
-      }, 1000);
-      return;
+      await sleep(1000);
+      return response.status(200).send({ data });
     }
 
     const username = request.params.id;
+
+    await sleep(1000);
     const rawData = await crawler(username);
+
     if (rawData.error) {
       return response.status(400).send({ message: rawData.error });
     }
