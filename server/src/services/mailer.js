@@ -3,9 +3,9 @@ const ejs = require('ejs');
 const path = require('path');
 
 require('dotenv').config();
-const host = process.env.SMTP_HOST__PROD || process.env.SMTP_HOST;
-const user = process.env.SMTP_USER__PROD || process.env.SMTP_USER;
-const pass = process.env.SMTP_PASS__PROD || process.env.SMTP_PASS;
+const host = process.env.SMTP_HOST_DEV || process.env.SMTP_HOST_PROD;
+const user = process.env.SMTP_USER_DEV || process.env.SMTP_USER_PROD;
+const pass = process.env.SMTP_PASS_DEV || process.env.SMTP_PASS_PROD;
 
 const transport = {
   host: host,
@@ -34,10 +34,10 @@ const getSubject = (type, user) => {
   return subject;
 };
 
-const getHtml = async (user, type, data) => {
+const getHtml = async (user, type) => {
   let templateData = {
     user: user,
-    data: data
+    data: user.data.releases
   };
 
   let templateDir;
@@ -78,10 +78,10 @@ const getOptions = async (user, subject, html) => {
   return options;
 };
 
-const mailer = async (user, type, data) => {
+const mailer = async (user, type) => {
   try {
     const subject = getSubject(type, user);
-    const html = await getHtml(user, type, data);
+    const html = await getHtml(user, type);
 
     const options = await getOptions(user, subject, html);
 
