@@ -49,7 +49,12 @@ const CrawlingForm = ({ setDataStorage }) => {
     }
 
     if (!inputData) {
-      setFormState({ ...formState, default: false, error: true });
+      setFormState({
+        ...formState,
+        default: false,
+        error: true,
+        message: `Can't send incomplete request.`
+      });
       return;
     }
 
@@ -110,11 +115,7 @@ const CrawlingForm = ({ setDataStorage }) => {
       </InputGroup>
 
       <Tooltip formState={formState}>
-        {formState.error
-          ? `Can't send incomplete request.`
-          : formState.message
-          ? formState.message
-          : null}
+        {formState.message ? formState.message : null}
       </Tooltip>
     </FormItem>
   );

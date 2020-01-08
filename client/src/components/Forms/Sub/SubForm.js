@@ -36,10 +36,16 @@ const SubForm = () => {
 
   const handleInputChange = event => {
     if (event.target.name === 'email') {
-      setInputData({ ...inputData, email: event.target.value.trim() });
+      setInputData({
+        ...inputData,
+        email: event.target.value.trim().toLowerCase()
+      });
     }
     if (event.target.name === 'username') {
-      setInputData({ ...inputData, username: event.target.value.trim() });
+      setInputData({
+        ...inputData,
+        username: event.target.value.trim().toLowerCase()
+      });
     }
 
     setFormState({
@@ -148,11 +154,7 @@ const SubForm = () => {
       </InputGroup>
 
       <Tooltip formState={formState}>
-        {formState.error
-          ? `Can't send incomplete request.`
-          : formState.message
-          ? formState.message
-          : null}
+        {formState.message ? formState.message : null}
       </Tooltip>
     </FormItem>
   );
