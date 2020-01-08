@@ -109,31 +109,38 @@ router.get('/update/:id/:username', async (request, response) => {
 // PUT subscribe user
 router.put('/subscribe', async (request, response) => {
   try {
-    const { body } = request;
+    let { body } = request;
+    // end: data missing
+    if (body.username === undefined || body.email === undefined) {
+      return response.status(400).send({ message: 'Data missing.' });
+    }
 
+    // trim & toLowerCase the body
+    body = {
+      email: request.body.email.trim().toLowerCase(),
+      username: request.body.username.trim().toLowerCase()
+    };
+
+    // email validation
     const validateEmail = email => {
-      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(String(email));
+      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return regex.test(String(email));
     };
 
     if (!validateEmail(body.email)) {
       return response.status(400).send({ message: 'Incorrect email format.' });
     }
 
-    // end: data missing
-    if (body.username === undefined || body.email === undefined) {
-      return response.status(400).send({ message: 'Data missing.' });
-    }
-
+    // trying to find if this email is already exists in the db
     const foundUser = await User.findOne({
       email: body.email
     });
 
     // end: duplicate
     if (foundUser && foundUser.username === body.username) {
-      // end: duplicate + verify
       if (!foundUser.isVerified) {
         await mailer(foundUser, 'verification');
+
         return response
           .status(409)
           .send({ message: 'Duplicate, need email verification.' });
@@ -151,9 +158,6 @@ router.put('/subscribe', async (request, response) => {
 
       await mailer(newUser, 'update');
 
-      /* await foundUser.updateOne({
-        username: body.username
-      }); */
       return response.status(200).send({
         message: `Please confirm subscription update via email verification link.`
         /*         message: `Received ${body.email} subscription update from ${foundUser.username} to ${body.username}. Please confirm subscription update via email verification link.` */
@@ -166,7 +170,9 @@ router.put('/subscribe', async (request, response) => {
       email: body.email,
       isVerified: false
     });
+
     await user.save();
+
     await mailer(user, 'verification');
 
     response.status(201).send({
