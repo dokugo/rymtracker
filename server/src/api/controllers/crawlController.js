@@ -1,9 +1,9 @@
-const crawler = require('../services/crawler');
-const reduce = require('../helpers/reducer');
-const filter = require('../helpers/duplicateFilter');
-const sampleData = require('../sample.json');
+const crawler = require('../../services/crawler');
+const reduce = require('../../helpers/reducer');
+const filter = require('../../helpers/duplicateFilter');
+const sampleData = require('../../sample.json');
 
-const User = require('../models/user');
+const User = require('../../models/user');
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 

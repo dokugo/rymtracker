@@ -1,5 +1,5 @@
-const User = require('../models/user');
-const mailer = require('../services/mailer');
+const User = require('../../models/user');
+const mailer = require('../../services/mailer');
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 

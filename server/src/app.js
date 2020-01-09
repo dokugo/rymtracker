@@ -6,10 +6,9 @@ const express = require('express');
 const cors = require('cors');
 
 const mongoose = require('mongoose');
-const url = process.env.MONGODB_URI;
-// console.log('Connecting to', url);
+const DB_URL = process.env.MONGODB_URI;
 mongoose
-  .connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(result => {
     console.log('Connected to the database.');
   })
@@ -22,25 +21,16 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-/* const requestLogger = (request, response, next) => {
-  console.log('Method:', request.method);
-  console.log('Path:  ', request.path);
-  console.log('Body:  ', request.body);
-  console.log('---');
-  next();
-};
-app.use(requestLogger); */
-
-const usersRouter = require('./routes/usersRouter');
-const crawlRouter = require('./routes/crawlRouter');
-const mailRouter = require('./routes/mailRouter');
+const usersRouter = require('./api/routers/usersRouter');
+const crawlRouter = require('./api/routers/crawlRouter');
+const mailRouter = require('./api/routers/mailRouter');
 
 app.use('/users', usersRouter);
 app.use('/crawl', crawlRouter);
 app.use('/mail', mailRouter);
 
 const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' });
+  response.status(404).send({ message: 'Unknown endpoint.' });
 };
 app.use(unknownEndpoint);
 
