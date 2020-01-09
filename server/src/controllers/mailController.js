@@ -1,13 +1,5 @@
-const express = require('express');
-const router = express.Router();
-
-const mailer = require('../services/mailer');
-
 const User = require('../models/user');
-
-/* const foundUser = await User.findOne({
-  email: body.email
-}); */
+const mailer = require('../services/mailer');
 
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
@@ -49,8 +41,8 @@ const singleMail = async user => {
   await mailer(user, 'releases');
 };
 
-// GET send a email to every subscribed user
-router.get('/everyone', async (request, response) => {
+// send a email to every subscribed user
+exports.everyone = async (request, response) => {
   try {
     // refactor the db query here
 
@@ -63,11 +55,12 @@ router.get('/everyone', async (request, response) => {
     response.status(200).send({ message: responseMessages });
   } catch (error) {
     console.log(error);
+    throw error;
   }
-});
+};
 
-// GET send a mail to specified user
-router.get('/:id', async (request, response) => {
+// send a mail to specified user
+exports.specified = async (request, response) => {
   try {
     const email = request.params.id;
 
@@ -77,9 +70,6 @@ router.get('/:id', async (request, response) => {
     if (user) {
       const releases = user.data && user.data.releases;
       const error = user.data && user.data.error;
-
-      console.log(releases);
-      console.log(error);
 
       if (!releases) {
         return response
@@ -104,7 +94,6 @@ router.get('/:id', async (request, response) => {
     }
   } catch (error) {
     console.log(error);
+    throw error;
   }
-});
-
-module.exports = router;
+};

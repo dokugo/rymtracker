@@ -21,7 +21,6 @@ const PORT = process.env.PORT || 9000;
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.listen(PORT, () => console.log(`Server is listening on port ${PORT}.`));
 
 /* const requestLogger = (request, response, next) => {
   console.log('Method:', request.method);
@@ -32,14 +31,16 @@ app.listen(PORT, () => console.log(`Server is listening on port ${PORT}.`));
 };
 app.use(requestLogger); */
 
-const usersRoutes = require('./routes/usersRoutes');
+const usersRouter = require('./routes/usersRouter');
 const crawl = require('./controllers/crawl');
-const mail = require('./controllers/mail');
-app.use('/users', usersRoutes);
+const mailRouter = require('./routes/mailRouter');
+app.use('/users', usersRouter);
 app.use('/crawl', crawl);
-app.use('/mail', mail);
+app.use('/mail', mailRouter);
 
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' });
 };
 app.use(unknownEndpoint);
+
+app.listen(PORT, () => console.log(`Server is listening on port ${PORT}.`));
