@@ -29,34 +29,34 @@ router.get('/everyone', async (request, response) => {
     const responseMessages = [];
 
     const users = await User.find();
-    const usernames = users.map(item => item.username);
 
-    console.log(usernames);
+    for (let i = 0; i < users.length; i++) {
+      const username = users[i].username;
 
-    for (let i = 0; i < usernames.length; i++) {
       if (!users[i].isVerified) {
-        const message = `${usernames[i]}: email is not verified.`;
+        const message = `${username}: email is not verified.`;
         responseMessages.push(message);
         console.log(message);
         continue;
       }
 
       await sleep(1000);
-      const rawData = await crawler(usernames[i]);
+      const rawData = await crawler(username);
 
       if (rawData.error) {
-        const message = `${usernames[i]}: no data.`;
+        const message = `${username}: no data.`;
         responseMessages.push(message);
         console.log(message);
 
-        await saveCrawledData(null, usernames[i], rawData.error);
+        await saveCrawledData(null, username, rawData.error);
       } else {
-        const message = `${usernames[i]}: crawling successful.`;
+        const message = `${username}: crawling successful.`;
         responseMessages.push(message);
         console.log(message);
 
+        // OOP is needed here
         const data = filter(reduce(rawData));
-        await saveCrawledData(data, usernames[i], null);
+        await saveCrawledData(data, username, null);
       }
     }
 
