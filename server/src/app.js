@@ -32,10 +32,11 @@ app.use(express.json());
 app.use(requestLogger); */
 
 const usersRouter = require('./routes/usersRouter');
-const crawl = require('./controllers/crawl');
+const crawlRouter = require('./routes/crawlRouter');
 const mailRouter = require('./routes/mailRouter');
+
 app.use('/users', usersRouter);
-app.use('/crawl', crawl);
+app.use('/crawl', crawlRouter);
 app.use('/mail', mailRouter);
 
 const unknownEndpoint = (request, response) => {

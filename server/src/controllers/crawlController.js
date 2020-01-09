@@ -1,6 +1,3 @@
-const express = require('express');
-const router = express.Router();
-
 const crawler = require('../services/crawler');
 const reduce = require('../helpers/reducer');
 const filter = require('../helpers/duplicateFilter');
@@ -23,8 +20,8 @@ const saveCrawledData = async (data, username, error) => {
   await User.findOneAndUpdate(query, update, options);
 };
 
-// GET all subscribed users crawled data
-router.get('/everyone', async (request, response) => {
+// get all subscribed users crawled data
+exports.everyone = async (request, response) => {
   try {
     const responseMessages = [];
 
@@ -63,11 +60,12 @@ router.get('/everyone', async (request, response) => {
     response.status(200).send({ message: responseMessages });
   } catch (error) {
     console.log(error);
+    throw error;
   }
-});
+};
 
-// GET specified user crawled data
-router.get('/:id', async (request, response) => {
+// get specified user crawled data
+exports.specified = async (request, response) => {
   try {
     if (request.params.id === 'test') {
       const data = filter(sampleData);
@@ -88,7 +86,6 @@ router.get('/:id', async (request, response) => {
     response.status(200).send({ data });
   } catch (error) {
     console.log(error);
+    throw error;
   }
-});
-
-module.exports = router;
+};
