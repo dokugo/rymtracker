@@ -32,10 +32,10 @@ app.listen(PORT, () => console.log(`Server is listening on port ${PORT}.`));
 };
 app.use(requestLogger); */
 
-const user = require('./controllers/user');
+const usersRoutes = require('./routes/usersRoutes');
 const crawl = require('./controllers/crawl');
 const mail = require('./controllers/mail');
-app.use('/user', user);
+app.use('/users', usersRoutes);
 app.use('/crawl', crawl);
 app.use('/mail', mail);
 

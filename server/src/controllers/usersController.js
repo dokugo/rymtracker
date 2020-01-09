@@ -1,12 +1,8 @@
-const express = require('express');
-const router = express.Router();
-
 const User = require('../models/user');
-
 const mailer = require('../services/mailer');
 
-// GET all users
-router.get('/subscriptions', async (request, response) => {
+// get all users
+exports.everyone = async (request, response) => {
   try {
     const users = await User.find();
 
@@ -18,10 +14,10 @@ router.get('/subscriptions', async (request, response) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-// GET specified user
-router.get('/:id', async (request, response) => {
+// get specified user
+exports.specified = async (request, response) => {
   try {
     const email = request.params.id;
     const user = await User.findOne({ email: email });
@@ -34,10 +30,10 @@ router.get('/:id', async (request, response) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-// GET verify specified user
-router.get('/verify/:id', async (request, response) => {
+// verify specified user
+exports.verify = async (request, response) => {
   try {
     const id = request.params.id;
     const user = await User.findById(id);
@@ -55,10 +51,10 @@ router.get('/verify/:id', async (request, response) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-// GET unsubscribe user
-router.get('/unsubscribe/:id', async (request, response) => {
+// unsubscribe user
+exports.unsubscribe = async (request, response) => {
   try {
     /*     const deletedUser = await User.findOneAndDelete({
       username: request.query.username,
@@ -79,10 +75,10 @@ router.get('/unsubscribe/:id', async (request, response) => {
   } catch (error) {
     console.log(error);
   }
-});
+};
 
-// GET update user
-router.get('/update/:id/:username', async (request, response) => {
+// update user
+exports.update = async (request, response) => {
   try {
     const id = request.params.id;
     const newUsername = request.params.username;
@@ -104,10 +100,10 @@ router.get('/update/:id/:username', async (request, response) => {
     console.log(error);
     throw error;
   }
-});
+};
 
-// PUT subscribe user
-router.put('/subscribe', async (request, response) => {
+// subscribe user
+exports.subscribe = async (request, response) => {
   try {
     let { body } = request;
     // end: data missing
@@ -183,6 +179,4 @@ router.put('/subscribe', async (request, response) => {
     console.log(error);
     throw error;
   }
-});
-
-module.exports = router;
+};
