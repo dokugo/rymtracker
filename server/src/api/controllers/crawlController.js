@@ -1,7 +1,7 @@
 const crawler = require('../../services/crawler');
 const reduce = require('../../helpers/reducer');
 const filter = require('../../helpers/duplicateFilter');
-const sampleData = require('../../sample.json');
+const sampleData = require('../../temp/sample.json');
 
 const User = require('../../models/user');
 
@@ -23,7 +23,7 @@ const saveCrawledData = async (data, username, error) => {
 // get all subscribed users crawled data
 exports.everyone = async (request, response) => {
   try {
-    const responseMessages = [];
+    const messagesArray = [];
 
     const users = await User.find();
 
@@ -32,7 +32,7 @@ exports.everyone = async (request, response) => {
 
       if (!users[i].isVerified) {
         const message = `${username}: email is not verified.`;
-        responseMessages.push(message);
+        messagesArray.push(message);
         console.log(message);
         continue;
       }
@@ -41,14 +41,14 @@ exports.everyone = async (request, response) => {
       const rawData = await crawler(username);
 
       if (rawData.error) {
-        const message = `${username}: no data.`;
-        responseMessages.push(message);
+        const message = `${username}: no data found.`;
+        messagesArray.push(message);
         console.log(message);
 
         await saveCrawledData(null, username, rawData.error);
       } else {
         const message = `${username}: crawling successful.`;
-        responseMessages.push(message);
+        messagesArray.push(message);
         console.log(message);
 
         // OOP is needed here
@@ -57,7 +57,7 @@ exports.everyone = async (request, response) => {
       }
     }
 
-    response.status(200).send({ message: responseMessages });
+    response.status(200).send({ message: messagesArray });
   } catch (error) {
     console.log(error);
     throw error;
@@ -70,7 +70,7 @@ exports.specified = async (request, response) => {
     if (request.params.id === 'test') {
       const data = filter(sampleData);
       await sleep(1000);
-      return response.status(200).send({ data });
+      return response.status(200).send({ message: { data } });
     }
 
     const username = request.params.id;
@@ -79,11 +79,11 @@ exports.specified = async (request, response) => {
     const rawData = await crawler(username);
 
     if (rawData.error) {
-      return response.status(400).send({ message: rawData.error });
+      return response.status(400).send({ message: { error: rawData.error } });
     }
     const data = filter(reduce(rawData));
 
-    response.status(200).send({ data });
+    response.status(200).send({ message: { data } });
   } catch (error) {
     console.log(error);
     throw error;
