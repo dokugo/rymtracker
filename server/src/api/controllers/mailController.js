@@ -4,7 +4,7 @@ const mailer = require('../../services/mailer');
 const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 const massMail = async () => {
-  const responseMessages = [];
+  const messagesArray = [];
 
   const users = await User.find();
 
@@ -13,27 +13,27 @@ const massMail = async () => {
 
     if (!users[i].isVerified) {
       const message = `${users[i].email}: email is not verified.`;
-      responseMessages.push(message);
+      messagesArray.push(message);
       console.log(message);
       continue;
     }
 
     const releases = users[i].data && users[i].data.releases;
     if (releases) {
-      const message = `${users[i].email}: mailing successfully processed.`;
-      responseMessages.push(message);
+      const message = `${users[i].email}: mailing successful.`;
+      messagesArray.push(message);
       console.log(message);
 
       await sleep(1000);
       await mailer(users[i], 'releases');
     } else {
-      const message = `${users[i].email}: no crawled data.`;
-      responseMessages.push(message);
+      const message = `${users[i].email}: no data found for ${users[i].username}.`;
+      messagesArray.push(message);
       console.log(message);
     }
   }
 
-  return responseMessages;
+  return messagesArray;
 };
 
 const singleMail = async user => {
@@ -50,9 +50,9 @@ exports.everyone = async (request, response) => {
     // const releases = await Release.find();
 
     // await massMail(users, releases);
-    const responseMessages = await massMail();
+    const responseMessage = await massMail();
 
-    response.status(200).send({ message: responseMessages });
+    response.status(200).send({ message: responseMessage });
   } catch (error) {
     console.log(error);
     throw error;
@@ -68,29 +68,29 @@ exports.specified = async (request, response) => {
     const user = await User.findOne({ email: email });
     // console.log(user);
     if (user) {
+      if (!user.isVerified) {
+        return response
+          .status(400)
+          .send({ message: `${email}: email is not verified.` });
+      }
+
       const releases = user.data && user.data.releases;
       const error = user.data && user.data.error;
 
       if (!releases) {
-        return response
-          .status(400)
-          .send({ message: `No crawled data for ${user.username}.` });
+        return response.status(400).send({
+          message: `${email}: no data found for ${user.username}.`
+        });
       }
 
       if (error) {
         return response.status(400).send({ message: error });
       }
 
-      if (!user.isVerified) {
-        return response
-          .status(400)
-          .send({ message: `${user.email} is not verified.` });
-      }
-
       await singleMail(user);
-      response.status(200).send({ message: `Email sent to ${email}` });
+      response.status(200).send({ message: `${email}: mailing successful.` });
     } else {
-      response.status(200).send({ message: 'No subscriptions.' });
+      response.status(200).send({ message: `${email}: no subscriptions.` });
     }
   } catch (error) {
     console.log(error);
