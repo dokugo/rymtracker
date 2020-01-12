@@ -100,7 +100,7 @@ const SubForm = () => {
     const DOMAIN =
       process.env.REACT_APP_PROD_API_ROUTE || 'http://localhost:9000';
 
-    fetch(`${DOMAIN}/user/subscribe`, {
+    fetch(`${DOMAIN}/users/subscribe`, {
       method: 'PUT',
       body: JSON.stringify(inputData),
       headers: {
