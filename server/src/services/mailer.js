@@ -48,19 +48,19 @@ const getHtml = async (user, type) => {
     case 'verification':
       templateData = {
         user: user,
-        link: `https://rymtracker.ml/user/verify/${user.id}`,
+        link: `https://rymtracker.ml/users/verify/${user.id}`,
         text: ``
       };
-      templateDir = path.join(__dirname, '../templates/confirmation.ejs');
+      templateDir = path.join(__dirname, '../templates/verification.ejs');
       break;
 
     case 'update':
       templateData = {
         user: user,
-        link: `https://rymtracker.ml/user/update/${user.id}`,
+        link: `https://rymtracker.ml/users/update/${user.id}/${user.username}`,
         text: `update`
       };
-      templateDir = path.join(__dirname, '../templates/confirmation.ejs');
+      templateDir = path.join(__dirname, '../templates/verification.ejs');
       break;
   }
 
@@ -94,17 +94,5 @@ const mailer = async (user, type) => {
     console.log(error);
   }
 };
-
-/* const verify = async user => {
-  try {
-    const options = await getOptions(user, 'verification');
-    const message = await transporter.sendMail(options);
-
-    console.log('Message sent:');
-    console.log(message);
-  } catch (error) {
-    console.log(error);
-  }
-}; */
 
 module.exports = mailer;
