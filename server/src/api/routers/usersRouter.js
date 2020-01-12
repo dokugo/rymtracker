@@ -5,7 +5,7 @@ const usersController = require('../controllers/usersController');
 
 router.put('/subscribe', usersController.subscribe);
 router.get('/everyone', usersController.everyone);
-router.get('/:id', usersController.specified);
+router.get('/:email', usersController.specified);
 router.get('/verify/:id', usersController.verify);
 router.get('/unsubscribe/:id', usersController.unsubscribe);
 router.get('/update/:id/:username', usersController.update);

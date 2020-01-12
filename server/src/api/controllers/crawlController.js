@@ -2,10 +2,8 @@ const crawler = require('../../services/crawler');
 const reduce = require('../../helpers/reducer');
 const filter = require('../../helpers/duplicateFilter');
 const sampleData = require('../../temp/sample.json');
-
+const { sleep } = require('../../helpers/utils');
 const User = require('../../models/user');
-
-const sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 const saveCrawledData = async (data, username, error) => {
   const query = { username: username };
@@ -41,20 +39,22 @@ exports.everyone = async (request, response) => {
       const rawData = await crawler(username);
 
       if (rawData.error) {
+        await saveCrawledData(null, username, rawData.error);
+
         const message = `${username}: no data found.`;
         messagesArray.push(message);
         console.log(message);
 
-        await saveCrawledData(null, username, rawData.error);
-      } else {
-        const message = `${username}: crawling successful.`;
-        messagesArray.push(message);
-        console.log(message);
-
-        // OOP is needed here
-        const data = filter(reduce(rawData));
-        await saveCrawledData(data, username, null);
+        continue;
       }
+
+      // OOP is needed here
+      const data = filter(reduce(rawData));
+      await saveCrawledData(data, username, null);
+
+      const message = `${username}: crawling successful.`;
+      messagesArray.push(message);
+      console.log(message);
     }
 
     response.status(200).send({ message: messagesArray });
@@ -67,20 +67,20 @@ exports.everyone = async (request, response) => {
 // get specified user crawled data
 exports.specified = async (request, response) => {
   try {
-    if (request.params.id === 'test') {
-      const data = filter(sampleData);
-      await sleep(1000);
+    const username = request.params.username;
+
+    if (username === 'test') {
+      const data = sampleData;
       return response.status(200).send({ message: { data } });
     }
 
-    const username = request.params.id;
-
-    await sleep(1000);
     const rawData = await crawler(username);
 
     if (rawData.error) {
       return response.status(400).send({ message: { error: rawData.error } });
     }
+
+    // OOP is needed here
     const data = filter(reduce(rawData));
 
     response.status(200).send({ message: { data } });

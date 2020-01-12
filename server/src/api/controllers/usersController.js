@@ -1,53 +1,47 @@
 const User = require('../../models/user');
 const mailer = require('../../services/mailer');
+const { validateEmail } = require('../../helpers/utils');
 
 // subscribe user
 exports.subscribe = async (request, response) => {
   try {
     let { body } = request;
-    // end: data missing
+
     if (body.username === undefined || body.email === undefined) {
       return response.status(400).send({ message: `Data missing.` });
     }
 
-    // trim & toLowerCase the body
     body = {
       email: request.body.email.trim().toLowerCase(),
       username: request.body.username.trim().toLowerCase()
     };
 
-    // email validation
-    const validateEmail = email => {
-      const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return regex.test(String(email));
-    };
-
+    // handle invalid email
     if (!validateEmail(body.email)) {
       return response
         .status(400)
         .send({ message: `${body.email}: incorrect email format.` });
     }
 
-    // trying to find if this email is already exists in the db
     const foundUser = await User.findOne({
       email: body.email
     });
 
-    // end: duplicate
+    // handle duplicate
     if (foundUser && foundUser.username === body.username) {
       if (!foundUser.isVerified) {
         await mailer(foundUser, 'verification');
 
         return response.status(409).send({
-          message: `${body.email}: duplicate, need email verification.`
+          message: `${body.email}: duplicate, please confirm subscription via email verification link.`
         });
       }
       return response
         .status(409)
-        .send({ message: `${body.email}: duplicate.` });
+        .send({ message: `${body.email} + ${body.username}: duplicate` });
     }
 
-    // end: update
+    // handle update
     if (foundUser && foundUser.username !== body.username) {
       const newUser = {
         id: foundUser.id,
@@ -62,7 +56,7 @@ exports.subscribe = async (request, response) => {
       });
     }
 
-    // end: save
+    // handle save
     const user = new User({
       username: body.username,
       email: body.email,
@@ -90,7 +84,7 @@ exports.everyone = async (request, response) => {
     if (users.length) {
       response.status(200).send({ message: users });
     } else {
-      response.status(200).send({ message: `Subscriptions not found.` });
+      response.status(404).send({ message: `Subscriptions not found.` });
     }
   } catch (error) {
     console.log(error);
@@ -101,13 +95,15 @@ exports.everyone = async (request, response) => {
 // get specified user
 exports.specified = async (request, response) => {
   try {
-    const email = request.params.id;
+    const email = request.params.email;
     const user = await User.findOne({ email: email });
 
     if (user) {
       response.status(200).send({ message: user });
     } else {
-      response.status(404).send({ message: `Subscription not found.` });
+      response
+        .status(404)
+        .send({ message: `${email}: subscription not found.` });
     }
   } catch (error) {
     console.log(error);
@@ -121,13 +117,13 @@ exports.verify = async (request, response) => {
     const user = await User.findById(request.params.id);
 
     if (!user) {
-      return response.status(200).send({ message: `Subscription not found.` });
+      return response.status(404).send({ message: `Subscription not found.` });
     }
 
     if (user.isVerified) {
       response
-        .status(200)
-        .send({ message: `${user.email}: this email is already verified.` });
+        .status(400)
+        .send({ message: `${user.email}: email is already verified.` });
     } else {
       await user.updateOne({ isVerified: true });
       response
@@ -143,13 +139,6 @@ exports.verify = async (request, response) => {
 // unsubscribe user
 exports.unsubscribe = async (request, response) => {
   try {
-    /*     const deletedUser = await User.findOneAndDelete({
-      username: request.query.username,
-      email: request.query.email
-    }); */
-
-    // const id = request.params.id;
-
     const deletedUser = await User.findByIdAndDelete(request.params.id);
 
     if (deletedUser) {
@@ -157,7 +146,7 @@ exports.unsubscribe = async (request, response) => {
         .status(200)
         .send({ message: `${deletedUser.email}: unsubscribe successful.` });
     } else {
-      response.status(400).send({ message: `Subscription not found.` });
+      response.status(404).send({ message: `Subscription not found.` });
     }
   } catch (error) {
     console.log(error);
@@ -168,9 +157,14 @@ exports.unsubscribe = async (request, response) => {
 // update user
 exports.update = async (request, response) => {
   try {
-    const id = request.params.id;
     const newUsername = request.params.username;
-    const user = await User.findById(id);
+    const user = await User.findById(request.params.id);
+
+    if (user && user.username === newUsername) {
+      return response
+        .status(409)
+        .send({ message: `${user.email} + ${newUsername}: duplicate` });
+    }
 
     if (user && user.username !== newUsername) {
       await user.updateOne({
@@ -179,12 +173,6 @@ exports.update = async (request, response) => {
       return response.status(200).send({
         message: `${user.email}: update to ${user.username} successful.`
       });
-    }
-
-    if (user && user.username === newUsername) {
-      return response
-        .status(409)
-        .send({ message: `${user.email} + ${newUsername}: duplicate` });
     }
   } catch (error) {
     console.log(error);

@@ -4,6 +4,6 @@ const router = express.Router();
 const mailController = require('../controllers/mailController');
 
 router.get('/everyone', mailController.everyone);
-router.get('/:id', mailController.specified);
+router.get('/:email', mailController.specified);
 
 module.exports = router;
