@@ -1,9 +1,9 @@
 const crawler = require('../../services/crawler');
-const reduce = require('../../helpers/reducer');
-const filter = require('../../helpers/duplicateFilter');
 const sampleData = require('../../temp/sample.json');
 const { sleep } = require('../../helpers/utils');
 const User = require('../../models/user');
+const DataProcessor = require('../../helpers/dataProcessor');
+const dataProcessor = new DataProcessor();
 
 const saveCrawledData = async (data, username, error) => {
   const query = { username: username };
@@ -48,8 +48,8 @@ exports.everyone = async (request, response) => {
         continue;
       }
 
-      // OOP is needed here
-      const data = filter(reduce(rawData));
+      dataProcessor.input = rawData;
+      const data = dataProcessor.output();
       await saveCrawledData(data, username, null);
 
       const message = `${username}: crawling successful.`;
@@ -71,6 +71,7 @@ exports.specified = async (request, response) => {
 
     if (username === 'test') {
       const data = sampleData;
+      await sleep(1000);
       return response.status(200).send({ message: { data } });
     }
 
@@ -80,8 +81,8 @@ exports.specified = async (request, response) => {
       return response.status(400).send({ message: { error: rawData.error } });
     }
 
-    // OOP is needed here
-    const data = filter(reduce(rawData));
+    dataProcessor.input = rawData;
+    const data = dataProcessor.output();
 
     response.status(200).send({ message: { data } });
   } catch (error) {
