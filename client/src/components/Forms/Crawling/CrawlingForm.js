@@ -21,6 +21,14 @@ const CrawlingForm = ({ setDataStorage }) => {
     message: null
   });
 
+  const inputRef = createRef();
+  const focusInput = () => {
+    inputRef.current.focus();
+    /*     if (formState.default) {
+      inputRef.current.focus();
+    } */
+  };
+
   const handleInputChange = event => {
     setInputData(event.target.value.trim());
     setFormState({
@@ -32,11 +40,11 @@ const CrawlingForm = ({ setDataStorage }) => {
     // console.log(inputData);
   };
 
-  const inputRef = createRef();
-  const focusInput = () => {
-    if (formState.default) {
-      inputRef.current.focus();
-    }
+  const validateUsername = username => {
+    const regex = /^[\w_]*$/;
+    const noForbiddenSymbols = regex.test(username);
+    const notTooLong = username.length < 25;
+    return noForbiddenSymbols && notTooLong;
   };
 
   const handleRequest = event => {
@@ -55,11 +63,23 @@ const CrawlingForm = ({ setDataStorage }) => {
         error: true,
         message: `Can't send incomplete request.`
       });
+      focusInput();
+      return;
+    }
+
+    if (!validateUsername(inputData)) {
+      setFormState({
+        ...formState,
+        default: false,
+        error: true,
+        message: 'Incorrect username format.'
+      });
+      focusInput();
       return;
     }
 
     setListAnimation(false);
-    setFormState({ ...formState, loading: true });
+    setFormState({ ...formState, loading: true, message: null });
     inputRef.current.blur();
 
     const DOMAIN =
@@ -78,8 +98,7 @@ const CrawlingForm = ({ setDataStorage }) => {
         if (response.message.data) {
           setFormState({
             ...formState,
-            loading: false,
-            message: null
+            loading: false
           });
           setDataStorage(response.message.data);
         } else {
@@ -111,7 +130,7 @@ const CrawlingForm = ({ setDataStorage }) => {
           title="Username"
           name="username"
         />
-        <Button formState={formState} focusInput={focusInput} />
+        <Button formState={formState} />
       </InputGroup>
 
       <Tooltip formState={formState}>
