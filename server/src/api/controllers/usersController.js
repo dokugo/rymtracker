@@ -1,6 +1,7 @@
 const User = require('../../models/user');
 const mailer = require('../../services/mailer');
 const { validateEmail } = require('../../helpers/utils');
+const { validateUsername } = require('../../helpers/utils');
 
 // subscribe user
 exports.subscribe = async (request, response) => {
@@ -21,6 +22,13 @@ exports.subscribe = async (request, response) => {
       return response
         .status(400)
         .send({ message: `${body.email}: incorrect email format.` });
+    }
+
+    // handle invalid username
+    if (!validateUsername(body.username)) {
+      return response
+        .status(400)
+        .send({ message: `${body.username}: incorrect username format.` });
     }
 
     const foundUser = await User.findOne({
