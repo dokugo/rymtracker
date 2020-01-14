@@ -126,6 +126,7 @@ exports.verify = async (request, response) => {
         .send({ message: `${user.email}: email is already verified.` });
     } else {
       await user.updateOne({ isVerified: true });
+      await mailer(user, 'greeting');
       response
         .status(200)
         .send({ message: `${user.email}: verification succesful.` });

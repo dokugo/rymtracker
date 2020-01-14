@@ -30,6 +30,9 @@ const getSubject = (type, user) => {
     case 'update':
       subject = `❓ Please confirm subscription update to ${user.username}`;
       break;
+    case 'greeting':
+      subject = `✔️ Verification successful`;
+      break;
   }
   return subject;
 };
@@ -61,6 +64,15 @@ const getHtml = async (user, type) => {
         text: `update`
       };
       templateDir = path.join(__dirname, '../templates/verification.ejs');
+      break;
+
+    case 'greeting':
+      templateData = {
+        user: user,
+        link: `https://rymtracker.ml/user/unsubscribe/${user.id}`,
+        text: `Hi, ${user.email}. The new releases list is being mailed to the subscribers on every Sunday, 18:00 GMT/UTC +0.`
+      };
+      templateDir = path.join(__dirname, '../templates/greeting.ejs');
       break;
   }
 
