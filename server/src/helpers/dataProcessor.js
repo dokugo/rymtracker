@@ -4,15 +4,35 @@ const dataProcessor = data => {
   return filteredData;
 };
 
+// reduce function is merging raw crawled data into convenient form
+//
+// exaple of a raw data:
+//
+// [
+//   {
+//     {type: "date", ...},
+//     {type: "artist", ...},
+//     {type: "album", ...},
+//     {type: "date", ...},
+//     {type: "artist", ...},
+//     {type: "artist", ...},
+//     {type: "album", ...}
+//   }
+// ]
+//
+// example of a processed data:
+//
+// [
+//   {
+//     {type: "release", date: '...', album: '...', artists: [{...}]},
+//     {type: "release", date: '...', album: '...', artists: [{...}, {...}]}
+//   }
+// ]
+
 const reduce = arr => {
   const result = arr.reduce((acc, item, index) => {
-    /*     if (item.type === 'date') {
-      // acc = [...acc, ...[{ date: item }]];
-      // change to push() ?
-      acc = acc.concat([{ date: item.date, type: 'date' }]);
-    } */
     if (item.type === 'album') {
-      // acc = [...acc, ...[{ artists: finder(index), album: item }]];
+      // acc = [...acc, ...[{ artists: findArtists(arr, index), album: item, date: findDate(arr, index), type: 'release' }]];
       // change to push() ?
       acc = acc.concat([
         {
@@ -53,6 +73,10 @@ const findDate = (data, index) => {
   }
   return result;
 };
+
+// Remove duplicate releases.
+// Duplicate releases are present if user have rated several separate artists
+// and someday two or more of them releasing collaborative album.
 
 const duplicateFilter = data => {
   const filteredData = data.filter((item, index, arr) => {
