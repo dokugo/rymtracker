@@ -2,8 +2,7 @@ const crawler = require('../../services/crawler');
 const sampleData = require('../../temp/sample.json');
 const { sleep } = require('../../helpers/utils');
 const User = require('../../models/user');
-const DataProcessor = require('../../helpers/dataProcessor');
-const dataProcessor = new DataProcessor();
+const dataProcessor = require('../../helpers/dataProcessor');
 
 const saveCrawledData = async (data, username, error) => {
   const query = { username: username };
@@ -48,8 +47,7 @@ exports.everyone = async (request, response) => {
         continue;
       }
 
-      dataProcessor.input = rawData;
-      const data = dataProcessor.output();
+      const data = dataProcessor(rawData);
       await saveCrawledData(data, username, null);
 
       const message = `${username}: crawling successful.`;
@@ -81,8 +79,7 @@ exports.specified = async (request, response) => {
       return response.status(400).send({ message: { error: rawData.error } });
     }
 
-    dataProcessor.input = rawData;
-    const data = dataProcessor.output();
+    const data = dataProcessor(rawData);
 
     response.status(200).send({ message: { data } });
   } catch (error) {
