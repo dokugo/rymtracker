@@ -10,28 +10,34 @@ const SubForm = () => {
     default: true,
     loading: false,
     error: false,
-    message: null,
-    validated: false
+    message: null
   });
 
   const emailInputRef = createRef();
   const usernameInputRef = createRef();
 
-  const focusInput = () => {
+  const focusInput = input => {
+    if (input) input.current.focus();
+
     if (!inputData) {
       emailInputRef.current.focus();
     } else if (inputData && !inputData.email) {
       emailInputRef.current.focus();
     } else if (inputData && !inputData.username) {
       usernameInputRef.current.focus();
-    } else if (!formState.validated) {
-      emailInputRef.current.focus();
     }
   };
 
   const validateEmail = email => {
     const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return regex.test(String(email));
+    return regex.test(email);
+  };
+
+  const validateUsername = username => {
+    const regex = /^[\w_]*$/;
+    const noForbiddenSymbols = regex.test(username);
+    const notTooLong = username.length < 25;
+    return noForbiddenSymbols && notTooLong;
   };
 
   const handleInputChange = event => {
@@ -62,6 +68,7 @@ const SubForm = () => {
     event.preventDefault();
 
     console.log(inputData);
+    console.log(formState.invalid);
 
     if (formState.loading) {
       return;
@@ -79,6 +86,7 @@ const SubForm = () => {
         error: true,
         message: `Can't send incomplete request.`
       });
+      focusInput();
       return;
     }
 
@@ -87,13 +95,28 @@ const SubForm = () => {
         ...formState,
         default: false,
         error: true,
-        message: 'Incorrect email format.',
-        validated: false
+        message: 'Incorrect email format.'
       });
+      focusInput(emailInputRef);
       return;
     }
 
-    setFormState({ ...formState, loading: true, validated: true });
+    if (!validateUsername(inputData.username)) {
+      setFormState({
+        ...formState,
+        default: false,
+        error: true,
+        message: 'Incorrect username format.'
+      });
+      focusInput(usernameInputRef);
+      return;
+    }
+
+    setFormState({
+      ...formState,
+      loading: true,
+      message: null
+    });
     emailInputRef.current.blur();
     usernameInputRef.current.blur();
 
@@ -150,7 +173,7 @@ const SubForm = () => {
             name="username"
           />
         </InputBox>
-        <Button formState={formState} focusInput={focusInput} />
+        <Button formState={formState} />
       </InputGroup>
 
       <Tooltip formState={formState}>
