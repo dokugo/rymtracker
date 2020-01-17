@@ -98,7 +98,8 @@ const CrawlingForm = ({ setDataStorage }) => {
         if (response.message.data) {
           setFormState({
             ...formState,
-            loading: false
+            loading: false,
+            message: null
           });
           setDataStorage(response.message.data);
         } else {
@@ -130,7 +131,7 @@ const CrawlingForm = ({ setDataStorage }) => {
           title="Username"
           name="username"
         />
-        <Button formState={formState} />
+        <Button formState={formState} type={'search'} />
       </InputGroup>
 
       <Tooltip formState={formState}>

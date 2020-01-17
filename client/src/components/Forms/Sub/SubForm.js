@@ -173,7 +173,7 @@ const SubForm = () => {
             name="username"
           />
         </InputBox>
-        <Button formState={formState} />
+        <Button formState={formState} type={'sub'} />
       </InputGroup>
 
       <Tooltip formState={formState}>

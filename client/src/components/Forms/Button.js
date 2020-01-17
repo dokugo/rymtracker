@@ -1,10 +1,23 @@
 import React from 'react';
 import styled from 'styled-components/macro';
 
-import { IconLoading, IconWarning, IconError, IconSearch } from './Icons';
+import {
+  IconLoading,
+  IconWarning,
+  IconError,
+  IconSearch,
+  IconSubscribe
+} from './Icons';
 
-const FormButton = ({ formState, focusInput }) => {
+const FormButton = ({ formState, type }) => {
   const { loading, warning, error } = formState;
+
+  const defaultIcon =
+    type === 'sub' ? (
+      <IconSubscribe />
+    ) : type === 'search' ? (
+      <IconSearch />
+    ) : null;
 
   return (
     <ButtonContainer
@@ -12,7 +25,6 @@ const FormButton = ({ formState, focusInput }) => {
     >
       <Button
         isDisabled={formState.loading || formState.warning || formState.error}
-        onClick={focusInput}
         aria-label="Search button"
       >
         <ButtonIconContainer>
@@ -23,7 +35,7 @@ const FormButton = ({ formState, focusInput }) => {
           ) : warning ? (
             <IconWarning />
           ) : (
-            <IconSearch />
+            defaultIcon
           )}
         </ButtonIconContainer>
       </Button>
