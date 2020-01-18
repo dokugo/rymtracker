@@ -2,9 +2,6 @@ console.clear();
 
 require('dotenv').config();
 
-const express = require('express');
-const cors = require('cors');
-
 const mongoose = require('mongoose');
 const DB_URL = process.env.MONGODB_URI;
 mongoose
@@ -16,7 +13,8 @@ mongoose
     console.log('Error connecting to the database: ', error.message);
   });
 
-const PORT = process.env.PORT || 9000;
+const express = require('express');
+const cors = require('cors');
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -24,7 +22,6 @@ app.use(express.json());
 const usersRouter = require('./api/routers/usersRouter');
 const crawlRouter = require('./api/routers/crawlRouter');
 const mailRouter = require('./api/routers/mailRouter');
-
 app.use('/users', usersRouter);
 app.use('/crawl', crawlRouter);
 app.use('/mail', mailRouter);
@@ -34,4 +31,5 @@ const unknownEndpoint = (request, response) => {
 };
 app.use(unknownEndpoint);
 
+const PORT = process.env.PORT || 9000;
 app.listen(PORT, () => console.log(`Server is listening on port ${PORT}.`));

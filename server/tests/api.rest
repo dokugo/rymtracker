@@ -1,36 +1,33 @@
 ### /crawl
 
-### GET test
+### get mock crawled data
 GET http://localhost:9000/crawl/test
 
-### GET user crawled data
+### get user crawled data
 GET http://localhost:9000/crawl/sharifi
 
-### GET all subscribed users crawled data
+### get all subscribed users crawled data
 GET http://localhost:9000/crawl/everyone
 
+### /users
 
+### get all saved data from the db
+GET http://localhost:9000/users/everyone
 
+### get user data from the db
+GET http://localhost:9000/users/username@gmail.com
 
-### /user
+### verify user
+GET http://localhost:9000/users/verify/5df58a4563bf5c223c07a1fd
 
-### GET all saved data from the db
-GET http://localhost:9000/user/subscriptions
+### unsubscribe user
+GET http://localhost:9000/users/unsubscribe/5df54c02013b55168cbd2f5d
 
-### GET user data from the db
-GET http://localhost:9000/user/username@gmail.com
+### update user
+GET http://localhost:9000/users/update/5df0205777c2212470e76111/diobrando
 
-### GET verify user
-GET http://localhost:9000/user/verify/5df58a4563bf5c223c07a1fd
-
-### GET unsubscribe user
-GET http://localhost:9000/user/unsubscribe/5df54c02013b55168cbd2f5d
-
-### GET update user
-GET http://localhost:9000/user/update/5df0205777c2212470e76111/diobrando
-
-### PUT subscribe user
-PUT http://localhost:9000/user/subscribe
+### subscribe user
+PUT http://localhost:9000/users/subscribe
 Content-Type: application/json
 
 {
@@ -38,15 +35,12 @@ Content-Type: application/json
   "email": "username@gmail.com"
 }
 
-
-
-
 ### /mail
 
-### GET mail everyone
+### mail everyone
 GET http://localhost:9000/mail/everyone
 
-### GET single user mailing
+### single user mailing
 GET http://localhost:9000/mail/username@gmail.com
 
 ### testing emails
