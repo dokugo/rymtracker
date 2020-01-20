@@ -1,6 +1,10 @@
 const nodemailer = require('nodemailer');
-const ejs = require('ejs');
-const path = require('path');
+// const ejs = require('ejs');
+// const path = require('path');
+
+/* const GetTemplate = require('./getTemplate');
+const template = new GetTemplate(); */
+const template = require('./template');
 
 require('dotenv').config();
 const host = process.env.SMTP_HOST_DEV || process.env.SMTP_HOST_PROD;
@@ -18,90 +22,13 @@ const transport = {
 };
 const transporter = nodemailer.createTransport(transport);
 
-const getSubject = (type, user) => {
-  let subject;
-  switch (type) {
-    case 'releases':
-      subject = `💿 Upcoming releases for ${user.username}`;
-      break;
-    case 'verification':
-      subject = `❓ Please confirm subscription to ${user.username}`;
-      break;
-    case 'update':
-      subject = `❓ Please confirm subscription update to ${user.username}`;
-      break;
-    case 'greeting':
-      subject = `✔️ Verification successful`;
-      break;
-  }
-  return subject;
-};
-
-const getHtml = async (user, type) => {
-  let templateDir, templateData;
-  switch (type) {
-    case 'releases':
-      templateData = {
-        user: user,
-        data: user.data.releases
-      };
-      templateDir = path.join(__dirname, '../templates/releases.ejs');
-      break;
-
-    case 'verification':
-      templateData = {
-        user: user,
-        link: `https://rymtracker.ml/users/verify/${user.id}`,
-        text: ``
-      };
-      templateDir = path.join(__dirname, '../templates/verification.ejs');
-      break;
-
-    case 'update':
-      templateData = {
-        user: user,
-        link: `https://rymtracker.ml/users/update/${user.id}/${user.username}`,
-        text: `update`
-      };
-      templateDir = path.join(__dirname, '../templates/verification.ejs');
-      break;
-
-    case 'greeting':
-      templateData = {
-        user: user,
-        link: `https://rymtracker.ml/user/unsubscribe/${user.id}`,
-        text: `Hi, ${user.email}. The new releases list is being mailed to the subscribers on every Sunday, 18:00 GMT/UTC +0.`
-      };
-      templateDir = path.join(__dirname, '../templates/greeting.ejs');
-      break;
-  }
-
-  const html = await ejs.renderFile(templateDir, templateData);
-  return html;
-};
-
-const getOptions = async (user, subject, html) => {
-  const options = {
-    from: '"RYM Tracker" <no-reply@rymtracker.ml>',
-    to: user.email,
-    subject: subject,
-    text: `Please use a client with HTML support.`,
-    html: html
-  };
-  return options;
-};
-
 const mailer = async (user, type) => {
   try {
-    const subject = getSubject(type, user);
-    const html = await getHtml(user, type);
-
-    const options = await getOptions(user, subject, html);
-
-    const message = await transporter.sendMail(options);
+    const message = await template.generate(user, type);
+    const email = await transporter.sendMail(message);
 
     console.log('Message sent:');
-    console.log(message);
+    console.log(email);
   } catch (error) {
     console.log(error);
   }
