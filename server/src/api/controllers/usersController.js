@@ -1,5 +1,5 @@
 const User = require('../../models/user');
-const mailer = require('../../services/mailer');
+const mailer = require('../../services/mailer/mailer');
 const { validateEmail } = require('../../helpers/utils');
 const { validateUsername } = require('../../helpers/utils');
 

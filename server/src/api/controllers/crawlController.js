@@ -1,8 +1,7 @@
-const crawler = require('../../services/crawler');
+const crawler = require('../../services/crawler/crawler');
 const sampleData = require('../../temp/sample.json');
 const { sleep } = require('../../helpers/utils');
 const User = require('../../models/user');
-const dataProcessor = require('../../helpers/dataProcessor');
 const lock = require('../../helpers/lock');
 
 const saveCrawledData = async (data, username, error) => {
@@ -43,11 +42,11 @@ exports.everyone = async (request, response) => {
         continue;
       }
 
-      const rawData = await crawler(username);
+      const data = await crawler(username);
       await sleep(1000);
 
-      if (rawData.error) {
-        await saveCrawledData(null, username, rawData.error);
+      if (data.error) {
+        await saveCrawledData(null, username, data.error);
 
         const message = `${username}: no data found.`;
         messagesArray.push(message);
@@ -56,7 +55,6 @@ exports.everyone = async (request, response) => {
         continue;
       }
 
-      const data = dataProcessor(rawData);
       await saveCrawledData(data, username, null);
 
       const message = `${username}: crawling successful.`;
@@ -93,15 +91,13 @@ exports.specified = async (request, response) => {
       return response.status(200).send({ message: { data } });
     }
 
-    const rawData = await crawler(username);
+    const data = await crawler(username);
     await sleep(1000);
 
-    if (rawData.error) {
+    if (data.error) {
       lock.release(lockID);
-      return response.status(400).send({ message: { error: rawData.error } });
+      return response.status(400).send({ message: { error: data.error } });
     }
-
-    const data = dataProcessor(rawData);
 
     lock.release(lockID);
     response.status(200).send({ message: { data } });

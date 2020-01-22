@@ -1,5 +1,5 @@
 const User = require('../../models/user');
-const mailer = require('../../services/mailer');
+const mailer = require('../../services/mailer/mailer');
 const { sleep } = require('../../helpers/utils');
 
 const massMail = async () => {

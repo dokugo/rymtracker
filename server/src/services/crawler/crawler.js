@@ -1,6 +1,7 @@
 const puppeteer = require('puppeteer-extra');
 const stealth = require('puppeteer-extra-plugin-stealth')();
 const hiddenUserAgent = require('puppeteer-extra-plugin-anonymize-ua');
+const dataProcessor = require('./dataProcessor');
 
 puppeteer.use(stealth);
 puppeteer.use(hiddenUserAgent({ makeWindows: true }));
@@ -99,6 +100,7 @@ const crawler = async username => {
 
     page.setViewport({ width: 1920, height: 937 });
 
+    // block scripts, styles, images, fonts, etc...
     page.setRequestInterception(true);
     page.on('request', request => {
       if (request.resourceType() === 'document') {
@@ -108,10 +110,17 @@ const crawler = async username => {
       }
     });
 
-    const result = await getPage(URL, page);
+    const rawData = await getPage(URL, page);
 
     await page.close();
-    return result;
+
+    if (rawData.error) {
+      return rawData;
+    }
+
+    const data = dataProcessor(rawData);
+
+    return data;
   } catch (error) {
     console.error('Error: ', error);
   }
