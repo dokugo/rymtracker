@@ -9,16 +9,9 @@ const config = {
     options: { useNewUrlParser: true, useUnifiedTopology: true }
   },
   smtp: {
-    prod: {
-      host: process.env.SMTP_HOST_PROD,
-      user: process.env.SMTP_USER_PROD,
-      password: process.env.SMTP_PASS_PROD
-    },
-    dev: {
-      host: process.env.SMTP_HOST_DEV,
-      user: process.env.SMTP_USER_DEV,
-      password: process.env.SMTP_PASS_DEV
-    }
+    host: process.env.SMTP_HOST_DEV || process.env.SMTP_HOST_PROD,
+    user: process.env.SMTP_USER_DEV || process.env.SMTP_USER_PROD,
+    password: process.env.SMTP_PASS_DEV || process.env.SMTP_PASS_PROD
   }
 };
 

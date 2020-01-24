@@ -1,19 +1,14 @@
+const config = require('../../config/config');
 const nodemailer = require('nodemailer');
 const template = require('./template');
 
-const config = require('./config/config');
-
-const host = config.smtp.dev.host || config.smtp.prod.host;
-const user = config.smtp.dev.user || config.smtp.prod.user;
-const pass = config.smtp.dev.pass || config.smtp.prod.pass;
-
 const transport = {
-  host: host,
+  host: config.smtp.host,
   port: 587,
   secure: false, // true for 465, false for other ports
   auth: {
-    user: user,
-    pass: pass
+    user: config.smtp.user,
+    pass: config.smtp.pass
   }
 };
 const transporter = nodemailer.createTransport(transport);
