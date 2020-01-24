@@ -1,15 +1,11 @@
 const nodemailer = require('nodemailer');
-// const ejs = require('ejs');
-// const path = require('path');
-
-/* const GetTemplate = require('./getTemplate');
-const template = new GetTemplate(); */
 const template = require('./template');
 
-require('dotenv').config();
-const host = process.env.SMTP_HOST_DEV || process.env.SMTP_HOST_PROD;
-const user = process.env.SMTP_USER_DEV || process.env.SMTP_USER_PROD;
-const pass = process.env.SMTP_PASS_DEV || process.env.SMTP_PASS_PROD;
+const config = require('./config/config');
+
+const host = config.smtp.dev.host || config.smtp.prod.host;
+const user = config.smtp.dev.user || config.smtp.prod.user;
+const pass = config.smtp.dev.pass || config.smtp.prod.pass;
 
 const transport = {
   host: host,

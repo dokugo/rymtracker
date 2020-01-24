@@ -2,9 +2,7 @@ console.clear();
 
 const config = require('./config/config');
 
-const database = require('./config/db');
-database();
-
+const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
 const app = express();
@@ -18,8 +16,24 @@ app.use('/users', usersRouter);
 app.use('/crawl', crawlRouter);
 app.use('/mail', mailRouter);
 
-const { unknownEndpoint } = require('./helpers/utils');
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ message: 'Unknown endpoint.' });
+};
 app.use(unknownEndpoint);
 
 const PORT = process.env.PORT || config.app.port;
-app.listen(PORT, () => console.log(`Server is listening on port ${PORT}.`));
+
+const listen = () => {
+  app.listen(PORT);
+  console.log(`Server is listening on port ${PORT}.`);
+};
+
+const connect = () => {
+  mongoose.connection
+    .on('error', console.log)
+    .on('disconnected', connect)
+    .once('open', listen, console.log('Connected to the database.'));
+  return mongoose.connect(config.db.uri, config.db.options);
+};
+
+connect();

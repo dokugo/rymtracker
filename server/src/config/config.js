@@ -5,7 +5,8 @@ const config = {
     port: 9000
   },
   db: {
-    uri: process.env.MONGODB_URI
+    uri: process.env.MONGODB_URI,
+    options: { useNewUrlParser: true, useUnifiedTopology: true }
   },
   smtp: {
     prod: {

@@ -11,7 +11,3 @@ exports.validateUsername = username => {
   const notTooLong = username.length < 25;
   return noForbiddenSymbols && notTooLong;
 };
-
-exports.unknownEndpoint = (request, response) => {
-  response.status(404).send({ message: 'Unknown endpoint.' });
-};
