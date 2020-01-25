@@ -1,17 +1,19 @@
 console.clear();
 
 const { APP_PORT, DB_URI, DB_OPTIONS } = require('./config/config');
-
+const limiter = require('./helpers/limiter');
 const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
 const app = express();
-app.use(cors());
-app.use(express.json());
-
 const usersRouter = require('./api/routers/usersRouter');
 const crawlRouter = require('./api/routers/crawlRouter');
 const mailRouter = require('./api/routers/mailRouter');
+
+app.set('trust proxy', 1);
+app.use(limiter);
+app.use(cors());
+app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/crawl', crawlRouter);
 app.use('/mail', mailRouter);
