@@ -1,6 +1,6 @@
 console.clear();
 
-const config = require('./config/config');
+const { APP_PORT, DB_URI, DB_OPTIONS } = require('./config/config');
 
 const mongoose = require('mongoose');
 const express = require('express');
@@ -21,11 +21,9 @@ const unknownEndpoint = (request, response) => {
 };
 app.use(unknownEndpoint);
 
-const PORT = process.env.PORT || config.app.port;
-
 const listen = () => {
-  app.listen(PORT);
-  console.log(`Server is listening on port ${PORT}.`);
+  app.listen(APP_PORT);
+  console.log(`Server is listening on port ${APP_PORT}.`);
 };
 
 const connect = () => {
@@ -33,7 +31,7 @@ const connect = () => {
     .on('error', console.log)
     .on('disconnected', connect)
     .once('open', listen, console.log('Connected to the database.'));
-  return mongoose.connect(config.db.uri, config.db.options);
+  return mongoose.connect(DB_URI, DB_OPTIONS);
 };
 
 connect();

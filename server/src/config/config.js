@@ -1,18 +1,10 @@
 require('dotenv').config();
 
-const config = {
-  app: {
-    port: 9000
-  },
-  db: {
-    uri: process.env.MONGODB_URI,
-    options: { useNewUrlParser: true, useUnifiedTopology: true }
-  },
-  smtp: {
-    host: process.env.SMTP_HOST_DEV || process.env.SMTP_HOST_PROD,
-    user: process.env.SMTP_USER_DEV || process.env.SMTP_USER_PROD,
-    password: process.env.SMTP_PASS_DEV || process.env.SMTP_PASS_PROD
-  }
+module.exports = {
+  APP_PORT: process.env.PORT || 9000,
+  DB_URI: process.env.MONGODB_URI,
+  DB_OPTIONS: { useNewUrlParser: true, useUnifiedTopology: true },
+  SMTP_HOST: process.env.SMTP_HOST_DEV || process.env.SMTP_HOST_PROD,
+  SMTP_USER: process.env.SMTP_USER_DEV || process.env.SMTP_USER_PROD,
+  SMTP_PASS: process.env.SMTP_PASS_DEV || process.env.SMTP_PASS_PROD
 };
-
-module.exports = config;
