@@ -1,9 +1,9 @@
 const puppeteer = require('puppeteer-extra');
-const stealth = require('puppeteer-extra-plugin-stealth')();
+const stealth = require('puppeteer-extra-plugin-stealth');
 const hiddenUserAgent = require('puppeteer-extra-plugin-anonymize-ua');
 const dataProcessor = require('./dataProcessor');
 
-puppeteer.use(stealth);
+puppeteer.use(stealth());
 puppeteer.use(hiddenUserAgent({ makeWindows: true }));
 
 const getUserPage = username => {

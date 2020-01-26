@@ -9,7 +9,7 @@
     "install": "cd client && npm i && cd ../server && npm i",
     "server": "cd server && npm run dev",
     "client": "cd client && npm run dev",
-    "deploy" : "now --prod && git push heroku master",
+    "deploy": "now --prod && git push heroku master",
     "logs": "heroku logs --tail"
   }
 }

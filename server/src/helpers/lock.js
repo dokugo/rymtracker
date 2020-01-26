@@ -10,11 +10,16 @@ const lock = {
 
     if (!locksStorage[id]) {
       locksStorage[id] = true;
+
       // console.log(`Lock is acquired for ${id}`);
+
+      // isLocked = false because there is no lock prior to acquire() execution
       const isLocked = false;
       return isLocked;
     } else {
       // console.log(`Lock is already acquired for ${id}`);
+
+      // isLocked = true because there is active lock prior to acquire() execution
       const isLocked = true;
       return isLocked;
     }

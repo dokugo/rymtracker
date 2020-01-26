@@ -9,6 +9,7 @@ const app = express();
 const usersRouter = require('./api/routers/usersRouter');
 const crawlRouter = require('./api/routers/crawlRouter');
 const mailRouter = require('./api/routers/mailRouter');
+const { unknownEndpoint } = require('./helpers/utils');
 
 app.set('trust proxy', 1);
 app.use(limiter);
@@ -17,10 +18,6 @@ app.use(express.json());
 app.use('/users', usersRouter);
 app.use('/crawl', crawlRouter);
 app.use('/mail', mailRouter);
-
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ message: 'Unknown endpoint.' });
-};
 app.use(unknownEndpoint);
 
 const listen = () => {

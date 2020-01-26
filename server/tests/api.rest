@@ -7,7 +7,7 @@ GET http://localhost:9000/crawl/test
 GET http://localhost:9000/crawl/sharifi
 
 ### get all subscribed users crawled data
-GET http://localhost:9000/crawl/everyone
+GET http://localhost:9000/crawl/
 
 ### /users
 

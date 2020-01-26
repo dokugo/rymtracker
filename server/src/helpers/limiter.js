@@ -1,5 +1,5 @@
-const rateLimit = require('express-rate-limit');
 const { RATE_LIMIT_WINDOW, RATE_LIMIT_MAX } = require('../config/config');
+const rateLimit = require('express-rate-limit');
 
 const limitedRequestsHandler = (req, res) => {
   res.status(429).send({
