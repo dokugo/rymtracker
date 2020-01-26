@@ -3,6 +3,7 @@ const sampleData = require('../../temp/sample.json');
 const { sleep } = require('../../helpers/utils');
 const User = require('../../models/user');
 const lock = require('../../helpers/lock');
+const { validateUsername } = require('../../helpers/utils');
 
 const saveCrawledData = async (data, username, error) => {
   const query = { username: username };
@@ -77,18 +78,28 @@ exports.specified = async (request, response) => {
 
     const isLocked = lock.acquire(lockID);
     if (isLocked) {
-      return response
-        .status(429)
-        .send({ message: `Your previous request is still processing.` });
+      return response.status(429).send({
+        message: `Your previous request is still processing.`,
+        error: true
+      });
     }
 
     const username = request.params.username;
+
+    // handle invalid username
+    if (!validateUsername(username)) {
+      lock.release(lockID);
+      return response.status(400).send({
+        message: `${username}: incorrect username format.`,
+        error: true
+      });
+    }
 
     if (username === 'test') {
       const data = sampleData;
       await sleep(1000);
       lock.release(lockID);
-      return response.status(200).send({ message: { data } });
+      return response.status(200).send({ message: data });
     }
 
     const data = await crawler(username);
@@ -96,11 +107,11 @@ exports.specified = async (request, response) => {
 
     if (data.error) {
       lock.release(lockID);
-      return response.status(400).send({ message: { error: data.error } });
+      return response.status(400).send({ message: data.error, error: true });
     }
 
     lock.release(lockID);
-    response.status(200).send({ message: { data } });
+    response.status(200).send({ message: data });
   } catch (error) {
     console.log(error);
     throw error;

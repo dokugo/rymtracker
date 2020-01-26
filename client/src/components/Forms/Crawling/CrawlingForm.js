@@ -95,20 +95,20 @@ const CrawlingForm = ({ setDataStorage }) => {
     })
       .then(response => response.json())
       .then(response => {
-        if (response.message.data) {
+        if (response.error) {
+          setFormState({
+            ...formState,
+            loading: false,
+            message: response.message
+          });
+          setDataStorage([]);
+        } else {
           setFormState({
             ...formState,
             loading: false,
             message: null
           });
-          setDataStorage(response.message.data);
-        } else {
-          setFormState({
-            ...formState,
-            loading: false,
-            message: response.message.error
-          });
-          setDataStorage([]);
+          setDataStorage(response.message);
         }
 
         setListAnimation(true);
