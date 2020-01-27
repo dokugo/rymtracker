@@ -1,3 +1,9 @@
+const {
+  API_KEY_CLIENT,
+  API_KEY_EMAIL,
+  API_KEY_PRIVATE
+} = require('../config/config');
+
 exports.sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
 exports.validateEmail = email => {
@@ -13,6 +19,29 @@ exports.validateUsername = username => {
   return noForbiddenSymbols && notTooLong && notTooShort;
 };
 
-exports.unknownEndpoint = (request, response) => {
-  response.status(404).send({ message: 'Unknown endpoint.' });
+exports.clientRoute = (request, response, next) => {
+  if (request.query.apikey !== API_KEY_CLIENT) {
+    return response
+      .status(401)
+      .send({ message: `Access denied.`, error: true });
+  }
+  next();
+};
+
+exports.emailRoute = (request, response, next) => {
+  if (request.query.apikey !== API_KEY_EMAIL) {
+    return response
+      .status(401)
+      .send({ message: `Access denied.`, error: true });
+  }
+  next();
+};
+
+exports.privateRoute = (request, response, next) => {
+  if (request.query.apikey !== API_KEY_PRIVATE) {
+    return response
+      .status(401)
+      .send({ message: `Access denied.`, error: true });
+  }
+  next();
 };

@@ -7,6 +7,14 @@ module.exports = {
   DB_URI: process.env.MONGODB_URI,
   DB_OPTIONS: { useNewUrlParser: true, useUnifiedTopology: true },
 
+  // used in helpers/utils
+  // used for client operations auth
+  API_KEY_CLIENT: process.env.API_KEY_CLIENT,
+  // used for email-accessed routes auth
+  API_KEY_EMAIL: process.env.API_KEY_EMAIL,
+  // used for inner server services operations auth (mass crawling, mailing)
+  API_KEY_PRIVATE: process.env.API_KEY_PRIVATE,
+
   // used in helpers/limiter
   RATE_LIMIT_WINDOW: 5, // seconds
   RATE_LIMIT_MAX: 10, // limit each IP to RATE_LIMIT_MAX requests per windowMs
