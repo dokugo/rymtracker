@@ -86,6 +86,13 @@ exports.specified = async (request, response) => {
 
     const username = request.params.username;
 
+    if (username === 'tt') {
+      const data = sampleData;
+      await sleep(1000);
+      lock.release(lockID);
+      return response.status(200).send({ message: data });
+    }
+
     // handle invalid username
     if (!validateUsername(username)) {
       lock.release(lockID);
@@ -93,13 +100,6 @@ exports.specified = async (request, response) => {
         message: `${username}: incorrect username format.`,
         error: true
       });
-    }
-
-    if (username === 'test') {
-      const data = sampleData;
-      await sleep(1000);
-      lock.release(lockID);
-      return response.status(200).send({ message: data });
     }
 
     const data = await crawler(username);

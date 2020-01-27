@@ -21,7 +21,7 @@ const getPage = async (URL, page) => {
 
       let table;
       for (let i = 0; i < tables.length; i++) {
-        if (tables[i].clientHeight === 328) {
+        if (tables[i].clientWidth === 260) {
           table = tables[i];
           break;
         }
@@ -29,6 +29,10 @@ const getPage = async (URL, page) => {
       if (!table) {
         return {
           error: 'Requested user page has no upcoming releases section.'
+        };
+      } else if (!table.rows[1].cells[0].children[0].children.length) {
+        return {
+          error: 'Requested user page has no releases to track.'
         };
       }
 

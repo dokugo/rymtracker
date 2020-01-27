@@ -9,7 +9,8 @@ exports.validateUsername = username => {
   const regex = /^[\w_]*$/;
   const noForbiddenSymbols = regex.test(username);
   const notTooLong = username.length < 25;
-  return noForbiddenSymbols && notTooLong;
+  const notTooShort = username.length > 2;
+  return noForbiddenSymbols && notTooLong && notTooShort;
 };
 
 exports.unknownEndpoint = (request, response) => {

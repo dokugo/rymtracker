@@ -1,7 +1,7 @@
 ### /crawl
 
 ### get mock crawled data
-GET http://localhost:9000/crawl/test
+GET http://localhost:9000/crawl/tt
 
 ### get user crawled data
 GET http://localhost:9000/crawl/sharifi
