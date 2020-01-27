@@ -122,22 +122,35 @@ exports.specified = async (request, response) => {
 // verify specified user
 exports.verify = async (request, response) => {
   try {
-    const user = await User.findById(request.params.id);
+    if (!request.query.email || !request.query.id) {
+      return response.status(400).send({ message: `Data missing.` });
+    }
+
+    const user = await User.findById(request.query.id).catch(error =>
+      console.error(error.message)
+    );
 
     if (!user) {
       return response.status(404).send({ message: `Subscription not found.` });
     }
 
+    if (user.email !== request.query.email) {
+      return response.status(400).send({
+        message: `${user.email}: the provided email does not match the id.`
+      });
+    }
+
     if (user.isVerified) {
-      response
+      return response
         .status(400)
         .send({ message: `${user.email}: email is already verified.` });
-    } else {
-      await user.updateOne({ isVerified: true });
-      await mailer(user, 'greeting');
-      response
-        .status(200)
-        .send({ message: `${user.email}: verification succesful.` });
+    }
+
+    await user.updateOne({ isVerified: true });
+    await mailer(user, 'greeting');
+    response
+      .status(200)
+      .send({ message: `${user.email}: verification succesful.` });
     }
   } catch (error) {
     console.log(error);
