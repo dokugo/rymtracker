@@ -1,4 +1,5 @@
-require('dotenv').config();
+const dotenv = require('dotenv');
+dotenv.config({ path: `${__dirname}/.env` });
 
 module.exports = {
   // used in app.js
