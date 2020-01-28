@@ -29,7 +29,7 @@ const template = {
           user: user,
           data: user.data.releases
         };
-        templateDir = path.join(__dirname, '../templates/releases.ejs');
+        templateDir = path.join(__dirname, '../../templates/releases.ejs');
         break;
 
       case 'verification':
@@ -38,7 +38,7 @@ const template = {
           link: `https://rymtracker.ml/users/verify/${user.id}`,
           text: ``
         };
-        templateDir = path.join(__dirname, '../templates/verification.ejs');
+        templateDir = path.join(__dirname, '../../templates/verification.ejs');
         break;
 
       case 'update':
@@ -47,7 +47,7 @@ const template = {
           link: `https://rymtracker.ml/users/update/${user.id}/${user.username}`,
           text: `update`
         };
-        templateDir = path.join(__dirname, '../templates/verification.ejs');
+        templateDir = path.join(__dirname, '../../templates/verification.ejs');
         break;
 
       case 'greeting':
@@ -56,7 +56,7 @@ const template = {
           link: `https://rymtracker.ml/user/unsubscribe/${user.id}`,
           text: `Hi, ${user.email}. The new releases list is being mailed to the subscribers on every Sunday, 18:00 GMT/UTC +0.`
         };
-        templateDir = path.join(__dirname, '../templates/greeting.ejs');
+        templateDir = path.join(__dirname, '../../templates/greeting.ejs');
         break;
     }
 
