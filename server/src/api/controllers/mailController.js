@@ -2,10 +2,8 @@ const User = require('../../models/user');
 const mailer = require('../../services/mailer/mailer');
 const { sleep } = require('../../helpers/utils');
 
-const massMail = async () => {
+const massMail = async users => {
   const messagesArray = [];
-
-  const users = await User.find();
 
   for (let i = 0; i < users.length; i++) {
     if (!users[i].isVerified) {
@@ -36,7 +34,13 @@ const massMail = async () => {
 // send a mail to every subscribed user
 exports.everyone = async (request, response) => {
   try {
-    const responseMessage = await massMail();
+    const users = await User.find();
+
+    if (!users) {
+      return response.status(404).send({ message: `Subscriptions not found.` });
+    }
+
+    const responseMessage = await massMail(users);
     response.status(200).send({ message: responseMessage });
   } catch (error) {
     console.log(error);
@@ -47,7 +51,11 @@ exports.everyone = async (request, response) => {
 // send a mail to specified user
 exports.specified = async (request, response) => {
   try {
+    if (!request.params.email) {
+      return response.status(400).send({ message: `Data missing.` });
+    }
     const email = request.params.email;
+
     const user = await User.findOne({ email: email });
 
     if (!user) {
