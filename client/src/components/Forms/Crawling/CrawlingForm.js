@@ -83,11 +83,12 @@ const CrawlingForm = ({ setDataStorage }) => {
     setFormState({ ...formState, loading: true, message: null });
     inputRef.current.blur();
 
-    const DOMAIN =
-      process.env.REACT_APP_PROD_API_ROUTE || 'http://localhost:9000';
+    const DOMAIN = process.env.REACT_APP_PROD_DOMAIN || 'http://localhost:9000';
+    const API_KEY = process.env.REACT_APP_PROD_API_KEY || 'o6EWhXFY15ODhD2Q';
 
     fetch(`${DOMAIN}/crawl/${inputData}`, {
       headers: {
+        'X-API-Key': API_KEY,
         'Cache-Control':
           'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
         Pragma: 'no-cache',
