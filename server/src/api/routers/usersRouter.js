@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const usersController = require('../controllers/usersController');
-const { clientRoute, emailRoute } = require('../../helpers/utils');
+const { publicRoute, privateRoute } = require('../../middlewares/middlewares');
 
-router.put('/subscribe', clientRoute, usersController.subscribe);
-router.get('/everyone', emailRoute, usersController.everyone);
-router.get('/verify', emailRoute, usersController.verify);
-router.get('/unsubscribe/:id', emailRoute, usersController.unsubscribe);
-router.get('/update/:id/:username', emailRoute, usersController.update);
-router.get('/:email', emailRoute, usersController.specified);
+router.get('/', privateRoute, usersController.everyone);
+router.put('/subscribe', publicRoute, usersController.subscribe);
+router.patch('/verify', publicRoute, usersController.verify);
+router.patch('/update', publicRoute, usersController.update);
+router.delete('/unsubscribe', publicRoute, usersController.unsubscribe);
+router.get('/:email', privateRoute, usersController.specified);
 
 module.exports = router;
