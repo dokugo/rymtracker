@@ -1,9 +1,8 @@
 const crawler = require('../../services/crawler/crawler');
-const sampleData = require('../../temp/sample.json');
-const { sleep } = require('../../helpers/utils');
 const User = require('../../models/user');
+const sampleData = require('../../temp/sample.json');
+const { sleep, validateUsername } = require('../../helpers/utils');
 const lock = require('../../helpers/lock');
-const { validateUsername } = require('../../helpers/utils');
 
 const saveCrawledData = async (data, username, error) => {
   const query = { username: username };
@@ -18,10 +17,11 @@ const saveCrawledData = async (data, username, error) => {
   await User.findOneAndUpdate(query, update, options);
 };
 
+const LOCK_ID = 0;
+
 // get all subscribed users crawled data
 exports.everyone = async (request, response) => {
   try {
-    const LOCK_ID = 0;
     const isLocked = lock.acquire(LOCK_ID);
     if (isLocked) {
       return response
@@ -32,6 +32,10 @@ exports.everyone = async (request, response) => {
     const messagesArray = [];
 
     const users = await User.find();
+
+    if (!users) {
+      return response.status(404).send({ message: 'Subscriptions not found.' });
+    }
 
     for (let i = 0; i < users.length; i++) {
       const username = users[i].username;
@@ -44,7 +48,7 @@ exports.everyone = async (request, response) => {
       }
 
       const data = await crawler(username);
-      await sleep(1000);
+      await sleep(1000); // 1 second pause to prevent being banned for spamming requests
 
       if (data.error) {
         await saveCrawledData(null, username, data.error);
@@ -74,9 +78,9 @@ exports.everyone = async (request, response) => {
 // get specified user crawled data
 exports.specified = async (request, response) => {
   try {
-    const lockID = request.ip;
+    const lockId = request.ip;
 
-    const isLocked = lock.acquire(lockID);
+    const isLocked = lock.acquire(lockId);
     if (isLocked) {
       return response.status(429).send({
         message: `Your previous request is still processing.`,
@@ -89,13 +93,13 @@ exports.specified = async (request, response) => {
     if (username === 'tt') {
       const data = sampleData;
       await sleep(1000);
-      lock.release(lockID);
+      lock.release(lockId);
       return response.status(200).send({ message: data });
     }
 
     // handle invalid username
     if (!validateUsername(username)) {
-      lock.release(lockID);
+      lock.release(lockId);
       return response.status(400).send({
         message: `${username}: incorrect username format.`,
         error: true
@@ -103,14 +107,14 @@ exports.specified = async (request, response) => {
     }
 
     const data = await crawler(username);
-    await sleep(1000);
+    await sleep(1000); // in case someone is spamming /crawl/:username route
 
     if (data.error) {
-      lock.release(lockID);
+      lock.release(lockId);
       return response.status(400).send({ message: data.error, error: true });
     }
 
-    lock.release(lockID);
+    lock.release(lockId);
     response.status(200).send({ message: data });
   } catch (error) {
     console.log(error);

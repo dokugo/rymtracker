@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const crawlController = require('../controllers/crawlController');
-const { clientRoute, privateRoute } = require('../../helpers/utils');
+const { publicRoute, privateRoute } = require('../../middlewares/middlewares');
 
 router.get('/', privateRoute, crawlController.everyone);
-router.get('/:username', clientRoute, crawlController.specified);
+router.get('/:username', publicRoute, crawlController.specified);
 
 module.exports = router;
