@@ -1,8 +1,6 @@
 const {
-  API_KEY_CLIENT,
-  API_KEY_EMAIL,
-  API_KEY_PRIVATE
-} = require('../config/config');
+  Types: { ObjectId }
+} = require('mongoose');
 
 exports.sleep = time => new Promise(resolve => setTimeout(resolve, time));
 
@@ -19,29 +17,6 @@ exports.validateUsername = username => {
   return noForbiddenSymbols && notTooLong && notTooShort;
 };
 
-exports.clientRoute = (request, response, next) => {
-  if (request.query.apikey !== API_KEY_CLIENT) {
-    return response
-      .status(401)
-      .send({ message: `Access denied.`, error: true });
-  }
-  next();
-};
-
-exports.emailRoute = (request, response, next) => {
-  if (request.query.apikey !== API_KEY_EMAIL) {
-    return response
-      .status(401)
-      .send({ message: `Access denied.`, error: true });
-  }
-  next();
-};
-
-exports.privateRoute = (request, response, next) => {
-  if (request.query.apikey !== API_KEY_PRIVATE) {
-    return response
-      .status(401)
-      .send({ message: `Access denied.`, error: true });
-  }
-  next();
+exports.validateId = id => {
+  return ObjectId.isValid(id);
 };
