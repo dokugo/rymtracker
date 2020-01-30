@@ -21,3 +21,10 @@ exports.privateRoute = (request, response, next) => {
   }
   next();
 };
+
+exports.errorHandler = (error, request, response, next) => {
+  console.error(error.message);
+  return response
+    .status(500)
+    .send({ message: `Internal server error.`, error: true });
+};

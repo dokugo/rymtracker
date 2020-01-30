@@ -32,7 +32,7 @@ const massMail = async users => {
 };
 
 // send a mail to every subscribed user
-exports.everyone = async (request, response) => {
+exports.everyone = async (request, response, next) => {
   try {
     const users = await User.find();
 
@@ -43,13 +43,12 @@ exports.everyone = async (request, response) => {
     const responseMessage = await massMail(users);
     response.status(200).send({ message: responseMessage });
   } catch (error) {
-    console.log(error);
-    throw error;
+    next(error);
   }
 };
 
 // send a mail to specified user
-exports.specified = async (request, response) => {
+exports.specified = async (request, response, next) => {
   try {
     if (!request.params.email) {
       return response.status(400).send({ message: `Data missing.` });
@@ -86,7 +85,6 @@ exports.specified = async (request, response) => {
     await mailer(user, 'releases');
     response.status(200).send({ message: `${email}: mailing successful.` });
   } catch (error) {
-    console.log(error);
-    throw error;
+    next(error);
   }
 };

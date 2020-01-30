@@ -14,15 +14,11 @@ const transport = {
 const transporter = nodemailer.createTransport(transport);
 
 const mailer = async (user, type) => {
-  try {
-    const message = await template.generate(user, type);
-    const email = await transporter.sendMail(message);
+  const message = await template.generate(user, type);
+  const email = await transporter.sendMail(message);
 
-    console.log('Message sent:');
-    console.log(email);
-  } catch (error) {
-    console.log(error);
-  }
+  console.log('Message sent:');
+  console.log(email);
 };
 
 module.exports = mailer;

@@ -9,16 +9,23 @@ const app = express();
 const usersRouter = require('./api/routers/usersRouter');
 const crawlRouter = require('./api/routers/crawlRouter');
 const mailRouter = require('./api/routers/mailRouter');
-const { unknownEndpoint } = require('./helpers/utils');
+const { errorHandler, notFound404 } = require('./middlewares/middlewares');
+
+/* const requestLogger = (request, response, next) => {
+  console.log(request.headers);
+  next();
+}; */
 
 app.set('trust proxy', 1);
-app.use(limiter);
 app.use(cors());
+app.use(limiter);
 app.use(express.json());
+// app.use(requestLogger);
 app.use('/users', usersRouter);
 app.use('/crawl', crawlRouter);
 app.use('/mail', mailRouter);
-app.use(unknownEndpoint);
+app.use(errorHandler);
+app.use(notFound404);
 
 const listen = () => {
   app.listen(APP_PORT);

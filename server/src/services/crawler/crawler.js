@@ -13,72 +13,68 @@ const getUserPage = username => {
 };
 
 const getPage = async (URL, page) => {
-  try {
-    await page.goto(URL, { waitUntil: 'networkidle2', timeout: 0 });
+  await page.goto(URL, { waitUntil: 'networkidle2', timeout: 0 });
 
-    const parsePage = await page.evaluate(() => {
-      const tables = document.querySelectorAll('table.mbgen');
+  const parsePage = await page.evaluate(() => {
+    const tables = document.querySelectorAll('table.mbgen');
 
-      let table;
-      for (let i = 0; i < tables.length; i++) {
-        if (tables[i].clientWidth === 260) {
-          table = tables[i];
-          break;
-        }
+    let table;
+    for (let i = 0; i < tables.length; i++) {
+      if (tables[i].clientWidth === 260) {
+        table = tables[i];
+        break;
       }
-      if (!table) {
-        return {
-          error: 'Requested user page has no upcoming releases section.'
-        };
-      } else if (!table.rows[1].cells[0].children[0].children.length) {
-        return {
-          error: 'Requested user page has no releases to track.'
-        };
-      }
-
-      const box = table.querySelector('tbody > tr:nth-child(2) > td > div');
-
-      const items = box.getElementsByTagName('*');
-      const itemsAmount = items.length;
-
-      const getData = {
-        text: i => {
-          return items[i].innerText;
-        },
-        type: i => {
-          return items[i].className;
-        },
-        link: i => {
-          return items[i].href;
-        },
-        date: i => {
-          return items[i].textContent;
-        }
+    }
+    if (!table) {
+      return {
+        error: 'Requested user page has no upcoming releases section.'
       };
+    } else if (!table.rows[1].cells[0].children[0].children.length) {
+      return {
+        error: 'Requested user page has no releases to track.'
+      };
+    }
 
-      const data = [];
-      for (let i = 0; i < itemsAmount; i++) {
-        if (items[i].tagName === 'A') {
-          data.push({
-            text: getData.text(i),
-            type: getData.type(i),
-            link: getData.link(i)
-          });
-        } else if (items[i].tagName === 'B') {
-          data.push({
-            date: getData.date(i),
-            type: 'date'
-          });
-        }
+    const box = table.querySelector('tbody > tr:nth-child(2) > td > div');
+
+    const items = box.getElementsByTagName('*');
+    const itemsAmount = items.length;
+
+    const getData = {
+      text: i => {
+        return items[i].innerText;
+      },
+      type: i => {
+        return items[i].className;
+      },
+      link: i => {
+        return items[i].href;
+      },
+      date: i => {
+        return items[i].textContent;
       }
+    };
 
-      return data;
-    });
+    const data = [];
+    for (let i = 0; i < itemsAmount; i++) {
+      if (items[i].tagName === 'A') {
+        data.push({
+          text: getData.text(i),
+          type: getData.type(i),
+          link: getData.link(i)
+        });
+      } else if (items[i].tagName === 'B') {
+        data.push({
+          date: getData.date(i),
+          type: 'date'
+        });
+      }
+    }
 
-    return parsePage;
-  } catch (error) {
-    console.error('Error: ', error);
-  }
+    return data;
+  });
+
+  return parsePage;
 };
 
 let browser;
@@ -86,48 +82,44 @@ let browser;
 const crawler = async username => {
   const URL = getUserPage(username);
 
-  try {
-    if (!browser) {
-      browser = await puppeteer.launch({
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-gpu',
-          '--window-size=1920,1080'
-        ],
-        defaultViewport: { width: 1920, height: 1080 },
-        headless: true
-      });
-    }
-
-    const page = await browser.newPage();
-
-    page.setViewport({ width: 1920, height: 937 });
-
-    // block scripts, styles, images, fonts, etc...
-    page.setRequestInterception(true);
-    page.on('request', request => {
-      if (request.resourceType() === 'document') {
-        request.continue();
-      } else {
-        request.abort();
-      }
+  if (!browser) {
+    browser = await puppeteer.launch({
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-gpu',
+        '--window-size=1920,1080'
+      ],
+      defaultViewport: { width: 1920, height: 1080 },
+      headless: true
     });
-
-    const rawData = await getPage(URL, page);
-
-    await page.close();
-
-    if (rawData.error) {
-      return rawData;
-    }
-
-    const data = dataProcessor(rawData);
-
-    return data;
-  } catch (error) {
-    console.error('Error: ', error);
   }
+
+  const page = await browser.newPage();
+
+  page.setViewport({ width: 1920, height: 937 });
+
+  // block scripts, styles, images, fonts, etc...
+  page.setRequestInterception(true);
+  page.on('request', request => {
+    if (request.resourceType() === 'document') {
+      request.continue();
+    } else {
+      request.abort();
+    }
+  });
+
+  const rawData = await getPage(URL, page);
+
+  await page.close();
+
+  if (rawData.error) {
+    return rawData;
+  }
+
+  const data = dataProcessor(rawData);
+
+  return data;
 };
 
 module.exports = crawler;

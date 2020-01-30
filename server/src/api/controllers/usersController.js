@@ -7,7 +7,7 @@ const {
 } = require('../../helpers/utils');
 
 // get all users
-exports.everyone = async (request, response) => {
+exports.everyone = async (request, response, next) => {
   try {
     const users = await User.find();
 
@@ -17,13 +17,12 @@ exports.everyone = async (request, response) => {
 
     response.status(200).send({ message: users });
   } catch (error) {
-    console.log(error);
-    throw error;
+    next(error);
   }
 };
 
 // subscribe user
-exports.subscribe = async (request, response) => {
+exports.subscribe = async (request, response, next) => {
   try {
     let { body } = request;
 
@@ -95,13 +94,12 @@ exports.subscribe = async (request, response) => {
       });
     }
   } catch (error) {
-    console.log(error);
-    throw error;
+    next(error);
   }
 };
 
 // verify specified user
-exports.verify = async (request, response) => {
+exports.verify = async (request, response, next) => {
   try {
     if (!request.query.email || !request.query.id) {
       return response.status(400).send({ message: `Data missing.` });
@@ -143,13 +141,12 @@ exports.verify = async (request, response) => {
         .send({ message: `${user.email}: verification succesful.` });
     }
   } catch (error) {
-    console.log(error);
-    throw error;
+    next(error);
   }
 };
 
 // update user
-exports.update = async (request, response) => {
+exports.update = async (request, response, next) => {
   try {
     if (!request.query.id || !request.query.email || request.query.username) {
       return response.status(400).send({ message: `Data missing.` });
@@ -200,13 +197,12 @@ exports.update = async (request, response) => {
       });
     }
   } catch (error) {
-    console.log(error);
-    throw error;
+    next(error);
   }
 };
 
 // unsubscribe user
-exports.unsubscribe = async (request, response) => {
+exports.unsubscribe = async (request, response, next) => {
   try {
     if (!request.query.email || !request.query.id) {
       return response.status(400).send({ message: `Data missing.` });
@@ -249,13 +245,12 @@ exports.unsubscribe = async (request, response) => {
         .send({ message: `${user.email}: unsubscribe successful.` });
     }
   } catch (error) {
-    console.log(error);
-    throw error;
+    next(error);
   }
 };
 
 // get specified user
-exports.specified = async (request, response) => {
+exports.specified = async (request, response, next) => {
   try {
     if (!request.params.email) {
       return response.status(400).send({ message: `Data missing.` });
@@ -272,7 +267,6 @@ exports.specified = async (request, response) => {
         .send({ message: `${email}: subscription not found.` });
     }
   } catch (error) {
-    console.log(error);
-    throw error;
+    next(error);
   }
 };

@@ -20,7 +20,7 @@ const saveCrawledData = async (data, username, error) => {
 const LOCK_ID = 0;
 
 // get all subscribed users crawled data
-exports.everyone = async (request, response) => {
+exports.everyone = async (request, response, next) => {
   try {
     const isLocked = lock.acquire(LOCK_ID);
     if (isLocked) {
@@ -70,13 +70,12 @@ exports.everyone = async (request, response) => {
     lock.release(LOCK_ID);
     response.status(200).send({ message: messagesArray });
   } catch (error) {
-    console.log(error);
-    throw error;
+    next(error);
   }
 };
 
 // get specified user crawled data
-exports.specified = async (request, response) => {
+exports.specified = async (request, response, next) => {
   try {
     const lockId = request.ip;
 
@@ -117,7 +116,6 @@ exports.specified = async (request, response) => {
     lock.release(lockId);
     response.status(200).send({ message: data });
   } catch (error) {
-    console.log(error);
-    throw error;
+    next(error);
   }
 };
