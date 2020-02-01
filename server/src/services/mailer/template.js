@@ -18,7 +18,8 @@ const template = {
         templateDir: path.join(__dirname, '../../templates/releases.ejs'),
         templateData: {
           user: user,
-          data: user.data.releases
+          data: user.data.releases,
+          link: `https://rymtracker.ml/user/unsubscribe/${user.id}`
         }
       },
 
