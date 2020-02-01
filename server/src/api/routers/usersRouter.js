@@ -5,7 +5,7 @@ const { publicRoute, privateRoute } = require('../../middlewares/middlewares');
 
 router.get('/', privateRoute, usersController.everyone);
 router.put('/subscribe', publicRoute, usersController.subscribe);
-router.patch('/verify', publicRoute, usersController.verify);
+router.patch('/verification', publicRoute, usersController.verification);
 router.patch('/update', publicRoute, usersController.update);
 router.delete('/unsubscribe', publicRoute, usersController.unsubscribe);
 router.get('/:email', privateRoute, usersController.specified);

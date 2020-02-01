@@ -99,7 +99,7 @@ exports.subscribe = async (request, response, next) => {
 };
 
 // verify specified user
-exports.verify = async (request, response, next) => {
+exports.verification = async (request, response, next) => {
   try {
     if (!request.query.email || !request.query.id) {
       return response.status(400).send({ message: `Data missing.` });

@@ -22,11 +22,11 @@ const template = {
         }
       },
 
-      verify: {
-        templateDir: path.join(__dirname, '../../templates/verify.ejs'),
+      verification: {
+        templateDir: path.join(__dirname, '../../templates/verification.ejs'),
         templateData: {
           user: user,
-          link: `https://rymtracker.ml/users/verify/${user.id}`,
+          link: `https://rymtracker.ml/users/verification/${user.id}`,
           text: ``
         }
       },
