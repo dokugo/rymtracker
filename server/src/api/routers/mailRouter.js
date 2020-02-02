@@ -1,9 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const mailController = require('../controllers/mailController');
-const { privateRoute } = require('../../middlewares/middlewares');
+const { everyone, specified } = require('../controllers/mailController');
 
-router.get('/', privateRoute, mailController.everyone);
-router.get('/:email', privateRoute, mailController.specified);
+const {
+  privateRoute,
+  asyncTryCatch
+} = require('../../middlewares/middlewares');
+
+router.get('/', privateRoute, asyncTryCatch(everyone));
+router.get('/:email', privateRoute, asyncTryCatch(specified));
 
 module.exports = router;

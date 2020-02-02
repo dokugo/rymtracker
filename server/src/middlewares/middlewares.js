@@ -28,3 +28,7 @@ exports.errorHandler = (error, request, response, next) => {
     .status(500)
     .send({ message: `Internal server error.`, error: true });
 };
+
+exports.asyncTryCatch = fn => (request, response, next) => {
+  fn(request, response).catch(error => next(error));
+};

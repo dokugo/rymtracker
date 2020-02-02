@@ -32,59 +32,51 @@ const massMail = async users => {
 };
 
 // send a mail to every subscribed user
-exports.everyone = async (request, response, next) => {
-  try {
-    const users = await User.find();
+exports.everyone = async (request, response) => {
+  const users = await User.find();
 
-    if (!users) {
-      return response.status(404).send({ message: `Subscriptions not found.` });
-    }
-
-    const responseMessage = await massMail(users);
-    response.status(200).send({ message: responseMessage });
-  } catch (error) {
-    next(error);
+  if (!users) {
+    return response.status(404).send({ message: `Subscriptions not found.` });
   }
+
+  const responseMessage = await massMail(users);
+  response.status(200).send({ message: responseMessage });
 };
 
 // send a mail to specified user
-exports.specified = async (request, response, next) => {
-  try {
-    if (!request.params.email) {
-      return response.status(400).send({ message: `Data missing.` });
-    }
-    const email = request.params.email;
-
-    const user = await User.findOne({ email: email });
-
-    if (!user) {
-      return response
-        .status(404)
-        .send({ message: `${email}: subscription not found.` });
-    }
-
-    if (!user.isVerified) {
-      return response
-        .status(403)
-        .send({ message: `${email}: email is not verified.` });
-    }
-
-    const error = user.data && user.data.error;
-    const releases = user.data && user.data.releases;
-
-    if (error) {
-      return response.status(400).send({ message: error });
-    }
-
-    if (!releases) {
-      return response.status(400).send({
-        message: `${email}: no data found for ${user.username}.`
-      });
-    }
-
-    await mailer(user, 'releases');
-    response.status(200).send({ message: `${email}: mailing successful.` });
-  } catch (error) {
-    next(error);
+exports.specified = async (request, response) => {
+  if (!request.params.email) {
+    return response.status(400).send({ message: `Data missing.` });
   }
+  const email = request.params.email;
+
+  const user = await User.findOne({ email: email });
+
+  if (!user) {
+    return response
+      .status(404)
+      .send({ message: `${email}: subscription not found.` });
+  }
+
+  if (!user.isVerified) {
+    return response
+      .status(403)
+      .send({ message: `${email}: email is not verified.` });
+  }
+
+  const error = user.data && user.data.error;
+  const releases = user.data && user.data.releases;
+
+  if (error) {
+    return response.status(400).send({ message: error });
+  }
+
+  if (!releases) {
+    return response.status(400).send({
+      message: `${email}: no data found for ${user.username}.`
+    });
+  }
+
+  await mailer(user, 'releases');
+  response.status(200).send({ message: `${email}: mailing successful.` });
 };

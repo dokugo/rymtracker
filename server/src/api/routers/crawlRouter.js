@@ -1,9 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const crawlController = require('../controllers/crawlController');
-const { publicRoute, privateRoute } = require('../../middlewares/middlewares');
+const { everyone, specified } = require('../controllers/crawlController');
 
-router.get('/', privateRoute, crawlController.everyone);
-router.get('/:username', publicRoute, crawlController.specified);
+const {
+  publicRoute,
+  privateRoute,
+  asyncTryCatch
+} = require('../../middlewares/middlewares');
+
+router.get('/', privateRoute, asyncTryCatch(everyone));
+router.get('/:username', publicRoute, asyncTryCatch(specified));
 
 module.exports = router;
