@@ -1,33 +1,45 @@
 ### /crawl
 
-### get mock crawled data
-GET http://localhost:9000/crawl/tt
-
-### get user crawled data
-GET http://localhost:9000/crawl/sharifi
-
-### get all subscribed users crawled data
+### crawlController.everyone
+### save all users crawled data to the db
+### /crawl/
+### API_KEY_PRIVATE
 GET http://localhost:9000/crawl/
+X-API-Key: xDzpq8mI5PgCcNH4
+
+### crawlController.specified
+### get mock crawled data
+### /crawl/tt
+### API_KEY_PUBLIC
+GET http://localhost:9000/crawl/tt
+X-API-Key: o6EWhXFY15ODhD2Q
+
+### crawlController.specified
+### get user crawled data
+### /crawl/{username}
+### API_KEY_PUBLIC
+GET http://localhost:9000/crawl/sharifi
+X-API-Key: o6EWhXFY15ODhD2Q
+
+###
+###
+###
 
 ### /users
 
-### get all saved data from the db
-GET http://localhost:9000/users/everyone
+### usersController.everyone
+### get all users
+### /users/
+### API_KEY_PRIVATE
+GET http://localhost:9000/users/
+X-API-Key: xDzpq8mI5PgCcNH4
 
-### get user data from the db
-GET http://localhost:9000/users/username@gmail.com
-
-### verify user
-GET http://localhost:9000/users/verify/5df58a4563bf5c223c07a1fd
-
-### unsubscribe user
-GET http://localhost:9000/users/unsubscribe/5df54c02013b55168cbd2f5d
-
-### update user
-GET http://localhost:9000/users/update/5df0205777c2212470e76111/diobrando
-
+### usersController.subscribe
 ### subscribe user
+### /users/subscribe
+### API_KEY_PUBLIC
 PUT http://localhost:9000/users/subscribe
+X-API-Key: o6EWhXFY15ODhD2Q
 Content-Type: application/json
 
 {
@@ -35,13 +47,54 @@ Content-Type: application/json
   "email": "username@gmail.com"
 }
 
+### usersController.verification
+### verify user
+### /users/verification?id={id}&email={email}
+### API_KEY_PUBLIC
+PATCH http://localhost:9000/users/verification?id=5df0205777c2212470e76111&email=aturaden@gmail.com
+X-API-Key: o6EWhXFY15ODhD2Q
+
+### usersController.update
+### update user
+### /users/update?id={id}&email={email}&username={username}
+### API_KEY_PUBLIC
+PATCH http://localhost:9000/users/update?id=5df0205777c2212470e76111&email=username@gmail.com&username=diobrando
+X-API-Key: o6EWhXFY15ODhD2Q
+
+
+### usersController.unsubscribe
+### unsubscribe user
+### /users/unsubscribe?id={id}&email={email}
+### API_KEY_PUBLIC
+DELETE http://localhost:9000/users/unsubscribe?id=5e2fc57be502051bccbd23f5&email=username@gma123asdasdil.com
+X-API-Key: o6EWhXFY15ODhD2Q
+
+### usersController.specified
+### get specified user
+### /users/{email}
+### API_KEY_PRIVATE
+GET http://localhost:9000/users/username@gmail.com
+X-API-Key: xDzpq8mI5PgCcNH4
+
+###
+###
+###
+
 ### /mail
 
+### mailController.specified
 ### mail everyone
-GET http://localhost:9000/mail/everyone
+### /mail/
+### API_KEY_PRIVATE
+GET http://localhost:9000/mail/
+X-API-Key: xDzpq8mI5PgCcNH4
 
+### mailController.specified
 ### single user mailing
+### /mail/{email}
+### API_KEY_PRIVATE
 GET http://localhost:9000/mail/username@gmail.com
+X-API-Key: xDzpq8mI5PgCcNH4
 
 ### testing emails
 ### no data: escyth
