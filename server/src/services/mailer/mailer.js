@@ -16,9 +16,7 @@ const transporter = nodemailer.createTransport(transport);
 const mailer = async (user, type) => {
   const message = await template.generate(user, type);
   const email = await transporter.sendMail(message);
-
-  console.log('Message sent:');
-  console.log(email);
+  return email;
 };
 
 module.exports = mailer;
