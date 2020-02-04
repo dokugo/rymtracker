@@ -29,5 +29,10 @@ module.exports = {
   // used in services/mailer/mailer
   SMTP_HOST: process.env.SMTP_HOST,
   SMTP_USER: process.env.SMTP_USER,
-  SMTP_PASS: process.env.SMTP_PASS
+  SMTP_PASS: process.env.SMTP_PASS,
+
+  // used in cron/cron
+  CRON_TIME: '00 18 * * SUN',
+  CRON_TIMEZONE: 'Europe/London',
+
 };

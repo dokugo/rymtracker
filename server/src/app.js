@@ -8,6 +8,7 @@ const cors = require('cors');
 const app = express();
 const router = require('./api/router');
 const { errorHandler, notFound404 } = require('./middlewares/middlewares');
+const cron = require('./cron/cron');
 
 app.set('trust proxy', 1);
 app.use(cors());
@@ -16,6 +17,8 @@ app.use(express.json());
 app.use(router);
 app.use(errorHandler);
 app.use(notFound404);
+
+cron.start();
 
 const listen = () => {
   app.listen(APP_PORT);
