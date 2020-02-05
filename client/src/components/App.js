@@ -13,6 +13,7 @@ import { hot } from 'react-hot-loader';
 import SubForm from './MainPage/Forms/Sub/SubForm';
 import CrawlingForm from './MainPage/Forms/Crawling/CrawlingForm';
 import List from './MainPage/List/List';
+import ConfirmationForm from './ConfirmationPage/ConfirmationForm';
 
 const App = () => {
   const [dataStorage, setDataStorage] = useState(null);
@@ -33,6 +34,7 @@ const App = () => {
               </DataContainer>
             </Route>
             <Route path={['/verification', '/update', '/unsubscribe']}>
+              <ConfirmationForm />
             </Route>
           </Switch>
         </Main>
@@ -44,7 +46,7 @@ const App = () => {
 export default hot(module)(App);
 
 const Main = styled.main`
-  height: 100%;
+  /* height: 100%; */
   padding: 0 12px;
 `;
 
@@ -53,6 +55,7 @@ const FormsContainer = styled.section`
     margin-top: 0;
   }
   display: flex;
+  height: 100%;
   width: 100%;
   justify-content: center;
   align-items: center;
@@ -61,7 +64,7 @@ const FormsContainer = styled.section`
   transition: all 0.5s ease 0s;
   flex-direction: column;
   margin-bottom: 30px;
-  margin-top: 60px;
+  padding-top: 60px;
 `;
 
 const DataContainer = styled.section`
