@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+
 import styled, {
   createGlobalStyle,
   ThemeProvider
@@ -8,9 +10,9 @@ import theme from '../themes/theme';
 
 import { hot } from 'react-hot-loader';
 
-import SubForm from './Forms/Sub/SubForm';
-import CrawlingForm from './Forms/Crawling/CrawlingForm';
-import List from './List/List';
+import SubForm from './MainPage/Forms/Sub/SubForm';
+import CrawlingForm from './MainPage/Forms/Crawling/CrawlingForm';
+import List from './MainPage/List/List';
 
 const App = () => {
   const [dataStorage, setDataStorage] = useState(null);
@@ -18,15 +20,23 @@ const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyle />
-      <Main>
-        <FormsContainer>
-          <SubForm />
-          <CrawlingForm setDataStorage={setDataStorage} />
-        </FormsContainer>
-        <DataContainer /* isOpaque={dataStorage ? true : false} */>
-          <List dataStorage={dataStorage} />
-        </DataContainer>
-      </Main>
+      <BrowserRouter>
+        <Main>
+          <Switch>
+            <Route exact path="/">
+              <FormsContainer>
+                <SubForm />
+                <CrawlingForm setDataStorage={setDataStorage} />
+              </FormsContainer>
+              <DataContainer /* isOpaque={dataStorage ? true : false} */>
+                <List dataStorage={dataStorage} />
+              </DataContainer>
+            </Route>
+            <Route path={['/verification', '/update', '/unsubscribe']}>
+            </Route>
+          </Switch>
+        </Main>
+      </BrowserRouter>
     </ThemeProvider>
   );
 };
