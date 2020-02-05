@@ -1,8 +1,9 @@
 import React, { useState, createRef } from 'react';
 import styled from 'styled-components/macro';
-
 import Input from '../Input';
 import Button from '../Button';
+const DOMAIN = process.env.REACT_APP_PROD_DOMAIN || 'http://localhost:9000';
+const API_KEY = process.env.REACT_APP_PROD_API_KEY || 'o6EWhXFY15ODhD2Q';
 
 const SubForm = () => {
   const [inputData, setInputData] = useState(null);
@@ -119,9 +120,6 @@ const SubForm = () => {
     });
     emailInputRef.current.blur();
     usernameInputRef.current.blur();
-
-    const DOMAIN = process.env.REACT_APP_PROD_DOMAIN || 'http://localhost:9000';
-    const API_KEY = process.env.REACT_APP_PROD_API_KEY || 'o6EWhXFY15ODhD2Q';
 
     fetch(`${DOMAIN}/users/subscribe`, {
       method: 'PUT',

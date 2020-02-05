@@ -1,11 +1,12 @@
 import React, { useState, createRef } from 'react';
 import styled from 'styled-components/macro';
-
 import { useContextSelector } from 'use-context-selector';
-import { AnimationContext } from '../../../contexts/animationContext';
+import { AnimationContext } from '../../../../contexts/animationContext';
 
 import Input from '../Input';
 import Button from '../Button';
+const DOMAIN = process.env.REACT_APP_PROD_DOMAIN || 'http://localhost:9000';
+const API_KEY = process.env.REACT_APP_PROD_API_KEY || 'o6EWhXFY15ODhD2Q';
 
 const CrawlingForm = ({ setDataStorage }) => {
   const setListAnimation = useContextSelector(
@@ -82,9 +83,6 @@ const CrawlingForm = ({ setDataStorage }) => {
     setListAnimation(false);
     setFormState({ ...formState, loading: true, message: null });
     inputRef.current.blur();
-
-    const DOMAIN = process.env.REACT_APP_PROD_DOMAIN || 'http://localhost:9000';
-    const API_KEY = process.env.REACT_APP_PROD_API_KEY || 'o6EWhXFY15ODhD2Q';
 
     fetch(`${DOMAIN}/crawl/${inputData}`, {
       headers: {

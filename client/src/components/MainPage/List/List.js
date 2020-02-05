@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components/macro';
 import { Transition } from 'react-transition-group';
 
-import { AnimationContext } from '../../contexts/animationContext';
+import { AnimationContext } from '../../../contexts/animationContext';
 import { useContextSelector } from 'use-context-selector';
 
 import ListItems from './ListItems';
