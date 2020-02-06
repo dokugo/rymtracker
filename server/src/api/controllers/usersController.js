@@ -22,7 +22,7 @@ exports.subscribe = async (request, response) => {
   let { body } = request;
 
   if (!body.username || !body.email) {
-    return response.status(400).send({ message: `Data missing.` });
+    return response.status(400).send({ message: `Missing data.` });
   }
 
   body = {
@@ -92,8 +92,8 @@ exports.subscribe = async (request, response) => {
 
 // verify specified user
 exports.verification = async (request, response) => {
-  if (!request.query.email || !request.query.id) {
-    return response.status(400).send({ message: `Data missing.` });
+  if (!request.query.id || !request.query.email || !request.query.username) {
+    return response.status(400).send({ message: `Missing data.` });
   }
 
   const validId = validateId(request.query.id);
@@ -107,14 +107,14 @@ exports.verification = async (request, response) => {
   const user = await User.findById(request.query.id);
 
   if (!user) {
-    return response
-      .status(404)
-      .send({ message: `${request.query.email}: subscription not found.` });
+    return response.status(404).send({
+      message: `${request.query.id}: subscription with this ID not found.`
+    });
   }
 
   if (user.email !== request.query.email) {
     return response.status(400).send({
-      message: `${user.email}: the provided email does not match the id.`
+      message: `${request.query.email}: the provided email does not match the id.`
     });
   }
 
@@ -135,10 +135,9 @@ exports.verification = async (request, response) => {
 
 // update user
 exports.update = async (request, response) => {
-  if (!request.query.id || !request.query.email || request.query.username) {
-    return response.status(400).send({ message: `Data missing.` });
+  if (!request.query.id || !request.query.email || !request.query.username) {
+    return response.status(400).send({ message: `Missing data.` });
   }
-
   const validId = validateId(request.query.id);
 
   if (!validId) {
@@ -167,7 +166,7 @@ exports.update = async (request, response) => {
       .send({ message: `${user.email}: email is not verified.` });
   }
 
-  const newUsername = request.params.username;
+  const newUsername = request.query.username;
 
   if (user.username === newUsername) {
     return response
@@ -180,15 +179,15 @@ exports.update = async (request, response) => {
       username: newUsername
     });
     return response.status(200).send({
-      message: `${user.email}: update to ${user.username} successful.`
+      message: `${user.email}: update to ${newUsername} successful.`
     });
   }
 };
 
 // unsubscribe user
 exports.unsubscribe = async (request, response) => {
-  if (!request.query.email || !request.query.id) {
-    return response.status(400).send({ message: `Data missing.` });
+  if (!request.query.id || !request.query.email || !request.query.username) {
+    return response.status(400).send({ message: `Missing data.` });
   }
 
   const validId = validateId(request.query.id);
@@ -232,7 +231,7 @@ exports.unsubscribe = async (request, response) => {
 // get specified user
 exports.specified = async (request, response) => {
   if (!request.params.email) {
-    return response.status(400).send({ message: `Data missing.` });
+    return response.status(400).send({ message: `Missing data.` });
   }
 
   const email = request.params.email;
