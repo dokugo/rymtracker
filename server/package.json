@@ -6,8 +6,9 @@
   "author": "dokugo",
   "license": "MIT",
   "scripts": {
-    "dev": "cd src && set NODE_ENV=development&&nodemon --inspect app.js",
-    "prod": "set NODE_ENV=production&&node src/app.js",
+    "dev": "cross-env NODE_ENV=development nodemon --inspect src/app.js",
+    "prod": "cross-env NODE_ENV=production node src/app.js",
+    "start": "node src/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.3",
+    "cross-env": "^7.0.0",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.3.0",
     "eslint-config-standard": "^14.1.0",
