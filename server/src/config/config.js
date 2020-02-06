@@ -35,4 +35,6 @@ module.exports = {
   CRON_TIME: '00 18 * * SUN',
   CRON_TIMEZONE: 'Europe/London',
 
+  // used in services/mailer/template
+  DOMAIN: process.env.DOMAIN || `http://localhost:3000`
 };

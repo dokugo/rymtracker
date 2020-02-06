@@ -1,11 +1,12 @@
 const ejs = require('ejs');
 const path = require('path');
+const { DOMAIN } = require('../../config/config');
 
 const template = {
   getSubject(user, type) {
     this.subjects = {
       releases: `💿 Upcoming releases for ${user.username}`,
-      verify: `❓ Please confirm subscription to ${user.username}`,
+      verification: `❓ Please confirm subscription to ${user.username}`,
       update: `❓ Please confirm subscription update to ${user.username}`,
       greeting: `✔️ Verification successful`
     };
@@ -13,13 +14,15 @@ const template = {
   },
 
   async getHtml(user, type) {
+    const paramsString = `?id=${user.id}&email=${user.email}&username=${user.username}`;
+
     this.options = {
       releases: {
         templateDir: path.join(__dirname, '../../templates/releases.ejs'),
         templateData: {
           user: user,
-          data: user.data.releases,
-          link: `https://rymtracker.ml/user/unsubscribe/${user.id}`
+          link: `${DOMAIN}/unsubscribe${paramsString}`,
+          text: ``
         }
       },
 
@@ -27,7 +30,7 @@ const template = {
         templateDir: path.join(__dirname, '../../templates/verification.ejs'),
         templateData: {
           user: user,
-          link: `https://rymtracker.ml/users/verification/${user.id}`,
+          link: `${DOMAIN}/verification${paramsString}`,
           text: ``
         }
       },
@@ -36,7 +39,7 @@ const template = {
         templateDir: path.join(__dirname, '../../templates/verification.ejs'),
         templateData: {
           user: user,
-          link: `https://rymtracker.ml/users/update/${user.id}/${user.username}`,
+          link: `${DOMAIN}/update${paramsString}`,
           text: `update`
         }
       },
@@ -45,7 +48,7 @@ const template = {
         templateDir: path.join(__dirname, '../../templates/greeting.ejs'),
         templateData: {
           user: user,
-          link: `https://rymtracker.ml/user/unsubscribe/${user.id}`,
+          link: `${DOMAIN}/unsubscribe${paramsString}`,
           text: `Hi, ${user.email}. The new releases list is being mailed to the subscribers on every Sunday, 18:00 GMT/UTC +0.`
         }
       }
