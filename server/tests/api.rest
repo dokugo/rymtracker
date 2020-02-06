@@ -1,3 +1,5 @@
+### use mock API keys
+
 ### /crawl
 
 ### crawlController.everyone
@@ -43,7 +45,7 @@ X-API-Key: o6EWhXFY15ODhD2Q
 Content-Type: application/json
 
 {
-  "username": "escyth",
+  "username": "escythasd",
   "email": "username@gmail.com"
 }
 
@@ -51,14 +53,14 @@ Content-Type: application/json
 ### verify user
 ### /users/verification?id={id}&email={email}
 ### API_KEY_PUBLIC
-PATCH http://localhost:9000/users/verification?id=5df0205777c2212470e76111&email=aturaden@gmail.com
+PATCH http://localhost:9000/users/verification?id=5e399335dcb602391489091e&email=username@gmail.com&username=username
 X-API-Key: o6EWhXFY15ODhD2Q
 
 ### usersController.update
 ### update user
 ### /users/update?id={id}&email={email}&username={username}
 ### API_KEY_PUBLIC
-PATCH http://localhost:9000/users/update?id=5df0205777c2212470e76111&email=username@gmail.com&username=diobrando
+PATCH http://localhost:9000/users/update?id=5df0205777c2212470e76111&email=username@gmail.com&username=username
 X-API-Key: o6EWhXFY15ODhD2Q
 
 
@@ -66,7 +68,7 @@ X-API-Key: o6EWhXFY15ODhD2Q
 ### unsubscribe user
 ### /users/unsubscribe?id={id}&email={email}
 ### API_KEY_PUBLIC
-DELETE http://localhost:9000/users/unsubscribe?id=5e2fc57be502051bccbd23f5&email=username@gma123asdasdil.com
+DELETE http://localhost:9000/users/unsubscribe?id=5e2fc57be502051bccbd23f5&email=username@gmail.com&username=username
 X-API-Key: o6EWhXFY15ODhD2Q
 
 ### usersController.specified
@@ -93,7 +95,7 @@ X-API-Key: xDzpq8mI5PgCcNH4
 ### single user mailing
 ### /mail/{email}
 ### API_KEY_PRIVATE
-GET http://localhost:9000/mail/username@gmail.com
+GET http://localhost:9000/mail/sigur@gmail.com
 X-API-Key: xDzpq8mI5PgCcNH4
 
 ### testing emails

@@ -49,7 +49,7 @@ const template = {
         templateData: {
           user: user,
           link: `${DOMAIN}/unsubscribe${paramsString}`,
-          text: `Hi, ${user.email}. The new releases list is being mailed to the subscribers on every Sunday, 18:00 GMT/UTC +0.`
+          text: `Hi, ${user.username}. The new releases list is being mailed to the subscribers on every Sunday, 18:00 GMT/UTC +0.`
         }
       }
     };
