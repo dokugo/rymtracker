@@ -25,6 +25,7 @@ const getPage = async (URL, page) => {
         break;
       }
     }
+
     if (!table) {
       return {
         error: 'Requested user page has no upcoming releases section.'

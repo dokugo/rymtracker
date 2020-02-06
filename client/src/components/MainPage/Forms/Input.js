@@ -46,8 +46,8 @@ const Input = styled.input`
   &:focus {
     box-shadow: ${({ inputState, theme }) =>
       inputState.error
-        ? `0 0 0 3px ${theme.input.error}`
-        : `0 0 0 3px ${theme.input.default}`};
+        ? `0 0 0 2px ${theme.input.error}`
+        : `0 0 0 2px ${theme.input.default}`};
   }
   ::-webkit-search-decoration,
   ::-webkit-search-cancel-button,

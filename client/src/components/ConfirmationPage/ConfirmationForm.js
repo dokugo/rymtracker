@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-const DOMAIN = process.env.REACT_APP_PROD_DOMAIN || 'http://localhost:9000';
-const API_KEY = process.env.REACT_APP_PROD_API_KEY || 'o6EWhXFY15ODhD2Q';
+// const DOMAIN = 'https://rmtrck.ml';
+const DOMAIN = process.env.REACT_APP_DOMAIN || 'http://localhost:9000';
+const API_KEY = process.env.REACT_APP_API_KEY || 'o6EWhXFY15ODhD2Q';
 
 const ConfirmationForm = () => {
   const [formState, setFormState] = useState({
@@ -102,14 +103,16 @@ const Button = styled.button`
   font-weight: 400;
   color: ${({ theme }) => theme.global.text};
   width: 100%;
-  height: 65px;
-  min-height: 65px;
+  height: 50px;
+  min-height: 50px;
   padding: 0px 20px;
   padding-bottom: 2.5px;
   box-sizing: border-box;
   background-color: transparent;
   border: 2px solid;
-  border-color: ${({ theme }) => theme.input.default};
+  /* border-color: ${({ theme }) => theme.input.default}; */
+  border-color: rgba(255, 255, 255, 0.4);
+  /* border-color: rgba(180, 200, 220, 0.4); */
   border-radius: 8px;
   transition: 0.15s ease-in-out;
   outline: 0 none;

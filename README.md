@@ -4,7 +4,7 @@ Track the upcoming releases section of the specified [`rateyourmusic.com`](https
 
 This project is not production-ready. It was created purely for self-educational purposes.
 
-~~###### ⚠️ Please note that if you try to use [`rymtracker.ml`](https://rymtracker.ml), you might experience slow first-loading period since the free-tier Heroku instance "gets asleep" if it receives no web traffic in a 30-minute period and takes some time to get itself out of sleep, usually around 15 seconds.~~
+~~⚠️ Please note that if you try to use [`rymtracker.ml`](https://rymtracker.ml), you might experience slow first-loading period since the free-tier Heroku instance "gets asleep" if it receives no web traffic in a 30-minute period and takes some time to get itself out of sleep, usually around 15 seconds.~~
 
 ###### The backend was moved to an AWS EC2 instace and now has a persistent uptime.
 

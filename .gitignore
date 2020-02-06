@@ -9,6 +9,7 @@
 
 # workflows
 # .github
+.now
 
 # production
 client/build
@@ -25,3 +26,4 @@ client/.env.development
 client/.env.production
 server/src/config/.env.development
 server/src/config/.env.production
+
