@@ -1,3 +1,4 @@
+import { hot } from 'react-hot-loader';
 import React, { useState } from 'react';
 
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
@@ -7,8 +8,6 @@ import styled, {
   ThemeProvider
 } from 'styled-components/macro';
 import theme from '../themes/theme';
-
-import { hot } from 'react-hot-loader';
 
 import SubForm from './MainPage/Forms/Sub/SubForm';
 import CrawlingForm from './MainPage/Forms/Crawling/CrawlingForm';
@@ -26,6 +25,7 @@ const App = () => {
           <Switch>
             <Route exact path="/">
               <FormsContainer>
+                <H1>RYM Tracker</H1>
                 <SubForm />
                 <CrawlingForm setDataStorage={setDataStorage} />
               </FormsContainer>
@@ -43,16 +43,20 @@ const App = () => {
   );
 };
 
-export default hot(module)(App);
+export default process.env.NODE_ENV === 'development' ? hot(module)(App) : App;
 
 const Main = styled.main`
   /* height: 100%; */
   padding: 0 12px;
 `;
 
+const H1 = styled.h1`
+  margin-bottom: 12px;
+`;
+
 const FormsContainer = styled.section`
   @media (max-width: 660px) {
-    margin-top: 0;
+    padding-top: 0;
   }
   display: flex;
   height: 100%;

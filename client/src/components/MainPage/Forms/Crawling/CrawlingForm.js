@@ -4,9 +4,9 @@ import { useContextSelector } from 'use-context-selector';
 import { AnimationContext } from '../../../../contexts/animationContext';
 import Input from '../Input';
 import Button from '../Button';
-// const DOMAIN = 'https://rmtrck.ml';
-const DOMAIN = process.env.REACT_APP_DOMAIN || 'http://localhost:9000';
-const API_KEY = process.env.REACT_APP_API_KEY || 'o6EWhXFY15ODhD2Q';
+
+const DOMAIN = process.env.REACT_APP_DOMAIN;
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 const CrawlingForm = ({ setDataStorage }) => {
   const setListAnimation = useContextSelector(
@@ -157,6 +157,7 @@ const InputText = styled.div`
   min-width: 100%;
   @media (max-width: 660px) {
     width: 100%;
+    text-align: center;
   }
 `;
 

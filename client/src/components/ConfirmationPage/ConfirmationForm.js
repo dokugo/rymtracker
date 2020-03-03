@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styled from 'styled-components/macro';
-// const DOMAIN = 'https://rmtrck.ml';
-const DOMAIN = process.env.REACT_APP_DOMAIN || 'http://localhost:9000';
-const API_KEY = process.env.REACT_APP_API_KEY || 'o6EWhXFY15ODhD2Q';
+
+const DOMAIN = process.env.REACT_APP_DOMAIN;
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 const ConfirmationForm = () => {
   const [formState, setFormState] = useState({
