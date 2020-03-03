@@ -1,7 +1,12 @@
 {
   "version": 2,
-  "name": "rymtracker",
   "regions": ["arn1"],
+  "build": {
+    "env": {
+      "REACT_APP_DOMAIN": "@react_app_domain",
+      "REACT_APP_API_KEY": "@react_app_api_key"
+    }
+  },
   "builds": [
     {
       "src": "/client/package.json",

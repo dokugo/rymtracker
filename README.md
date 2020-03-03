@@ -21,12 +21,16 @@ This project is not production-ready. It was created purely for self-educational
 
 Name | Description
 --- | ---
+| Server
 `MONGODB_URI` | MongoDB URI
 `API_KEY_PUBLIC`, `API_KEY_PRIVATE` | Keys used in API authorization middleware
 `SMTP_HOST`, `SMTP_USER`, `SMTP_PASS` | SMTP provider hostname and credentials
 `DOMAIN` | Root domain used in email links generation
+| Client
+`REACT_APP_API_KEY` | Should be the same with `API_KEY_PUBLIC`
+`REACT_APP_DOMAIN` | Root domain used in fetch functions
 
-Take a look at `.env.example` for reference. Don't forget to setup the client env vars too (API keys and domain).
+Take a look at `.env.example` for reference. Don't forget to setup the client env vars too.
 
 If you are getting errors with Puppeteer, make sure all the necessary dependencies are installed. You can run `ldd chrome | grep not` not on a Linux machine to check which dependencies are missing. The common ones are provided below.
 
@@ -81,7 +85,13 @@ Check out [this](https://github.com/puppeteer/puppeteer/blob/master/docs/trouble
 
 ### API
 
-Coming soon...
+Coming later...
+
+### Deployment
+
+Client: [ZEIT  Now](https://zeit.co/). Don't forget to [setup the env vars](https://zeit.co/docs/v2/build-step#using-environment-variables-and-secrets).
+
+Server: AWS. More details later...
 
 ### Todo
 
@@ -117,28 +127,30 @@ Coming soon...
 - use http2
 - add logger to cron job
 - use another template engine instead of ejs
-
+- - -
 - handle incoming emails
 - use joi or express-validation for validation
 - clean massmail and masscrawl api methods
-
+- - -
+- ⚠️ send releases data on successful subscription ⚠️
+- - -
 - ⚠️ add email links hash ⚠️
 - ⚠️ handle puppeteer action in case of ip ban ⚠️
 - ⚠️ rewrite lock with event emitter usage ⚠️
-
+- - -
 - ⚠️ use aws ses instead of sendgrid ⚠️
 - ⚠️ improve email templates design ⚠️
-
+- - -
 - res msg status: error / ok
 - change response message text to start with a capital letter
-
+- - -
 - move sample data somewhere
 - do Promise.all and forEarch instead of procedural/imperative cringe 🤡
-
+- - -
 - use helmet
 - use compression
 - add cors config
-
+- - -
 - rename /users/ route path back to /user/
 
 ###### Client
