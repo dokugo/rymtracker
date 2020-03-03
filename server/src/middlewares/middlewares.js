@@ -5,20 +5,18 @@ exports.notFound404 = (request, response) => {
 };
 
 exports.publicRoute = (request, response, next) => {
-  if (request.headers[`x-api-key`] !== API_KEY_PUBLIC) {
+  if (request.headers[`x-api-key`] !== API_KEY_PUBLIC)
     return response
       .status(401)
       .send({ message: `Access denied.`, error: true });
-  }
   next();
 };
 
 exports.privateRoute = (request, response, next) => {
-  if (request.headers[`x-api-key`] !== API_KEY_PRIVATE) {
+  if (request.headers[`x-api-key`] !== API_KEY_PRIVATE)
     return response
       .status(401)
       .send({ message: `Access denied.`, error: true });
-  }
   next();
 };
 
@@ -31,4 +29,9 @@ exports.errorHandler = (error, request, response, next) => {
 
 exports.asyncTryCatch = fn => (request, response, next) => {
   fn(request, response).catch(error => next(error));
+};
+
+// this is used for aws load balancer health checks
+exports.index = (request, response, next) => {
+  if (request.url === '/') return response.status(200).send('Index.');
 };

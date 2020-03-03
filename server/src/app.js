@@ -7,7 +7,11 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const router = require('./api/router');
-const { errorHandler, notFound404 } = require('./middlewares/middlewares');
+const {
+  errorHandler,
+  notFound404,
+  index
+} = require('./middlewares/middlewares');
 const cron = require('./cron/cron');
 
 app.set('trust proxy', 1);
@@ -15,6 +19,7 @@ app.use(cors());
 app.use(limiter);
 app.use(express.json());
 app.use(router);
+app.use(index);
 app.use(errorHandler);
 app.use(notFound404);
 
