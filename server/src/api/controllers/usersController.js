@@ -126,19 +126,22 @@ exports.verification = async (request, response) => {
   }
 
   if (!user.isVerified) {
-    const data = await crawler(user.username);
+    await user.verify();
 
-    if (!data || data.error) {
-      user = await User.saveCrawledData(null, user.email, data.error);
-    } else {
-      user = await User.saveCrawledData(data, user.email, null);
-    }
-
-    await mailer(user, 'greeting');
     response
       .status(200)
       .send({ message: `${user.email}: verification succesful.` });
   }
+
+  const data = await crawler(user.username);
+
+  if (!data || data.error) {
+    user = await User.saveCrawledData(null, user.email, data.error);
+  } else {
+    user = await User.saveCrawledData(data, user.email, null);
+  }
+
+  await mailer(user, 'greeting');
 };
 
 // update user

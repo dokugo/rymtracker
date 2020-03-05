@@ -10,9 +10,13 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+userSchema.methods.verify = async function() {
+  await this.updateOne({ isVerified: true });
+};
+
 userSchema.statics.saveCrawledData = async function(data, email, error) {
   const query = { email: email };
-  const update = { data: { releases: data, error: error }, isVerified: true };
+  const update = { data: { releases: data, error: error } };
   const options = {
     useFindAndModify: false,
     upsert: true,
