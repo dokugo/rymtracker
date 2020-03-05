@@ -5,25 +5,37 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   </head>
   <body>
-    <%user.data.releases.map(item=>{%>
-      <div style="border-bottom: 1px solid #999999; padding-top: 8px; padding-bottom: 8px;">
-        <span style="color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 16px; line-height: 16px;">
-          <%=item.date%>:
-        </span>
-        <%item.artists.map((item, index, arr)=>{%>
-          <a style="text-decoration: none; color: #5b7cc4; font-size: 16px; font-family: Lucida Console, Monaco, Courier New; line-height: 16px;" href="<%=item.link%>"><%=item.text%></a>
-          <%if(index !== arr.length - 1){%>
-            <span style="color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 16px; line-height: 16px;">
-                &
+    <p style="line-height: 1.5; color: #606060; font-family: Lucida Console, Monaco, Courier New; font-size: 12px;">
+      <%=text%>
+    </p>
+
+    <% if (user.data.releases) { %>
+      <% user.data.releases.map(item => { %>
+        <div style="border-bottom: 1px solid #999999; padding-top: 8px; padding-bottom: 8px;">
+          <span style="color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 16px; line-height: 16px;">
+            <%=item.date%>:
+          </span>
+          <% item.artists.map((item, index, arr) => { %>
+            <a style="text-decoration: none; color: #5b7cc4; font-size: 16px; font-family: Lucida Console, Monaco, Courier New; line-height: 16px;" href="<%=item.link%>"><%=item.text%>
+            </a>
+            <%if (index !== arr.length - 1) { %>
+              <span style="color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 16px; line-height: 16px;">
+                  &
               </span>
-          <%}%>
-        <%});%>
-        <span style="color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 16px; line-height: 16px;">
-          –
-        </span>
-        <a style="text-decoration: none; color: #5b7cc4; font-size: 16px; font-family: Lucida Console, Monaco, Courier New; line-height: 16px;" href="<%=item.album.link%>"><%=item.album.text%></a>
-      </div>
-    <%});%> 
+            <% } %>
+          <% }) %>
+          <span style="color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 16px; line-height: 16px;">
+            –
+          </span>
+          <a style="text-decoration: none; color: #5b7cc4; font-size: 16px; font-family: Lucida Console, Monaco, Courier New; line-height: 16px;" href="<%=item.album.link%>"><%=item.album.text%></a>
+        </div>
+      <% }) %>
+      <% } else if (user.data.error) { %>
+      <p style="line-height: 1.5; color: #606060; font-family: Lucida Console, Monaco, Courier New; font-size: 12px;">
+        <%=user.data.error%>
+      </p>
+    <% } %>
+
     <p>
       <a style="line-height: 1.5; color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 12px;" href="<%=link%>" >
         Unsubscribe

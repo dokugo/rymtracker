@@ -5,10 +5,10 @@ const { DOMAIN } = require('../../config/config');
 const template = {
   getSubject(user, type) {
     this.subjects = {
-      releases: `💿 Upcoming releases for ${user.username}`,
       verification: `❓ Please confirm subscription to ${user.username}`,
       update: `❓ Please confirm subscription update to ${user.username}`,
-      greeting: `✔️ Verification successful`
+      greeting: `✔️ Verification successful`,
+      releases: `💿 Upcoming releases for ${user.username}`
     };
     return this.subjects[type];
   },
@@ -17,15 +17,6 @@ const template = {
     const paramsString = `?id=${user.id}&email=${user.email}&username=${user.username}`;
 
     this.options = {
-      releases: {
-        templateDir: path.join(__dirname, '../../templates/releases.ejs'),
-        templateData: {
-          user: user,
-          link: `${DOMAIN}/unsubscribe${paramsString}`,
-          text: ``
-        }
-      },
-
       verification: {
         templateDir: path.join(__dirname, '../../templates/verification.ejs'),
         templateData: {
@@ -45,11 +36,20 @@ const template = {
       },
 
       greeting: {
-        templateDir: path.join(__dirname, '../../templates/greeting.ejs'),
+        templateDir: path.join(__dirname, '../../templates/releases.ejs'),
         templateData: {
           user: user,
           link: `${DOMAIN}/unsubscribe${paramsString}`,
           text: `Hi, ${user.username}. The new releases list is being mailed to the subscribers on every Sunday, 18:00 GMT/UTC +0.`
+        }
+      },
+
+      releases: {
+        templateDir: path.join(__dirname, '../../templates/releases.ejs'),
+        templateData: {
+          user: user,
+          link: `${DOMAIN}/unsubscribe${paramsString}`,
+          text: `Hi, ${user.username}. This is your weekly RYM releases list.`
         }
       }
     };
