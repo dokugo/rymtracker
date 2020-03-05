@@ -1,5 +1,6 @@
 const User = require('../../models/user');
 const mailer = require('../../services/mailer/mailer');
+const crawler = require('../../services/crawler/crawler');
 const {
   validateEmail,
   validateUsername,
@@ -104,7 +105,7 @@ exports.verification = async (request, response) => {
       .send({ message: `${request.query.id}: Invalid ID.` });
   }
 
-  const user = await User.findById(request.query.id);
+  let user = await User.findById(request.query.id);
 
   if (!user) {
     return response.status(404).send({
@@ -125,7 +126,14 @@ exports.verification = async (request, response) => {
   }
 
   if (!user.isVerified) {
-    await user.updateOne({ isVerified: true });
+    const data = await crawler(user.username);
+
+    if (!data || data.error) {
+      user = await User.saveCrawledData(null, user.email, data.error);
+    } else {
+      user = await User.saveCrawledData(data, user.email, null);
+    }
+
     await mailer(user, 'greeting');
     response
       .status(200)

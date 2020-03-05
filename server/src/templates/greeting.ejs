@@ -8,6 +8,27 @@
     <p style="line-height: 1.5; color: #606060; font-family: Lucida Console, Monaco, Courier New; font-size: 12px;">
       <%=text%>
     </p>
+
+    <%user.data.releases.map(item=>{%>
+      <div style="border-bottom: 1px solid #999999; padding-top: 8px; padding-bottom: 8px;">
+        <span style="color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 16px; line-height: 16px;">
+          <%=item.date%>:
+        </span>
+        <%item.artists.map((item, index, arr)=>{%>
+          <a style="text-decoration: none; color: #5b7cc4; font-size: 16px; font-family: Lucida Console, Monaco, Courier New; line-height: 16px;" href="<%=item.link%>"><%=item.text%></a>
+          <%if(index !== arr.length - 1){%>
+            <span style="color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 16px; line-height: 16px;">
+                &
+              </span>
+          <%}%>
+        <%});%>
+        <span style="color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 16px; line-height: 16px;">
+          –
+        </span>
+        <a style="text-decoration: none; color: #5b7cc4; font-size: 16px; font-family: Lucida Console, Monaco, Courier New; line-height: 16px;" href="<%=item.album.link%>"><%=item.album.text%></a>
+      </div>
+    <%});%>
+
     <p>
       <a style="line-height: 1.5; color: #999999; font-family: Lucida Console, Monaco, Courier New; font-size: 12px;" href="<%=link%>" >
         Unsubscribe

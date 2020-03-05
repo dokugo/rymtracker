@@ -10,6 +10,19 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+userSchema.statics.saveCrawledData = async function(data, email, error) {
+  const query = { email: email };
+  const update = { data: { releases: data, error: error }, isVerified: true };
+  const options = {
+    useFindAndModify: false,
+    upsert: true,
+    new: true,
+    setDefaultsOnInsert: true
+  };
+  const result = await this.findOneAndUpdate(query, update, options);
+  return result;
+};
+
 userSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
