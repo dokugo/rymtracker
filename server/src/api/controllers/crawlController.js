@@ -1,21 +1,9 @@
 const crawler = require('../../services/crawler/crawler');
+const { crawlingLoop } = require('../../jobs/massCrawling');
 const User = require('../../models/user');
 const sampleData = require('../../temp/sample.json');
 const { sleep, validateUsername } = require('../../helpers/utils');
 const lock = require('../../helpers/lock');
-
-const saveCrawledData = async (data, username, error) => {
-  const query = { username: username };
-  const update = { data: { releases: data, error: error } };
-  const options = {
-    useFindAndModify: false,
-    upsert: true,
-    new: true,
-    setDefaultsOnInsert: true
-  };
-
-  await User.findOneAndUpdate(query, update, options);
-};
 
 const LOCK_ID = 0;
 
@@ -29,46 +17,16 @@ exports.everyone = async (request, response) => {
         .send({ message: `Your previous request is still processing.` });
     }
 
-    const messagesArray = [];
-
     const users = await User.find();
-
     if (!users) {
       return response.status(404).send({ message: 'Subscriptions not found.' });
     }
 
-    for (let i = 0; i < users.length; i++) {
-      const username = users[i].username;
-
-      if (!users[i].isVerified) {
-        const message = `${username}: email is not verified.`;
-        messagesArray.push(message);
-        console.log(message);
-        continue;
-      }
-
-      const data = await crawler(username);
-      await sleep(1000); // 1 second pause to prevent being banned for spamming requests
-
-      if (data.error) {
-        await saveCrawledData(null, username, data.error);
-
-        const message = `${username}: no data found.`;
-        messagesArray.push(message);
-        console.log(message);
-
-        continue;
-      }
-
-      await saveCrawledData(data, username, null);
-
-      const message = `${username}: crawling successful.`;
-      messagesArray.push(message);
-      console.log(message);
-    }
+    const crawlingLog = await crawlingLoop(users);
+    console.log(crawlingLog);
 
     lock.release(LOCK_ID);
-    response.status(200).send({ message: messagesArray });
+    response.status(200).send({ message: crawlingLog });
   } catch (error) {
     lock.release(LOCK_ID);
     throw error;

@@ -1,13 +1,18 @@
 const CronJob = require('cron').CronJob;
 const { CRON_TIME, CRON_TIMEZONE } = require('../config/config');
-const massCrawling = require('../jobs/massCrawling');
-const massMailing = require('../jobs/massMailing');
+const { massCrawling } = require('../jobs/massCrawling');
+const { massMailing } = require('../jobs/massMailing');
 
 const weeklyJob = async () => {
+  // write logs to disk or database
+
   console.log('Mass crawling started.');
-  await massCrawling();
+  const crawlingLog = await massCrawling();
+  console.log(crawlingLog);
+
   console.log('Mass mailing started.');
-  await massMailing();
+  const mailingLog = await massMailing();
+  console.log(mailingLog);
 };
 
 const options = {

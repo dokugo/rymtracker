@@ -1,21 +1,6 @@
-// todo: saving logs into a file or db
-
 const User = require('../models/user');
 const crawler = require('../services/crawler/crawler');
 const { sleep } = require('../helpers/utils');
-
-const saveCrawledData = async (data, username, error) => {
-  const query = { username: username };
-  const update = { data: { releases: data, error: error } };
-  const options = {
-    useFindAndModify: false,
-    upsert: true,
-    new: true,
-    setDefaultsOnInsert: true
-  };
-
-  await User.findOneAndUpdate(query, update, options);
-};
 
 const crawlingLoop = async users => {
   const messageLog = {};
@@ -23,6 +8,7 @@ const crawlingLoop = async users => {
   for (let i = 0; i < users.length; i++) {
     const user = users[i];
     const username = user.username;
+    const email = user.email;
 
     if (!user.isVerified) {
       const message = `email is not verified.`;
@@ -31,10 +17,7 @@ const crawlingLoop = async users => {
     }
 
     await sleep(1000); // prevent being banned for spamming requests
-
-    const data = await crawler(username).catch(error =>
-      console.error(error.message)
-    );
+    const data = await crawler(username);
 
     if (!data) {
       const message = `crawler service error.`;
@@ -43,11 +26,11 @@ const crawlingLoop = async users => {
     }
 
     if (data.error) {
-      await saveCrawledData(null, username, data.error);
+      await User.saveCrawledData(null, email, data.error);
       const message = `no data found.`;
       messageLog[username] = message;
     } else {
-      await saveCrawledData(data, username, null);
+      await User.saveCrawledData(data, email, null);
       const message = `crawling successful.`;
       messageLog[username] = message;
     }
@@ -66,10 +49,11 @@ const massCrawling = async () => {
     }
 
     const messageLog = await crawlingLoop(users);
-    console.log(messageLog);
+    return messageLog;
   } catch (error) {
     console.error(error);
+    return error;
   }
 };
 
-module.exports = massCrawling;
+module.exports = { crawlingLoop, massCrawling };
