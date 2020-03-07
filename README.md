@@ -106,8 +106,8 @@ Server: AWS. More details later...
   - [x] email template ui
   - [x] crawling scheduling
   - [x] email scheduling
-  - [ ] track multiple rym users
   - [ ] server-side view rendering
+  - [ ] save error logs to the db or disk
 - [ ]  **Client**
   - [x] crawling form
   - [x] user actions form
@@ -120,7 +120,27 @@ Server: AWS. More details later...
 <details><summary>In progress</summary>
 
 ###### Server
-- add multiple RYM accounts subscription
+- ⚠️ cron jobs error handling
+- ⚠️ write logs to disk on cron job error (or better on any error)
+- - -
+- ⚠️ add email links hash
+- ⚠️ handle puppeteer action in case of ip ban
+- ⚠️ rewrite lock with event emitter usage
+- - -
+- ⚠️ use aws ses instead of sendgrid
+- ⚠️ improve email templates design
+- - -
+- use forEach instead of for
+- - -
+- move sample data somewhere
+- do Promise.all and forEarch instead of procedural/imperative cringe 🤡
+- - -
+- use helmet
+- use compression
+- add cors config
+- - -
+- rename /users/ route path back to /user/
+- - -
 - serverless: brotli compressed puppeteer, api, file structure
 - make chromium sandbox
 - research on push vs concat vs spread performance
@@ -131,29 +151,13 @@ Server: AWS. More details later...
 - handle incoming emails
 - use joi or express-validation for validation
 - clean massmail and masscrawl api methods
-- - -
-- ⚠️ send releases data on successful subscription ⚠️
-- - -
-- ⚠️ add email links hash ⚠️
-- ⚠️ handle puppeteer action in case of ip ban ⚠️
-- ⚠️ rewrite lock with event emitter usage ⚠️
-- - -
-- ⚠️ use aws ses instead of sendgrid ⚠️
-- ⚠️ improve email templates design ⚠️
-- - -
 - res msg status: error / ok
 - change response message text to start with a capital letter
-- - -
-- move sample data somewhere
-- do Promise.all and forEarch instead of procedural/imperative cringe 🤡
-- - -
-- use helmet
-- use compression
-- add cors config
-- - -
-- rename /users/ route path back to /user/
+- try optional chaining
 
 ###### Client
+- ⚠️ separate ui from containers
+- ⚠️ separate fetch from forms
 - try optional chaining
 - list data lazy loading
 - useReducer instead of useState in forms
@@ -229,6 +233,10 @@ Server: AWS. More details later...
 - add error handling middleware
 - add try catch route wrapper
 - hide email in verification route response
+- send releases data on successful subscription
+- user verification: separate crawling 
+- move business-logic from controllers to user model methods/statics
+- DRY: get rid of repeating code (cron jobs, mailing/crawling controllers, user modes methods)
 
 ###### Client
 - render release dates

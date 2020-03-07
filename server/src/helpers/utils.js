@@ -17,6 +17,4 @@ exports.validateUsername = username => {
   return noForbiddenSymbols && notTooLong && notTooShort;
 };
 
-exports.validateId = id => {
-  return ObjectId.isValid(id);
-};
+exports.validateId = id => ObjectId.isValid(id);
