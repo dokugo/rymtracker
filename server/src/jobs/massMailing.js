@@ -26,12 +26,9 @@ const mailingLoop = async users => {
     }
 
     await sleep(1000); // prevent being banned for spamming requests
+    const letter = await mailer(user, 'releases');
 
-    const letterSent = await mailer(user, 'releases').catch(error =>
-      console.error(error.message)
-    );
-
-    if (!letterSent) {
+    if (!letter) {
       const message = `mailer service error.`;
       messageLog[email] = message;
       continue;
@@ -54,10 +51,10 @@ const massMailing = async () => {
     }
 
     const messageLog = await mailingLoop(users);
-    console.log(messageLog);
+    return messageLog;
   } catch (error) {
     console.error(error);
   }
 };
 
-module.exports = massMailing;
+module.exports = { massMailing, mailingLoop };
