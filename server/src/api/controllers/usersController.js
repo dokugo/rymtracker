@@ -45,18 +45,11 @@ exports.subscribe = async (request, response) => {
       .send({ message: `${body.username}: incorrect username format.` });
   }
 
-  const user = await User.findOne({
-    email: body.email
-  });
+  const user = await User.findOne({ email: body.email });
 
   // handle save
   if (!user) {
-    const newUser = new User({
-      username: body.username,
-      email: body.email,
-      isVerified: false
-    });
-    await newUser.save();
+    const newUser = await User.create(body.username, body.email);
     await mailer(newUser, 'verification');
     return response.status(201).send({
       message: `${body.email}: please confirm subscription via email verification link.`
@@ -65,16 +58,17 @@ exports.subscribe = async (request, response) => {
 
   // handle duplicate
   if (user.username === body.username) {
-    // handle unverified duplicate
-    if (!user.isVerified) {
-      await mailer(user, 'verification');
-      return response.status(409).send({
-        message: `${body.email} + ${body.username}: duplicate; please confirm subscription via email verification link.`
-      });
-    }
     return response
       .status(409)
       .send({ message: `${body.email} + ${body.username}: duplicate` });
+  }
+
+  // handle unverified duplicate
+  if (user.username === body.username && !user.isVerified) {
+    await mailer(user, 'verification');
+    return response.status(409).send({
+      message: `${body.email} + ${body.username}: duplicate; please confirm subscription via email verification link.`
+    });
   }
 
   // handle update
@@ -127,7 +121,6 @@ exports.verification = async (request, response) => {
 
   if (!user.isVerified) {
     await user.verify();
-
     response
       .status(200)
       .send({ message: `${user.email}: verification succesful.` });
@@ -186,9 +179,7 @@ exports.update = async (request, response) => {
   }
 
   if (user.username !== newUsername) {
-    await user.updateOne({
-      username: newUsername
-    });
+    await user.updateOne({ username: newUsername });
     return response.status(200).send({
       message: `${user.email}: update to ${newUsername} successful.`
     });
@@ -210,8 +201,6 @@ exports.unsubscribe = async (request, response) => {
   }
 
   const user = await User.findById(request.query.id);
-
-  console.log(user);
 
   if (!user) {
     return response

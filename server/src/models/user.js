@@ -10,6 +10,12 @@ const userSchema = new mongoose.Schema({
   }
 });
 
+userSchema.statics.create = async function(username, email) {
+  const newUser = new this({ username, email, isVerified: false });
+  await newUser.save();
+  return newUser;
+};
+
 userSchema.methods.verify = async function() {
   await this.updateOne({ isVerified: true });
 };
