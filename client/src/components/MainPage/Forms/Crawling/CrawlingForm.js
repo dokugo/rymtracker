@@ -4,9 +4,7 @@ import { useContextSelector } from 'use-context-selector';
 import { AnimationContext } from '../../../../contexts/animationContext';
 import Input from '../Input';
 import Button from '../Button';
-
-const DOMAIN = process.env.REACT_APP_DOMAIN;
-const API_KEY = process.env.REACT_APP_API_KEY;
+import request from '../../../../api/get';
 
 const CrawlingForm = ({ setDataStorage }) => {
   const setListAnimation = useContextSelector(
@@ -84,38 +82,14 @@ const CrawlingForm = ({ setDataStorage }) => {
     setFormState({ ...formState, loading: true, message: null });
     inputRef.current.blur();
 
-    fetch(`${DOMAIN}/crawl/${inputData}`, {
-      headers: {
-        'X-API-Key': API_KEY,
-        'Cache-Control':
-          'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-        Pragma: 'no-cache',
-        Expires: '0'
-      }
-    })
-      .then(response => response.json())
-      .then(response => {
-        if (response.error) {
-          setFormState({
-            ...formState,
-            loading: false,
-            message: response.message
-          });
-          setDataStorage([]);
-        } else {
-          setFormState({
-            ...formState,
-            loading: false,
-            message: null
-          });
-          setDataStorage(response.message);
-        }
-
-        setListAnimation(true);
-
-        console.log(response);
-      })
-      .catch(error => console.log('Error: ', error));
+    const response = await request(inputData);
+    setFormState({
+      ...formState,
+      loading: false,
+      message: response.error ? response.message : null
+    });
+    setDataStorage(response.error ? [] : response.message);
+    setListAnimation(true);
   };
 
   return (

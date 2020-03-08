@@ -2,9 +2,7 @@ import React, { useState, createRef } from 'react';
 import styled from 'styled-components/macro';
 import Input from '../Input';
 import Button from '../Button';
-
-const DOMAIN = process.env.REACT_APP_DOMAIN;
-const API_KEY = process.env.REACT_APP_API_KEY;
+import request from '../../../../api/put';
 
 const SubForm = () => {
   const [inputData, setInputData] = useState(null);
@@ -122,29 +120,10 @@ const SubForm = () => {
     emailInputRef.current.blur();
     usernameInputRef.current.blur();
 
-    fetch(`${DOMAIN}/users/subscribe`, {
-      method: 'PUT',
-      body: JSON.stringify(inputData),
-      headers: {
-        'X-API-Key': API_KEY,
-        'Content-Type': 'application/json',
-        'Cache-Control':
-          'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-        Pragma: 'no-cache',
-        Expires: '0'
-      }
-    })
-      .then(response => response.json())
-      .then(response => {
-        setFormState({
-          ...formState,
-          loading: false,
-          message: response.message
-        });
+    cleanObject(inputData);
+    const response = await request(inputData);
 
-        console.log(response);
-      })
-      .catch(error => console.log('Error: ', error));
+    setFormState({ ...formState, loading: false, message: response.message });
   };
 
   return (
