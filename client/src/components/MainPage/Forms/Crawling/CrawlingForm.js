@@ -1,5 +1,5 @@
 import React, { useState, createRef } from 'react';
-import styled from 'styled-components/macro';
+import { validateUsername } from '../../../../utils/utils';
 import { useContextSelector } from 'use-context-selector';
 import { AnimationContext } from '../../../../contexts/animationContext';
 import Input from '../Input';
