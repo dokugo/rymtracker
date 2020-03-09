@@ -7,6 +7,7 @@ import {
 } from '../../../../utils/utils';
 import Input from '../Input';
 import Button from '../Button';
+import { FormItem, InputText, InputGroup, Tooltip } from '../ui/common';
 import request from '../../../../api/put';
 
 const SubForm = () => {
@@ -26,53 +27,30 @@ const SubForm = () => {
 
     if (!inputData) {
       emailInputRef.current.focus();
-    } else if (inputData && !inputData.email) {
+    } else if (!inputData?.email) {
       emailInputRef.current.focus();
-    } else if (inputData && !inputData.username) {
+    } else if (!inputData?.username) {
       usernameInputRef.current.focus();
     }
   };
 
   const handleInputChange = event => {
     if (event.target.name === 'email') {
-      setInputData({
-        ...inputData,
-        email: event.target.value.trim().toLowerCase()
-      });
+      setInputData({ ...inputData, email: event.target.value });
     }
     if (event.target.name === 'username') {
-      setInputData({
-        ...inputData,
-        username: event.target.value.trim().toLowerCase()
-      });
+      setInputData({ ...inputData, username: event.target.value });
     }
 
-    setFormState({
-      ...formState,
-      error: false,
-      default: false,
-      message: null
-    });
-
-    // console.log(inputData);
+    setFormState({ ...formState, error: false, default: true, message: null });
   };
 
-  const handleRequest = event => {
+  const handleRequest = async event => {
     event.preventDefault();
 
-    console.log(inputData);
-    console.log(formState.invalid);
+    if (formState.loading) return;
 
-    if (formState.loading) {
-      return;
-    }
-
-    //try optional chaining
-    if (
-      !inputData ||
-      (inputData && !inputData.email) ||
-      (inputData && !inputData.username)
-    ) {
+    if (!inputData || !inputData?.email || !inputData?.username) {
       setFormState({
         ...formState,
         default: false,
@@ -105,11 +83,7 @@ const SubForm = () => {
       return;
     }
 
-    setFormState({
-      ...formState,
-      loading: true,
-      message: null
-    });
+    setFormState({ ...formState, loading: true, message: null });
     emailInputRef.current.blur();
     usernameInputRef.current.blur();
 
@@ -157,36 +131,6 @@ const SubForm = () => {
 
 export default SubForm;
 
-const FormItem = styled.form`
-  margin-bottom: 30px;
-  @media (max-width: 660px) {
-    width: 100%;
-  }
-`;
-
-const InputText = styled.div`
-  box-sizing: border-box;
-  padding: 20px 10px;
-  font-size: 20px;
-  width: 640px;
-  min-width: 100%;
-  @media (max-width: 660px) {
-    width: 100%;
-    text-align: center;
-  }
-`;
-
-const InputGroup = styled.div`
-  display: flex;
-  position: relative;
-  width: 640px;
-  min-width: 100%;
-  @media (max-width: 660px) {
-    flex-direction: column;
-    width: 100%;
-  }
-`;
-
 const InputBox = styled.div`
   &:nth-of-type(1) {
     margin-right: 15px;
@@ -197,13 +141,4 @@ const InputBox = styled.div`
       margin-bottom: 15px;
     }
   }
-`;
-
-const Tooltip = styled.span`
-  position: absolute;
-  font-size: 14px;
-  padding: 0px 10px;
-  margin-top: 5px;
-  color: ${({ formState, theme }) =>
-    formState.error ? theme.tooltip.error : theme.tooltip.default};
 `;

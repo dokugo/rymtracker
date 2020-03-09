@@ -12,12 +12,17 @@ import {
 const FormButton = ({ formState, type }) => {
   const { loading, warning, error } = formState;
 
-  const defaultIcon =
-    type === 'sub' ? (
-      <IconSubscribe />
-    ) : type === 'search' ? (
-      <IconSearch />
-    ) : null;
+  const defaultIcon = {
+    sub: <IconSubscribe />,
+    search: <IconSearch />
+  };
+
+  /*   const currentIcon = {
+    loading: <IconLoading />,
+    error: <IconError />,
+    warning: <IconWarning />,
+    default: defaultIcon[type]
+  }; */
 
   return (
     <ButtonContainer
@@ -35,7 +40,7 @@ const FormButton = ({ formState, type }) => {
           ) : warning ? (
             <IconWarning />
           ) : (
-            defaultIcon
+            defaultIcon[type]
           )}
         </ButtonIconContainer>
       </Button>
