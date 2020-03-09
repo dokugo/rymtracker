@@ -7,11 +7,7 @@ const request = async inputData => {
     body: JSON.stringify(inputData),
     headers: {
       'X-API-Key': API_KEY,
-      'Content-Type': 'application/json',
-      'Cache-Control':
-        'no-cache, no-store, must-revalidate, post-check=0, pre-check=0',
-      Pragma: 'no-cache',
-      Expires: '0'
+      'Content-Type': 'application/json'
     }
   })
     .then(response => response.json())

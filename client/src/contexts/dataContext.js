@@ -31,17 +31,11 @@ const DataContextProvider = ({ children }) => {
 
   useEffect(
     (itemsToLoad = getItemsAmount()) => {
-      if (dataStorage && dataStorage.length <= itemsToLoad) {
-        setDataCache({
-          items: dataStorage,
-          hasMore: false
-        });
+      if (dataStorage?.length <= itemsToLoad) {
+        setDataCache({ items: dataStorage, hasMore: false });
       } else {
-        const dataChunk = dataStorage && dataStorage.slice(0, itemsToLoad);
-        setDataCache({
-          items: dataChunk,
-          hasMore: true
-        });
+        const dataChunk = dataStorage?.slice(0, itemsToLoad);
+        setDataCache({ items: dataChunk, hasMore: true });
       }
     },
     [dataStorage]
