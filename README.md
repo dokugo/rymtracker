@@ -4,7 +4,7 @@ Track the upcoming releases section of the specified [`rateyourmusic.com`](https
 
 This project is not production-ready. It was created purely for self-educational purposes.
 
-~~⚠️ Please note that if you try to use [`rymtracker.ml`](https://rymtracker.ml), you might experience slow first-loading period since the free-tier Heroku instance "gets asleep" if it receives no web traffic in a 30-minute period and takes some time to get itself out of sleep, usually around 15 seconds.~~
+⚠️ ~~Please note that if you try to use [`rymtracker.ml`](https://rymtracker.ml), you might experience slow first-loading period since the free-tier Heroku instance "gets asleep" if it receives no web traffic in a 30-minute period and takes some time to get itself out of sleep, usually around 15 seconds.~~
 
 ###### The backend was moved to an AWS EC2 instace and now has a persistent uptime.
 
@@ -156,18 +156,14 @@ Server: AWS. More details later...
 - try optional chaining
 
 ###### Client
-- ⚠️ separate ui from containers
-- ⚠️ separate fetch from forms
-- try optional chaining
 - list data lazy loading
 - useReducer instead of useState in forms
-- crawling form fetch: clean final promise
 - add an example of the upcoming releases block
 - proper tooltip coloring
 - data validation refactoring
-- try thinner focus input borders
-- button component object instead of ternary
 - add validation of confirmation form params 
+- button component object instead of ternary
+- forms state refactoring (formState should have single key)
 
 ###### Other
 - add 'why' part with pictures to this readme
@@ -260,6 +256,11 @@ Server: AWS. More details later...
 - crawling form username validation
 - change sub form button icon
 - add client page for email links handling
+- set thinner focus input borders
+- use optional chaining
+- separate ui from containers
+- separate fetch from forms
+- clean crawling form fetch final promise
 
 ###### Other
 - move server deployment from <s>zeit</s> aws
